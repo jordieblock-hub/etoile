@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ÉTOILE | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed": "#ffd9e3",
+          "tertiary": "#000000",
+          "primary-fixed-dim": "#c8c6c5",
+          "outline-variant": "#c4c7c7",
+          "surface-dim": "#dadada",
+          "on-error": "#ffffff",
+          "on-secondary-fixed": "#2b151c",
+          "on-secondary": "#ffffff",
+          "secondary-container": "#fdd6e0",
+          "surface-bright": "#f9f9f9",
+          "inverse-surface": "#2f3131",
+          "primary-fixed": "#e5e2e1",
+          "surface-tint": "#5f5e5e",
+          "on-primary": "#ffffff",
+          "on-background": "#1a1c1c",
+          "surface": "#f9f9f9",
+          "surface-container-highest": "#e2e2e2",
+          "on-surface-variant": "#444748",
+          "on-secondary-fixed-variant": "#5b3f48",
+          "surface-container-low": "#f3f3f3",
+          "on-primary-fixed-variant": "#474746",
+          "primary-container": "#1c1b1b",
+          "error-container": "#ffdad6",
+          "primary": "#000000",
+          "surface-container": "#eeeeee",
+          "tertiary-fixed-dim": "#e0bfb9",
+          "surface-variant": "#e2e2e2",
+          "secondary": "#74565f",
+          "on-primary-container": "#858383",
+          "on-tertiary": "#ffffff",
+          "surface-container-high": "#e8e8e8",
+          "on-tertiary-container": "#997d78",
+          "inverse-primary": "#c8c6c5",
+          "on-surface": "#1a1c1c",
+          "tertiary-fixed": "#fddbd4",
+          "on-tertiary-fixed": "#291713",
+          "error": "#ba1a1a",
+          "background": "#f9f9f9",
+          "on-primary-fixed": "#1c1b1b",
+          "on-secondary-container": "#795a63",
+          "tertiary-container": "#291713",
+          "on-error-container": "#93000a",
+          "surface-container-lowest": "#ffffff",
+          "secondary-fixed-dim": "#e3bdc7",
+          "outline": "#747878",
+          "inverse-on-surface": "#f1f1f1",
+          "on-tertiary-fixed-variant": "#58413d"
+        },
+        fontFamily: {
+          "headline": ["Noto Serif"],
+          "body": ["Manrope"],
+          "label": ["Manrope"]
+        },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+  .tonal-shift-bg { background-color: #f3f3f3; }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container overflow-x-hidden">
+
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl transition-transform duration-300">
+  <nav class="flex justify-between items-center w-full px-12 py-6 max-w-screen-2xl mx-auto">
+    <div class="text-2xl font-headline tracking-tighter text-neutral-900 uppercase">ÉTOILE</div>
+    <div class="hidden md:flex items-center space-x-12">
+      <a class="text-xs uppercase tracking-widest font-body text-neutral-900 border-b border-neutral-900 pb-1" href="index.html">Dashboard</a>
+      <a class="text-xs uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="digital-closet.html">Digital Closet</a>
+      <a class="text-xs uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="style-me.html">Saved Looks</a>
+      <a class="text-xs uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="shopping-edit.html">Shopping Edit</a>
+    </div>
+    <div class="flex items-center space-x-6">
+      <button class="material-symbols-outlined text-neutral-900 hover:opacity-70 transition-opacity">search</button>
+      <button class="material-symbols-outlined text-neutral-900 hover:opacity-70 transition-opacity">account_circle</button>
+    </div>
+  </nav>
+</header>
+
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col w-64 h-screen fixed left-0 top-0 pt-24 px-6 tonal-shift-bg z-40">
+  <div class="mb-12">
+    <h2 class="font-headline italic text-lg text-neutral-900">The Atelier</h2>
+    <p class="text-[10px] uppercase tracking-widest font-body text-neutral-400">Stylist Mode Active</p>
+  </div>
+  <nav class="flex-1 space-y-8">
+    <a class="group flex items-center space-x-4 font-bold text-neutral-900 hover:translate-x-1 transition-transform" href="style-me.html">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1, 'wght' 300;">magic_button</span>
+      <span class="text-xs uppercase tracking-widest font-body">Style Me</span>
+    </a>
+    <a class="group flex items-center space-x-4 text-neutral-400 hover:translate-x-1 transition-transform hover:text-neutral-900" href="onboarding.html">
+      <span class="material-symbols-outlined">auto_awesome</span>
+      <span class="text-xs uppercase tracking-widest font-body">Build Look</span>
+    </a>
+    <a class="group flex items-center space-x-4 text-neutral-400 hover:translate-x-1 transition-transform hover:text-neutral-900" href="#">
+      <span class="material-symbols-outlined">payments</span>
+      <span class="text-xs uppercase tracking-widest font-body">Budget</span>
+    </a>
+    <a class="group flex items-center space-x-4 text-neutral-400 hover:translate-x-1 transition-transform hover:text-neutral-900" href="#">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="text-xs uppercase tracking-widest font-body">Settings</span>
+    </a>
+  </nav>
+  <div class="mt-auto pb-12">
+    <button onclick="window.location='style-me.html'" class="w-full bg-primary text-on-primary py-4 text-[10px] uppercase tracking-widest font-bold active:scale-95 transition-transform">
+      AI Styling Request
+    </button>
+  </div>
+</aside>
+
+<main class="lg:ml-64 pt-24 min-h-screen">
+
+  <!-- Hero Section -->
+  <section class="relative h-[820px] flex flex-col items-center justify-center px-12 text-center bg-surface-container-low overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-10">
+      <img class="w-full h-full object-cover grayscale" alt="High-fashion editorial black and white photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5DWPL9v3iKZiwRp9RWeh9uqkzeu6ls56Np9Zc9sStDcnhPTUiElXY1QjXYMLhjmsp-MwW_-F7HhnxjF7gh-idDc-kaFI5SHAEWafx5odjzmiZKfid8pmEUN7SRjFLj3fo_eYiORb4cYcD9tuxKR910nyEBSpr7g7peB0R1FqdsOj2kNVt24gswMS28lCSMculA_-SfpT3enhliKI5z2FldncjMzb3BL1VZqjJvDQwYlsCZMcWzF92d0yF2pPiCz_NLlQIa4KP1BA"/>
+    </div>
+    <div class="relative z-10 max-w-3xl">
+      <p class="font-body text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mb-6">Welcome back, Jordie</p>
+      <h1 class="text-5xl md:text-7xl font-headline tracking-tight text-neutral-900 mb-12 leading-[1.1]">What do you want<br/>to style today?</h1>
+      <div class="relative mb-10 w-full max-w-2xl mx-auto">
+        <input class="w-full bg-transparent border-b border-outline-variant py-4 text-xl font-headline placeholder:text-neutral-300 focus:outline-none focus:border-primary transition-colors text-center italic" placeholder="Describe an occasion, mood, or aesthetic..." type="text"/>
+      </div>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="style-me.html" class="bg-secondary-container text-on-secondary-container px-6 py-2 text-[10px] uppercase tracking-[0.2em] font-body hover:opacity-80 transition-opacity">Date Night</a>
+        <a href="style-me.html" class="bg-surface-container-highest text-neutral-900 px-6 py-2 text-[10px] uppercase tracking-[0.2em] font-body hover:opacity-80 transition-opacity">Vacation Dinner</a>
+        <button class="bg-surface-container-highest text-neutral-900 px-6 py-2 text-[10px] uppercase tracking-[0.2em] font-body hover:opacity-80 transition-opacity">Wedding Guest</button>
+        <button class="bg-surface-container-highest text-neutral-900 px-6 py-2 text-[10px] uppercase tracking-[0.2em] font-body hover:opacity-80 transition-opacity">Work Event</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Activity -->
+  <section class="px-12 py-24 max-w-screen-2xl mx-auto">
+    <div class="flex justify-between items-baseline mb-16 border-b border-outline-variant/10 pb-4">
+      <h2 class="text-3xl font-headline tracking-tight">Recent Activity</h2>
+      <a class="text-[10px] uppercase tracking-widest font-bold hover:opacity-50 transition-opacity" href="style-me.html">View All Archives</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+      <!-- Large Featured Request -->
+      <a href="style-me.html" class="md:col-span-7 group cursor-pointer">
+        <div class="aspect-[4/5] overflow-hidden mb-6 bg-surface-container">
+          <img class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700" alt="Editorial fashion shot with neutral tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDntWgNqdNPf3X9XBUOO62VzgSWwjC-zAjibX1J50V3wQKe6QCc6BSvQZA5HMftX3mFHHqHkys3EyahQ_0rUqrZBxrCs2lVK24hRAr6x82dvqI48I-7FOff-SiZ-hWekyORuoFwREuqyLllt_XalQ_2ZekR7SaRaGXPUG9CeF8se5C3lTto3yAKcKIBQ_Q1M_X3bm2WHQww1iRUpUlPQTAONGAui34BoK6VtG5WARzahDUat_1IEPeSeYqxx8IcNjLw_-LN-7Ywwnk"/>
+        </div>
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-[10px] uppercase tracking-widest text-neutral-400 mb-2">Styling Request · 2h ago</p>
+            <h3 class="text-2xl font-headline">Parisian Vacation Dinner</h3>
+          </div>
+          <span class="material-symbols-outlined text-neutral-300">north_east</span>
+        </div>
+      </a>
+      <!-- Secondary -->
+      <div class="md:col-span-5 flex flex-col justify-between">
+        <a href="style-me.html" class="group cursor-pointer mb-12">
+          <div class="aspect-video overflow-hidden mb-6 bg-surface-container">
+            <img class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700" alt="Designer shoes and silk dress on velvet chair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwOU81HtOgeTi2vOUY1bamW7EJNYa4RG1CbUdXX47zZz59CCRmErfOIMLOKTlCE1fbPVOjoCDr9L1cWbjYam6VH3-tABP3KlTh0Da4QCsIM3Wk-aL74-X_3jpcxr7KxXzVPgUdZ-EFvN2VS4D9ohpGTZ_PWf5AVq_g6d7u5kLxM7DzZCUGBCBwO3vB3TvhVcHP7t9EFA16eRhX_5Hvy2ijeEE4TYSHGWFe75inqRlfijjM_i3-B54i0yBxyowlxUMyqgqEQUBwwDg"/>
+          </div>
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-neutral-400 mb-2">Saved Look · Yesterday</p>
+              <h3 class="text-xl font-headline italic">Late Night Vernissage</h3>
+            </div>
+          </div>
+        </a>
+        <a href="digital-closet.html" class="bg-surface-container-low p-12 relative overflow-hidden group block">
+          <div class="relative z-10">
+            <p class="text-[10px] uppercase tracking-widest text-neutral-400 mb-4">Digital Closet</p>
+            <h3 class="text-4xl font-headline leading-tight mb-8">Catalogue your wardrobe for better AI insights.</h3>
+            <span class="text-[10px] uppercase tracking-[0.2em] font-bold border-b-2 border-primary pb-1">Enter Closet</span>
+          </div>
+          <span class="absolute -bottom-10 -right-10 text-[180px] font-headline text-neutral-200/50 italic select-none">Atelier</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Suggested Pieces -->
+  <section class="bg-white py-32 px-12 overflow-hidden">
+    <div class="max-w-screen-2xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center mb-24">
+        <div class="md:col-span-5">
+          <h2 class="text-5xl font-headline tracking-tighter mb-8 leading-tight">The Edit:<br/><span class="italic text-secondary">Seasonal Essentials</span></h2>
+          <p class="text-on-surface-variant font-light leading-relaxed mb-8 max-w-sm">A hand-selected curation of pieces that complement your existing closet and recent style explorations.</p>
+          <a href="shopping-edit.html" class="text-[10px] uppercase tracking-[0.2em] font-bold border-b-2 border-primary pb-1">Shop All</a>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16">
+        <div class="group">
+          <div class="aspect-[3/4] bg-surface-container-low mb-6 relative overflow-hidden">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Luxury camel wool coat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCawgrqpB9rYdhlrmz5VBYeClxAnF_IOAhZaGqSftbowtNWrDiSpk1KKgarX-nwlb9avt1BVMj7o7mkCoYc0e32mB6_6-fpHBm1fUlA7WVR6_lRQaTKSR-9yNhOtkw387JOrMBWKuQ8_F_kqI2cxhfglACJJtlcYnsXnmg3FCD6dBvKZvLhvfluO9vbK08xF6kjK1PAhmTHdQJ2GPKPANRu2LXqFdEFTaTVlSw1b88pCxFc1l1IFttMLBQP__89IO1mbxNySmnPFuk"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300">
+              <button class="bg-white text-black px-6 py-3 text-[10px] uppercase tracking-widest font-bold">Quick Buy</button>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h4 class="text-[10px] uppercase tracking-[0.2em] text-neutral-400">Toteme</h4>
+            <p class="font-headline">Cashmere Blend Wrap Coat</p>
+            <p class="font-headline text-sm italic">$1,250</p>
+          </div>
+        </div>
+        <div class="group mt-12">
+          <div class="aspect-[3/4] bg-surface-container-low mb-6 relative overflow-hidden">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Leather stiletto heels" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp8AZTJg9ybi_TO8l4YBRJBnwDiel2qRwJHgXClG7464siAPECR45coIEV9qcAn2RASgNmOud-gYOgpOwfg4BVh-JaPPxWDwXFXAGm8LjvxA-ovDabKzBXtc52K2YM0KSwc5NsNVxQah51UPqDoCIwn498btFCHeMImbrvlyqjHIu9_9J4bAoCYJdrgacg9vWN5sc8rZo0DhKMlxL7aD6S8QYYMJzM2nrC41bzUxOq-45zcs_i2ULgtQPwTANpgewNjLmO95N9tKw"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300">
+              <button class="bg-white text-black px-6 py-3 text-[10px] uppercase tracking-widest font-bold">Quick Buy</button>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h4 class="text-[10px] uppercase tracking-[0.2em] text-neutral-400">Saint Laurent</h4>
+            <p class="font-headline">Amber Leather Sandals</p>
+            <p class="font-headline text-sm italic">$795</p>
+          </div>
+        </div>
+        <div class="group">
+          <div class="aspect-[3/4] bg-surface-container-low mb-6 relative overflow-hidden">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Luxury leather shoulder bag" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmsF_zsbbBf7UcUFXBlO3QtQh-UtTtfkQYkCookUD4EM2KAwHFUqsg62vLMIdJcyVm_zBwgC-FMTmyRl-u9eiDJW17KSV_5pupol84pjKt65c6cFJkkvr87T7lHS9t24c3BP4UUueHw8sOKv1oK6D5pnjG42bYaF9RsyIaT39JL3e12_z3-9s9x9mn9aMy-JqW2pVMRPRiX-t-YVkyj7lhWx4vc9G95UhW1joPWszMj7qD8IAAQOWdidIjSllLR0dsrwaftj3ALHg"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300">
+              <button class="bg-white text-black px-6 py-3 text-[10px] uppercase tracking-widest font-bold">Quick Buy</button>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h4 class="text-[10px] uppercase tracking-[0.2em] text-neutral-400">The Row</h4>
+            <p class="font-headline">Sophia Leather Shoulder Bag</p>
+            <p class="font-headline text-sm italic">$2,800</p>
+          </div>
+        </div>
+        <div class="group mt-12">
+          <div class="aspect-[3/4] bg-surface-container-low mb-6 relative overflow-hidden">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="White cotton poplin shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLnI88Ga9nhcPol0fvjnrJGjoRf2mfXoXhV__XSt_mu26YYqYmswsW3NimZHjXp28VTlmV-Bo3nP4fodvP1MKjQIQKkSoTSY6LaAbym8mdP-ZTRRKNWv11lSNUqfkbDBTI0ken8x-TEAsWkpZphsSp5SFu2m5WmSZqQRebhuvYIC_rivyqNj2wu7jXiZ9I4LiaqYBjOIc9pHzRYVPo1s7yrpqdJWYNdSSuYcpriWfF4n-BPrXw3FhgAlsWjGznHtUGLKzYXmaqWC4"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300">
+              <button class="bg-white text-black px-6 py-3 text-[10px] uppercase tracking-widest font-bold">Quick Buy</button>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h4 class="text-[10px] uppercase tracking-[0.2em] text-neutral-400">Jil Sander</h4>
+            <p class="font-headline">Cotton Poplin Shirt</p>
+            <p class="font-headline text-sm italic">$550</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Lookbook -->
+  <section class="py-24 px-12 bg-surface">
+    <div class="max-w-screen-2xl mx-auto flex flex-col md:flex-row items-center gap-0">
+      <div class="w-full md:w-3/5 h-[600px] overflow-hidden">
+        <img class="w-full h-full object-cover grayscale" alt="Cinematic fashion portrait in minimalist studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSHtBDfJAsJ2L2kIevIf2kaBn1CQlejbXJx4L5rY6nYCeuvNZTSwjH3SZQL7gWfV3A2TVNz3s3jnWZXMxTAxzRxsri5MhdY6abMkNX4ZARnVkW0-4cnliJi4wfqJi1K90SNbGcDfb-6flHxkB1qV2AHJ1ntSwi2Xd-C6565wEAxGgcDxEQD_NpdorSGLHLycA4Iapn0Fmxw-LSSfxUY1nSFEmTYi36YfMH7GEhN7qU3dvighhcMNCbvyd1_6YyazfIPA3vomLgF2w"/>
+      </div>
+      <div class="w-full md:w-2/5 -mt-20 md:-mt-0 md:-ml-24 z-10">
+        <div class="bg-surface-container-lowest p-16 shadow-xl shadow-on-surface/5">
+          <h3 class="text-[10px] uppercase tracking-[0.3em] font-bold text-neutral-400 mb-6">The Masterclass</h3>
+          <h2 class="text-4xl font-headline mb-8 leading-tight italic">How to build a capsule wardrobe for the global nomad.</h2>
+          <p class="text-on-surface-variant font-light mb-10 leading-relaxed">Discover the art of minimalist travel styling. Our latest editorial guides you through the 12 essential pieces for an effortless international presence.</p>
+          <a href="shopping-edit.html" class="inline-block bg-primary text-on-primary px-10 py-4 text-[10px] uppercase tracking-widest font-bold">Read Editorial</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="w-full py-12 px-12 mt-20 bg-neutral-100">
+  <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-screen-2xl mx-auto">
+    <div class="font-headline text-sm mb-8 md:mb-0 uppercase tracking-tighter">ÉTOILE EDITORIAL</div>
+    <div class="flex space-x-12 mb-8 md:mb-0">
+      <a class="text-[10px] uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Editorial Policy</a>
+      <a class="text-[10px] uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Privacy</a>
+      <a class="text-[10px] uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Pinterest</a>
+      <a class="text-[10px] uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Instagram</a>
+    </div>
+    <div class="text-[10px] uppercase tracking-widest font-body text-neutral-400">© 2024 ÉTOILE EDITORIAL. ALL RIGHTS RESERVED.</div>
+  </div>
+</footer>
+
+<!-- Floating Action Button -->
+<button onclick="window.location='style-me.html'" class="fixed bottom-12 right-12 w-16 h-16 bg-primary text-on-primary shadow-2xl flex items-center justify-center hover:bg-neutral-800 transition-colors z-50 rounded-full">
+  <span class="material-symbols-outlined text-3xl" style="font-size:28px;">magic_button</span>
+</button>
+
+</body>
+</html>

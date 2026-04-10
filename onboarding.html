@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ÉTOILE | Begin Your Style Journey</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-background": "#1b1c1a",
+          "surface": "#faf9f5",
+          "on-tertiary": "#ffffff",
+          "surface-container-high": "#e9e8e4",
+          "secondary": "#904c31",
+          "tertiary": "#56642b",
+          "secondary-fixed": "#ffdbce",
+          "primary": "#775928",
+          "on-surface-variant": "#4e453a",
+          "on-secondary-container": "#783920",
+          "primary-fixed-dim": "#e8c086",
+          "surface-container-low": "#f4f4f0",
+          "on-tertiary-fixed-variant": "#3e4c16",
+          "secondary-container": "#fea685",
+          "tertiary-fixed-dim": "#bdce89",
+          "on-primary-fixed": "#281800",
+          "surface-tint": "#775928",
+          "background": "#faf9f5",
+          "on-secondary-fixed-variant": "#72351c",
+          "tertiary-container": "#89995a",
+          "outline-variant": "#d1c5b6",
+          "inverse-on-surface": "#f2f1ed",
+          "on-error": "#ffffff",
+          "on-tertiary-fixed": "#161f00",
+          "on-primary-container": "#3d2700",
+          "on-primary-fixed-variant": "#5d4213",
+          "on-secondary": "#ffffff",
+          "tertiary-fixed": "#d9eaa3",
+          "primary-container": "#b08d57",
+          "inverse-surface": "#2f312e",
+          "inverse-primary": "#e8c086",
+          "error-container": "#ffdad6",
+          "surface-dim": "#dbdad6",
+          "on-tertiary-container": "#242f00",
+          "surface-container": "#efeeea",
+          "surface-bright": "#faf9f5",
+          "surface-container-lowest": "#ffffff",
+          "error": "#ba1a1a",
+          "outline": "#807569",
+          "on-primary": "#ffffff",
+          "primary-fixed": "#ffdeae",
+          "surface-container-highest": "#e3e2df",
+          "on-surface": "#1b1c1a",
+          "on-secondary-fixed": "#380d00",
+          "surface-variant": "#e3e2df",
+          "on-error-container": "#93000a",
+          "secondary-fixed-dim": "#ffb59a"
+        },
+        fontFamily: {
+          "headline": ["Noto Serif"],
+          "body": ["Manrope"],
+          "label": ["Manrope"]
+        },
+        borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+  .editorial-shadow { box-shadow: 0 20px 40px rgba(78, 69, 58, 0.06); }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+
+<main class="min-h-screen flex flex-col items-center py-12 px-6 md:px-12 lg:px-24">
+
+  <!-- Progress Indicator -->
+  <div class="w-full max-w-5xl mb-16 flex items-center justify-between">
+    <a href="index.html" class="font-headline italic text-2xl text-on-surface tracking-tight">Étoile</a>
+    <div class="flex items-center gap-4 md:gap-8">
+      <span class="font-label text-xs uppercase tracking-widest text-primary font-bold">01 Inspiration</span>
+      <div class="h-[1px] w-8 md:w-12 bg-outline-variant/30"></div>
+      <span class="font-label text-xs uppercase tracking-widest text-on-surface-variant/40">02 Wardrobe</span>
+      <div class="h-[1px] w-8 md:w-12 bg-outline-variant/30"></div>
+      <span class="font-label text-xs uppercase tracking-widest text-on-surface-variant/40 hidden sm:inline">03 Frequency</span>
+      <div class="h-[1px] w-8 md:w-12 bg-outline-variant/30 hidden sm:block"></div>
+      <span class="font-label text-xs uppercase tracking-widest text-on-surface-variant/40 hidden sm:inline">04 Curation</span>
+    </div>
+  </div>
+
+  <!-- Composite Onboarding View -->
+  <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+
+    <!-- SECTION 1: STYLE INSPIRATION -->
+    <div class="lg:col-span-7 space-y-12">
+      <header class="space-y-4">
+        <h2 class="font-headline text-5xl md:text-6xl text-on-background leading-tight">
+          Curate Your<br/><span class="italic text-primary">Visual Identity</span>
+        </h2>
+        <p class="text-on-surface-variant max-w-md font-light text-lg">Every great collection begins with a mood. Share your aesthetic universe with us.</p>
+      </header>
+
+      <div class="space-y-8">
+        <!-- Pinterest Input -->
+        <div class="group">
+          <label class="block font-label text-xs uppercase tracking-widest mb-3 text-on-surface-variant/60">Pinterest Board Link</label>
+          <div class="relative flex items-center">
+            <input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary py-5 px-6 rounded-lg font-body placeholder:text-on-surface-variant/30 text-lg transition-all" placeholder="https://pinterest.com/your-style-board" type="text"/>
+            <div class="absolute right-4 flex items-center text-primary">
+              <span class="material-symbols-outlined text-2xl">link</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div class="relative group">
+          <label class="block font-label text-xs uppercase tracking-widest mb-3 text-on-surface-variant/60">Visual Moodboard</label>
+          <div class="w-full aspect-[16/7] bg-surface-container-lowest border border-dashed border-outline-variant/50 rounded-xl flex flex-col items-center justify-center p-8 transition-all hover:bg-surface-container-high/30 cursor-pointer overflow-hidden relative">
+            <!-- Background Sample Images -->
+            <div class="absolute inset-0 opacity-10 flex gap-4 pointer-events-none p-4">
+              <img class="h-full w-1/4 object-cover rounded-lg" alt="Fashion editorial neutral tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgfnceIHaUC-F7-mozEtwUHtEgREPrBz1oasQaAxeAJVa42s0I9oIk7habwOXcyzlHtDrxowabhH4b_eqM_-jZHeRbTjW5xnR8eJfi9h1t5kU_M0dFnRccgUZrrC5QDI_jfp8D4gMWy3W44Vrkkfot5u7uctlXrBaAX7m5WWp-OMpLpJECTg9VMCRupAs7AYy_fQ4H5qSGdAIauU5j_M-zl3oHJuRVTlvj_IV9YlB1P-hpYnuwXKHGnTGFXeouD0VqWsF5_Cufvhg"/>
+              <img class="h-full w-1/4 object-cover rounded-lg" alt="Moodboard textured fabrics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_jnfPBWvw9DlbN79lDknpa8mQnI-WcS8GxvSKqU6LXLlPBbIdgi2wtN3iyTyX_KPvLsoMThoGUSXmq_KD3K1boMMvtE_tEAl4b1MRlQc6ocFTiUrkYDCLjJGNs7qtJ9I44G3EVIfCNFPqLY27dmcSPiIOYNHPB4UEm3FDLBkM32UPG3887W6alLXCCZZbjEsrG0x1liREgk0uMFxasAN5LF-MMteM0ehhGgU0gzXJ_sro2zKMa7p4ABU5Sp3MnPjQ0gJwltHaXug"/>
+              <img class="h-full w-1/4 object-cover rounded-lg" alt="Silk dress on mannequin in atelier" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcyQkmemNCBs9zfcwj8XHdX56OCqWqk_HelEHzaVXkw503cm10jz_YTIXXjLsQ_JNRTHNLVxz8OMJyL3BSCCGmafQW2eCeWa70nhvhvsYOMMq_K1wjjE-GIU81v-S_lYT9y-0sJNmm60c7omztlhtdltLr6dREA_xgPtfJ6vd-AwwqldE3lFpc24TnGrWcyrxUcyVoeNOyZ1aqveYnCh01heTR3OmGxF6FP8d_eLGGzHrQ5H21OuNx3z_p_q0in9eZOANeiB-YT3w"/>
+              <img class="h-full w-1/4 object-cover rounded-lg" alt="Cashmere knitwear on wooden rail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkO46LUgZ0OcXjQrmxsveP0tXmp58_EUtekBqjekQ2pdQypRR2k1w_H23N5VmUz1mctWYnYDd1xTeRlqZRW_piOCc_wdwJoYynD7L_ntsM5rRb4SktKfeIUxA9zv0JxEZhtDUpMSk_hxXDKWFVnLqAWNAkZHmPpNuJXPhbevDU6QIC5ZKz7AtkGrxJWCVNTA9jYaGpjiJFzNDKy5lKKDU9dx-EJOpBtIqXpmqbj4Uqlci8aGbVFoUCtkmbPmER3ZWf3zxwJLVXiyA"/>
+            </div>
+            <div class="relative z-10 text-center">
+              <span class="material-symbols-outlined text-4xl text-primary-container mb-4 block" style="font-variation-settings: 'FILL' 1, 'wght' 300;">add_photo_alternate</span>
+              <p class="text-on-surface font-semibold">Drop screenshots or moodboard captures</p>
+              <p class="text-on-surface-variant/60 text-sm mt-1">Upload up to 12 inspirations</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explanatory Text -->
+        <div class="bg-surface-container-low p-8 rounded-xl relative overflow-hidden">
+          <div class="relative z-10">
+            <p class="font-body text-sm leading-relaxed text-on-surface-variant max-w-sm">
+              Our AI stylist analyses your shared visuals to decode the core DNA of your aesthetic — identifying recurring <span class="text-on-surface font-semibold italic">silhouettes</span>, tonal <span class="text-on-surface font-semibold italic">palettes</span>, and the subtle <span class="text-on-surface font-semibold italic">vibes</span> that define your unique look.
+            </p>
+          </div>
+          <div class="absolute -right-4 -bottom-4 opacity-5">
+            <span class="material-symbols-outlined" style="font-size: 80px;">auto_awesome</span>
+          </div>
+        </div>
+
+        <!-- Step Indicator & CTA -->
+        <div class="flex items-center justify-between pt-4">
+          <div class="flex space-x-2">
+            <div class="w-8 h-1 bg-primary"></div>
+            <div class="w-8 h-1 bg-outline-variant/20"></div>
+            <div class="w-8 h-1 bg-outline-variant/20"></div>
+            <div class="w-8 h-1 bg-outline-variant/20"></div>
+          </div>
+          <button class="group flex items-center space-x-6 py-4 px-12 bg-primary text-on-primary transition-all duration-300 active:scale-95 rounded-lg">
+            <span class="font-label text-xs uppercase tracking-[0.2em]">Next</span>
+            <span class="material-symbols-outlined text-lg translate-x-0 group-hover:translate-x-2 transition-transform">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: WARDROBE MAPPING -->
+    <div class="lg:col-span-5 pt-0 lg:pt-8">
+      <div class="bg-surface-container-low rounded-xl p-8 md:p-12 space-y-10 editorial-shadow">
+        <header class="space-y-2">
+          <span class="text-tertiary font-label text-xs uppercase tracking-widest font-bold">The Closet Canvas</span>
+          <h3 class="font-headline text-3xl">What defines your current wardrobe?</h3>
+          <p class="text-on-surface-variant text-sm font-light leading-relaxed">Select categories that represent your foundation.</p>
+        </header>
+
+        <!-- Multi-select Grid -->
+        <div class="grid grid-cols-2 gap-4">
+          <button class="flex flex-col items-center justify-center p-6 rounded-lg bg-secondary-container text-on-secondary-container transition-all ring-1 ring-secondary/20">
+            <span class="material-symbols-outlined text-3xl mb-3" style="font-variation-settings: 'FILL' 1, 'wght' 300;">apparel</span>
+            <span class="font-label text-xs uppercase tracking-widest font-bold">Tops</span>
+          </button>
+          <button class="flex flex-col items-center justify-center p-6 rounded-lg bg-surface-container-lowest border border-transparent hover:border-outline-variant transition-all">
+            <span class="material-symbols-outlined text-3xl text-primary/60 mb-3">straighten</span>
+            <span class="font-label text-xs uppercase tracking-widest text-on-surface-variant/60">Bottoms</span>
+          </button>
+          <button class="flex flex-col items-center justify-center p-6 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed transition-all ring-1 ring-tertiary/20">
+            <span class="material-symbols-outlined text-3xl mb-3" style="font-variation-settings: 'FILL' 1, 'wght' 300;">dry_cleaning</span>
+            <span class="font-label text-xs uppercase tracking-widest font-bold">Dresses</span>
+          </button>
+          <button class="flex flex-col items-center justify-center p-6 rounded-lg bg-surface-container-lowest border border-transparent hover:border-outline-variant transition-all">
+            <span class="material-symbols-outlined text-3xl text-primary/60 mb-3">checkroom</span>
+            <span class="font-label text-xs uppercase tracking-widest text-on-surface-variant/60">Outerwear</span>
+          </button>
+          <button class="flex flex-col items-center justify-center p-6 rounded-lg bg-surface-container-lowest border border-transparent hover:border-outline-variant transition-all">
+            <span class="material-symbols-outlined text-3xl text-primary/60 mb-3">footprint</span>
+            <span class="font-label text-xs uppercase tracking-widest text-on-surface-variant/60">Shoes</span>
+          </button>
+          <button class="flex flex-col items-center justify-center p-6 rounded-lg bg-surface-container-lowest border border-transparent hover:border-outline-variant transition-all">
+            <span class="material-symbols-outlined text-3xl text-primary/60 mb-3">diamond</span>
+            <span class="font-label text-xs uppercase tracking-widest text-on-surface-variant/60">Accessories</span>
+          </button>
+        </div>
+
+        <!-- Budget & Preferences -->
+        <div class="space-y-6 pt-6 border-t border-outline-variant/10">
+          <div>
+            <label class="block font-label text-xs uppercase tracking-widest mb-4 text-on-surface-variant/80">Curation Budget</label>
+            <div class="flex gap-2">
+              <button class="flex-1 py-3 bg-surface-container text-on-surface-variant/60 font-label text-xs uppercase tracking-widest rounded transition-all hover:bg-surface-container-highest">Low</button>
+              <button class="flex-1 py-3 bg-primary text-on-primary font-label text-xs uppercase tracking-widest rounded transition-all font-bold">Medium</button>
+              <button class="flex-1 py-3 bg-surface-container text-on-surface-variant/60 font-label text-xs uppercase tracking-widest rounded transition-all hover:bg-surface-container-highest">High</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between group cursor-pointer py-2">
+            <span class="text-on-surface-variant font-light">Size &amp; Brand Preferences</span>
+            <span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="w-full max-w-7xl flex flex-col md:flex-row items-center justify-between mt-24 gap-8">
+    <div class="flex items-center gap-4 text-on-surface-variant/60">
+      <span class="material-symbols-outlined">auto_awesome</span>
+      <p class="text-sm italic">Étoile uses your inputs to build a bespoke stylist algorithm.</p>
+    </div>
+    <div class="flex gap-6 items-center w-full md:w-auto">
+      <button class="px-8 py-4 font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">Save Draft</button>
+      <a href="style-me.html" class="flex-1 md:flex-none text-center px-12 py-5 bg-primary text-on-primary font-label text-xs uppercase tracking-[0.15em] font-bold rounded-lg hover:bg-primary/90 transition-all active:scale-[0.98]">
+        Continue Journey
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer class="w-full py-12 px-8 flex flex-col md:flex-row justify-between items-center mt-auto bg-surface-container-low gap-6">
+  <p class="font-body text-xs font-light text-on-background/50">© 2024 ÉTOILE. All Rights Reserved.</p>
+  <div class="flex gap-8 md:gap-12">
+    <a class="font-body text-xs font-light text-on-background/50 hover:underline decoration-primary-container underline-offset-4 transition-all" href="#">The Manifesto</a>
+    <a class="font-body text-xs font-light text-on-background/50 hover:underline decoration-primary-container underline-offset-4 transition-all" href="#">Terms</a>
+    <a class="font-body text-xs font-light text-on-background/50 hover:underline decoration-primary-container underline-offset-4 transition-all" href="#">Sustainability</a>
+    <a class="font-body text-xs font-light text-on-background/50 hover:underline decoration-primary-container underline-offset-4 transition-all" href="#">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>

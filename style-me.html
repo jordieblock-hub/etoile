@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ÉTOILE - Style Me</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed": "#ffd9e3",
+          "tertiary": "#000000",
+          "primary-fixed-dim": "#c8c6c5",
+          "outline-variant": "#c4c7c7",
+          "surface-dim": "#dadada",
+          "on-error": "#ffffff",
+          "on-secondary-fixed": "#2b151c",
+          "on-secondary": "#ffffff",
+          "secondary-container": "#fdd6e0",
+          "surface-bright": "#f9f9f9",
+          "inverse-surface": "#2f3131",
+          "primary-fixed": "#e5e2e1",
+          "surface-tint": "#5f5e5e",
+          "on-primary": "#ffffff",
+          "on-background": "#1a1c1c",
+          "surface": "#f9f9f9",
+          "surface-container-highest": "#e2e2e2",
+          "on-surface-variant": "#444748",
+          "on-secondary-fixed-variant": "#5b3f48",
+          "surface-container-low": "#f3f3f3",
+          "on-primary-fixed-variant": "#474746",
+          "primary-container": "#1c1b1b",
+          "error-container": "#ffdad6",
+          "primary": "#000000",
+          "surface-container": "#eeeeee",
+          "tertiary-fixed-dim": "#e0bfb9",
+          "surface-variant": "#e2e2e2",
+          "secondary": "#74565f",
+          "on-primary-container": "#858383",
+          "on-tertiary": "#ffffff",
+          "surface-container-high": "#e8e8e8",
+          "on-tertiary-container": "#997d78",
+          "inverse-primary": "#c8c6c5",
+          "on-surface": "#1a1c1c",
+          "tertiary-fixed": "#fddbd4",
+          "on-tertiary-fixed": "#291713",
+          "error": "#ba1a1a",
+          "background": "#f9f9f9",
+          "on-primary-fixed": "#1c1b1b",
+          "on-secondary-container": "#795a63",
+          "tertiary-container": "#291713",
+          "on-error-container": "#93000a",
+          "surface-container-lowest": "#ffffff",
+          "secondary-fixed-dim": "#e3bdc7",
+          "outline": "#747878",
+          "inverse-on-surface": "#f1f1f1",
+          "on-tertiary-fixed-variant": "#58413d"
+        },
+        fontFamily: {
+          "headline": ["Noto Serif"],
+          "body": ["Manrope"],
+          "label": ["Manrope"]
+        },
+        borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container">
+
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl px-12 py-6">
+  <div class="max-w-screen-2xl mx-auto flex justify-between items-center w-full">
+    <a href="index.html" class="text-2xl font-headline tracking-tighter text-neutral-900 uppercase">ÉTOILE</a>
+    <div class="hidden md:flex gap-12">
+      <a href="index.html" class="text-neutral-500 hover:text-neutral-900 transition-colors uppercase text-xs tracking-widest font-body">Dashboard</a>
+      <a href="digital-closet.html" class="text-neutral-500 hover:text-neutral-900 transition-colors uppercase text-xs tracking-widest font-body">Digital Closet</a>
+      <a href="style-me.html" class="text-neutral-900 border-b border-neutral-900 pb-1 uppercase text-xs tracking-widest font-body">Saved Looks</a>
+      <a href="shopping-edit.html" class="text-neutral-500 hover:text-neutral-900 transition-colors uppercase text-xs tracking-widest font-body">Shopping Edit</a>
+    </div>
+    <div class="flex items-center gap-6">
+      <span class="material-symbols-outlined text-neutral-900 cursor-pointer hover:opacity-70 transition-opacity">search</span>
+      <span class="material-symbols-outlined text-neutral-900 cursor-pointer hover:opacity-70 transition-opacity">account_circle</span>
+    </div>
+  </div>
+</nav>
+
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col w-64 h-screen fixed left-0 top-0 pt-24 px-6 bg-neutral-50 z-40">
+  <div class="mb-12">
+    <h2 class="font-headline italic text-lg text-neutral-900">The Atelier</h2>
+    <p class="text-[10px] uppercase tracking-widest text-neutral-400">Stylist Mode Active</p>
+  </div>
+  <nav class="flex flex-col gap-8">
+    <a href="style-me.html" class="font-bold text-neutral-900 flex items-center gap-4 hover:translate-x-1 transition-transform">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1, 'wght' 300;">magic_button</span>
+      <span class="uppercase text-xs tracking-widest font-body">Style Me</span>
+    </a>
+    <a href="onboarding.html" class="text-neutral-400 flex items-center gap-4 hover:translate-x-1 transition-transform">
+      <span class="material-symbols-outlined">auto_awesome</span>
+      <span class="uppercase text-xs tracking-widest font-body">Build Look</span>
+    </a>
+    <a href="#" class="text-neutral-400 flex items-center gap-4 hover:translate-x-1 transition-transform">
+      <span class="material-symbols-outlined">payments</span>
+      <span class="uppercase text-xs tracking-widest font-body">Budget</span>
+    </a>
+    <a href="#" class="text-neutral-400 flex items-center gap-4 hover:translate-x-1 transition-transform">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="uppercase text-xs tracking-widest font-body">Settings</span>
+    </a>
+  </nav>
+  <button class="mt-auto mb-12 bg-primary text-on-primary py-4 px-6 text-[10px] uppercase tracking-widest hover:bg-primary-container transition-colors active:scale-95 duration-300">
+    AI Styling Request
+  </button>
+</aside>
+
+<!-- Main Content -->
+<main class="lg:ml-64 pt-32 pb-24 px-8 md:px-16 max-w-screen-2xl mx-auto">
+
+  <!-- Header -->
+  <header class="mb-20">
+    <div class="inline-block bg-secondary-container text-on-secondary-container px-4 py-1 mb-4 text-[10px] uppercase tracking-[0.2em] font-semibold">
+      Event Curation
+    </div>
+    <h1 class="text-5xl md:text-7xl font-headline tracking-tight text-on-surface leading-tight">
+      Styled for your:<br/>
+      <span class="italic font-normal">Parisian Vacation Dinner</span>
+    </h1>
+    <p class="mt-6 text-on-surface-variant max-w-xl font-light leading-relaxed">
+      Refining your silhouette for an evening at L'Avenue. We've synthesized your Pinterest 'Quiet Luxury' board with your existing silk archives.
+    </p>
+  </header>
+
+  <!-- Magazine Grid -->
+  <div class="grid grid-cols-1 xl:grid-cols-12 gap-16 md:gap-24">
+
+    <!-- Look 1: Primary -->
+    <section class="xl:col-span-8 flex flex-col gap-12">
+      <div class="relative group">
+        <div class="aspect-[4/5] bg-surface-container-low overflow-hidden">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2XUvqgRuwqIkQfMF4dppS19LFpTs-a_bxheTIXN84B_tcKyqZoa-LTR5W5RxCgGKYt6U296dwWsbsIwT3eQ3PeY9ZtFMXq-57a2H_xRE5e2uf6JPjyqAwnYROT8UWqZt2KBR5XImt3sdTL_3kAhbuo1mU8LBPztBL_bFZjgVz1dMeAVrk9ZCAnKNFneAxewkQ5wmQMVgdOo9QODt5bmVA989jmIy3Rqmjqy5fFeVHS-zkAWtuVhYLvf7uegjw0Cp5B1pkxsx0s8o"
+               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+               alt="Editorial fashion outfit for Parisian dinner"/>
+        </div>
+        <!-- Floating Closet Overlap -->
+        <div class="absolute bottom-12 -right-6 md:-right-12 bg-surface-container-lowest p-8 w-64 md:w-80 shadow-sm border-l-4 border-secondary-container">
+          <span class="uppercase text-[9px] tracking-[0.3em] text-on-secondary-container font-bold mb-4 block">Closet Insight</span>
+          <p class="text-sm font-headline italic text-on-surface leading-snug">
+            "This pairing leverages your 2022 Celine blazer, balancing the fluidity of the new silk camisole seen in your recent Pinterest pins."
+          </p>
+        </div>
+      </div>
+
+      <!-- Product Breakdown -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="flex flex-col gap-4">
+          <div class="aspect-square bg-surface-container overflow-hidden relative">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuPwzZUqDGjpLpxNxu-qF-JMLa0IrXLy7Za5EYXtSG7GoyL0kMRX5eLuimIukGbKDMqiDherHijp9En7viXUm3f_nbI4iMaeBOnZxLEIJw8W0X2l-nPoYS-1n67bly4uMGGung_dwpVyPGpyJZFkC96lLQA3DFNQIPay9JG_j6TTxF46bfR13Z7EqLYGBkFMVnaa9sdZheDgOcPMnUsGyzPDT8tBUcFn9UsQhivP9LtvKHRPi3_2WH8PSYG5ezsdrpkQsNgntJ778"
+                 class="w-full h-full object-cover" alt="Oversized blazer"/>
+            <div class="absolute top-2 right-2 bg-white/90 px-2 py-1 text-[8px] tracking-widest uppercase font-bold text-neutral-900 border border-neutral-100">In Closet</div>
+          </div>
+          <div>
+            <p class="text-[10px] uppercase tracking-widest font-semibold">Celine</p>
+            <p class="text-xs text-on-surface-variant">Wool Oversized Blazer</p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div class="aspect-square bg-surface-container overflow-hidden relative">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA-l1z78fDiz_LwXivu-nT8XDVqREbM7KcDJ2Lu-z-dY0EwCz0vkdQBI-BNjGjVIGsP-9hCn2A1luHmnK3idynNZOcPmDfgL6DJQko2f2nGfv2gkXBwHouCkTVk7iTSS39Vi6Xl-7RgrhrKiVs4zQjkxigqEGq4qYlONGIDnrBbJA0Kq_Q0eZt1iCEtfAry0X2ti76K2djL4MucSdk5b5FCM1O4oPrmg_DrDgbARZBi1hPuQGZcyG0uryZrFnEL7Arbucj7ixHHHw"
+                 class="w-full h-full object-cover" alt="Silk bias-cut dress"/>
+            <div class="absolute top-2 right-2 bg-primary text-on-primary px-2 py-1 text-[8px] tracking-widest uppercase font-bold">Shop Now</div>
+          </div>
+          <div>
+            <p class="text-[10px] uppercase tracking-widest font-semibold">The Row</p>
+            <p class="text-xs text-on-surface-variant">Silk Bias-cut Dress</p>
+            <p class="text-xs font-headline mt-1">$1,290</p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div class="aspect-square bg-surface-container overflow-hidden relative">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-EsfliewXjOpppUs_X_-lAPykgj9Rw2Av0dw_foWdH2-UWesym0AKwyMZgYB4qYSdisXTbUaZq3G_aItSgnwia32fkswm37pT93waD_zHhZ3Uw5jVf1_y31UoqoKeupSmRqccarRmjX_oMVNTla8lKbhSSAV4REMV5u2k0Aszzld6OTIJ8ckOyGSm2ZJtTabqXoV6pYJpGuos66dZJiN4tNMuNIp_jPoILhjyklGDnAAVscJaAlDMt6m_H2wSYjse1zemJYvb3UU"
+                 class="w-full h-full object-cover" alt="Leather heels"/>
+            <div class="absolute top-2 right-2 bg-white/90 px-2 py-1 text-[8px] tracking-widest uppercase font-bold text-neutral-900 border border-neutral-100">In Closet</div>
+          </div>
+          <div>
+            <p class="text-[10px] uppercase tracking-widest font-semibold">Saint Laurent</p>
+            <p class="text-xs text-on-surface-variant">Amber Sandals</p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div class="aspect-square bg-surface-container overflow-hidden relative">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhv_JWefAGbJ77Aiez9wi89IGcwgYlSr5N_JOq9na3QdX5A1ts4kcjk9JB_fH_cAeFXhzsWXfVMINI3jLRbyZAkhIV-wr9B94aygBrl9izrIItcH-8cYCfHwFRfsQ3m2fENbtpkq4UNUZvIvCWt3lK4xATlcVNl_eogT1Bx3CD_YQaWJ6RoL1byEwHbJxlTq7_VmtkhQjLe_zLjrh2mPZykZ3B7LB6-QolMvDiq55cfu85u8TSp5eC5qZ73aOqpID-0gusIfY1NhU"
+                 class="w-full h-full object-cover" alt="Leather clutch"/>
+            <div class="absolute top-2 right-2 bg-primary text-on-primary px-2 py-1 text-[8px] tracking-widest uppercase font-bold">Shop Now</div>
+          </div>
+          <div>
+            <p class="text-[10px] uppercase tracking-widest font-semibold">Khaite</p>
+            <p class="text-xs text-on-surface-variant">The Elena Clutch</p>
+            <p class="text-xs font-headline mt-1">$850</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sidebar Controls -->
+    <aside class="xl:col-span-4 flex flex-col gap-12 border-l border-outline-variant/20 pl-8 md:pl-16">
+      <div class="flex flex-col gap-8">
+        <h3 class="text-2xl font-headline italic">Stylist's Note</h3>
+        <p class="text-sm leading-relaxed text-on-surface-variant">
+          "For a Parisian dinner, we emphasize the contrast between 'masculine' tailoring and 'feminine' silk. The blush tones in the accessories pull from your 'Rose Gold Edit' collection."
+        </p>
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center justify-between py-4 border-b border-outline-variant/20">
+            <span class="text-xs uppercase tracking-widest">I own this</span>
+            <div class="w-10 h-5 bg-neutral-200 relative flex items-center px-1 cursor-pointer">
+              <div class="w-3 h-3 bg-white shadow-sm transition-all translate-x-5"></div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between py-4 border-b border-outline-variant/20">
+            <span class="text-xs uppercase tracking-widest">Wear often</span>
+            <div class="w-10 h-5 bg-neutral-200 relative flex items-center px-1 cursor-pointer">
+              <div class="w-3 h-3 bg-white shadow-sm transition-all"></div>
+            </div>
+          </div>
+          <button class="flex items-center justify-between py-4 border-b border-outline-variant/20 group">
+            <span class="text-xs uppercase tracking-widest group-hover:text-primary transition-colors">Save look</span>
+            <span class="material-symbols-outlined text-sm">bookmark</span>
+          </button>
+        </div>
+        <a href="shopping-edit.html" class="w-full block text-center bg-primary text-on-primary py-6 text-xs uppercase tracking-[0.3em] font-bold hover:bg-neutral-800 transition-all active:scale-95">
+          Shop Missing Pieces ($2,140)
+        </a>
+      </div>
+      <div class="bg-surface-container-low p-8">
+        <p class="text-[10px] uppercase tracking-widest text-on-secondary-container mb-2">Pinterest Sync</p>
+        <p class="text-xs italic text-on-surface-variant">Matches 84% of your "Paris Nights" moodboard aesthetic.</p>
+      </div>
+    </aside>
+
+    <!-- Look 2: Alternative -->
+    <section class="xl:col-span-12 mt-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-16 md:gap-32">
+        <div class="order-2 md:order-1 flex flex-col gap-8">
+          <h2 class="text-4xl font-headline">The Alternative:<br/><span class="italic">Modern Monochrome</span></h2>
+          <p class="text-on-surface-variant leading-loose max-w-md">
+            A sharper, more architectural approach to evening wear. This utilises your Saint Laurent trousers and recommends a structured knit to maintain form during the dinner.
+          </p>
+          <div class="flex flex-wrap gap-4 mt-4">
+            <div class="flex items-center gap-3 bg-surface-container-lowest px-4 py-3 border border-outline-variant/20">
+              <span class="text-[10px] uppercase tracking-widest font-bold">New Item</span>
+            </div>
+            <div class="flex items-center gap-3 bg-secondary-container/30 px-4 py-3 border border-secondary-container">
+              <span class="text-[10px] uppercase tracking-widest font-bold">In Closet</span>
+            </div>
+          </div>
+          <button class="mt-8 self-start border border-primary px-8 py-4 text-[10px] uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">
+            Explore Alternative Look
+          </button>
+        </div>
+        <div class="order-1 md:order-2 aspect-[3/4] bg-surface-container relative overflow-hidden">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSo8rzYbwrH5sbzWkcWKBKFjxy28zHvXiS5oz5t0IbEHNg5ZDNmoH1IFhv-Gf9KPrryzdR0T68WbObCm6a9kPBoVfJbopevYhBNt6G8amkR9LfzXdRvt5yYNNmy1xKkkWm8ck19k4osVqlgoKhllvuweOoqZ0uSMRuD8hGzVcrJrYtYge2m4yKwdV2juaLWD0P_VELQa7_we5-_Ll2QwNM5FQd-L-k6XU3E0ZEi-VaD_8b95pvwC6g5W9fnNeX1zxx90u19KWVuw"
+               class="w-full h-full object-cover" alt="Alternative monochrome outfit"/>
+          <div class="absolute -top-12 -left-12 text-[12rem] font-headline text-neutral-100/50 pointer-events-none select-none leading-none">02</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shop the Gap -->
+    <section class="xl:col-span-12 mt-32 pt-24 border-t border-outline-variant/10">
+      <h3 class="font-headline text-3xl mb-12 italic text-center">Completing the Canvas</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="space-y-4">
+          <div class="aspect-[3/4] bg-surface-container overflow-hidden">
+            <img class="w-full h-full object-cover" alt="Sage green leather mules" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-EsfliewXjOpppUs_X_-lAPykgj9Rw2Av0dw_foWdH2-UWesym0AKwyMZgYB4qYSdisXTbUaZq3G_aItSgnwia32fkswm37pT93waD_zHhZ3Uw5jVf1_y31UoqoKeupSmRqccarRmjX_oMVNTla8lKbhSSAV4REMV5u2k0Aszzld6OTIJ8ckOyGSm2ZJtTabqXoV6pYJpGuos66dZJiN4tNMuNIp_jPoILhjyklGDnAAVscJaAlDMt6m_H2wSYjse1zemJYvb3UU"/>
+          </div>
+          <div class="text-center">
+            <p class="text-xs font-bold uppercase tracking-widest mb-1">Maison Mules</p>
+            <p class="text-sm italic font-headline">$240</p>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="aspect-[3/4] bg-surface-container overflow-hidden">
+            <img class="w-full h-full object-cover" alt="Gold sculptural earrings" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjYJoe7dDWL5B3Pm29QKNzE3vhFaxVnV1yoxb94iwfEdEHOsBtsozPChFPPRqJJqkJCiWSYYZolvD-zWvPhDebuUfaJo8wJm96RmaRHOvaPd3xQnHO5HskPwDEVW9ZWvsSSIqTgK53MImALX-n2U1z2m2geKuoyjDWnSyMgCnyXFrnpNQiMpM99HIqLmL7lS4yz63oEfFhJkhMZqPsVftFe4qt1S0-gk-IDGeO5OlrVBsPi0zCJah8fFLrSF_Xd3dVcmABjCX-k5k"/>
+          </div>
+          <div class="text-center">
+            <p class="text-xs font-bold uppercase tracking-widest mb-1">Abstract Hoops</p>
+            <p class="text-sm italic font-headline">$115</p>
+          </div>
+        </div>
+        <div class="space-y-4 pt-8">
+          <div class="aspect-[3/4] bg-surface-container overflow-hidden">
+            <img class="w-full h-full object-cover" alt="Terracotta shoulder bag" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhv_JWefAGbJ77Aiez9wi89IGcwgYlSr5N_JOq9na3QdX5A1ts4kcjk9JB_fH_cAeFXhzsWXfVMINI3jLRbyZAkhIV-wr9B94aygBrl9izrIItcH-8cYCfHwFRfsQ3m2fENbtpkq4UNUZvIvCWt3lK4xATlcVNl_eogT1Bx3CD_YQaWJ6RoL1byEwHbJxlTq7_VmtkhQjLe_zLjrh2mPZykZ3B7LB6-QolMvDiq55cfu85u8TSp5eC5qZ73aOqpID-0gusIfY1NhU"/>
+          </div>
+          <div class="text-center">
+            <p class="text-xs font-bold uppercase tracking-widest mb-1">L'Arc Clutch</p>
+            <p class="text-sm italic font-headline">$390</p>
+          </div>
+        </div>
+        <div class="space-y-4 pt-8">
+          <div class="aspect-[3/4] bg-surface-container overflow-hidden">
+            <img class="w-full h-full object-cover" alt="Silk scarf with botanical patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBacBX5ITcnHLyeA3xGZu4Su2CUtg41VUumBd9Kl3XVLDH-Vc1Ji5A-8FbTG_gzHbZ_uVZIs7QWvvgjWNQ8r971j29EfaVGzTc2ewrRPpYsFnwxasm0HlUQfnwLXyEcBc_r9QV8Nwbw6oQKWQSSGrFiRdKo7h02EXFf7Jf0bFu4YsnnSaZjTUfYItzYDmre2M3CnLd38JcrFJpv9XRIZwI0gxI-6odpXAEXCRz7gi7EqRHwtdA4Uld1VoYjqW7JQBHxar0swsjRRbE"/>
+          </div>
+          <div class="text-center">
+            <p class="text-xs font-bold uppercase tracking-widest mb-1">Silk Carré</p>
+            <p class="text-sm italic font-headline">$180</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-neutral-100 w-full py-12 px-12 mt-20">
+  <div class="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+    <div class="font-headline text-sm uppercase tracking-tighter">ÉTOILE EDITORIAL</div>
+    <div class="flex gap-12">
+      <a href="#" class="text-neutral-400 hover:text-neutral-900 transition-colors text-[10px] uppercase tracking-widest font-body">Editorial Policy</a>
+      <a href="#" class="text-neutral-400 hover:text-neutral-900 transition-colors text-[10px] uppercase tracking-widest font-body">Privacy</a>
+      <a href="#" class="text-neutral-400 hover:text-neutral-900 transition-colors text-[10px] uppercase tracking-widest font-body">Pinterest</a>
+      <a href="#" class="text-neutral-400 hover:text-neutral-900 transition-colors text-[10px] uppercase tracking-widest font-body">Instagram</a>
+    </div>
+    <div class="text-[10px] uppercase tracking-widest font-body text-neutral-400">© 2024 ÉTOILE EDITORIAL. ALL RIGHTS RESERVED.</div>
+  </div>
+</footer>
+
+</body>
+</html>
