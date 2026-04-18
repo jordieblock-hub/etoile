@@ -1,307 +1,320 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Digital Closet | ÉTOILE</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+<title>ÉTOILE | Digital Closet</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "secondary-fixed": "#ffd9e3",
-          "tertiary": "#000000",
-          "primary-fixed-dim": "#c8c6c5",
-          "outline-variant": "#c4c7c7",
-          "surface-dim": "#dadada",
-          "on-error": "#ffffff",
-          "on-secondary-fixed": "#2b151c",
-          "on-secondary": "#ffffff",
-          "secondary-container": "#fdd6e0",
-          "surface-bright": "#f9f9f9",
-          "inverse-surface": "#2f3131",
-          "primary-fixed": "#e5e2e1",
-          "surface-tint": "#5f5e5e",
-          "on-primary": "#ffffff",
-          "on-background": "#1a1c1c",
-          "surface": "#f9f9f9",
-          "surface-container-highest": "#e2e2e2",
-          "on-surface-variant": "#444748",
-          "on-secondary-fixed-variant": "#5b3f48",
-          "surface-container-low": "#f3f3f3",
-          "on-primary-fixed-variant": "#474746",
-          "primary-container": "#1c1b1b",
-          "error-container": "#ffdad6",
-          "primary": "#000000",
-          "surface-container": "#eeeeee",
-          "tertiary-fixed-dim": "#e0bfb9",
-          "surface-variant": "#e2e2e2",
-          "secondary": "#74565f",
-          "on-primary-container": "#858383",
-          "on-tertiary": "#ffffff",
-          "surface-container-high": "#e8e8e8",
-          "on-tertiary-container": "#997d78",
-          "inverse-primary": "#c8c6c5",
-          "on-surface": "#1a1c1c",
-          "tertiary-fixed": "#fddbd4",
-          "on-tertiary-fixed": "#291713",
-          "error": "#ba1a1a",
-          "background": "#f9f9f9",
-          "on-primary-fixed": "#1c1b1b",
-          "on-secondary-container": "#795a63",
-          "tertiary-container": "#291713",
-          "on-error-container": "#93000a",
-          "surface-container-lowest": "#ffffff",
-          "secondary-fixed-dim": "#e3bdc7",
-          "outline": "#747878",
-          "inverse-on-surface": "#f1f1f1",
-          "on-tertiary-fixed-variant": "#58413d"
-        },
-        fontFamily: {
-          "headline": ["Noto Serif"],
-          "body": ["Manrope"],
-          "label": ["Manrope"]
-        },
-        borderRadius: {"DEFAULT": "0rem", "lg": "0rem", "xl": "0rem", "full": "9999px"},
-      },
-    },
-  }
-</script>
 <style>
-  .material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
-    font-size: 20px;
+  * { box-sizing: border-box; }
+  body { font-family: 'Manrope', sans-serif; background: #0d0d0d; color: #f5f2ee; }
+  .serif { font-family: 'Noto Serif', serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; font-size: 20px; }
+
+  /* Scattered card effect — each card gets its own rotation + offset */
+  .closet-card {
+    background: white;
+    color: #0d0d0d;
+    transition: transform 0.3s, box-shadow 0.3s, z-index 0s;
+    cursor: pointer;
+    position: relative;
   }
-  .tonal-shift-bg { background-color: #f3f3f3; }
+  .closet-card:hover {
+    transform: rotate(0deg) translateY(-8px) scale(1.03) !important;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    z-index: 20;
+  }
+
+  .card-1 { transform: rotate(-2deg); }
+  .card-2 { transform: rotate(1.5deg) translateY(12px); }
+  .card-3 { transform: rotate(-1deg) translateY(4px); }
+  .card-4 { transform: rotate(2.5deg) translateY(8px); }
+  .card-5 { transform: rotate(-1.5deg); }
+  .card-6 { transform: rotate(0.8deg) translateY(16px); }
+
+  /* Tag label (like 29 Closet cards) */
+  .card-tag {
+    position: absolute;
+    top: -10px;
+    right: 12px;
+    background: #0d0d0d;
+    color: white;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    font-weight: 700;
+  }
+  .card-tag.owned { background: #2d6a2d; }
+  .card-tag.frequent { background: #e8b4bc; color: #0d0d0d; }
+
+  /* Category filter pills */
+  .filter-pill { border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); transition: all 0.2s; cursor: pointer; }
+  .filter-pill:hover, .filter-pill.active { border-color: white; color: white; }
+  .filter-pill.active { background: white; color: #0d0d0d; }
+
+  /* Central hanger graphic */
+  .hanger-graphic {
+    width: 0;
+    height: 0;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+    border-bottom: 50px solid #e8b4bc;
+    position: relative;
+  }
+  .hanger-graphic::after {
+    content: '';
+    position: absolute;
+    top: 50px;
+    left: -70px;
+    width: 140px;
+    height: 60px;
+    background: #e8b4bc;
+    border-radius: 0 0 70px 70px;
+  }
+  .hanger-hook {
+    width: 20px;
+    height: 20px;
+    border: 4px solid #e8b4bc;
+    border-radius: 50%;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .hanger-hook::before {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 16px;
+    background: #e8b4bc;
+  }
 </style>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+<body class="min-h-screen">
 
-<!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl">
-  <div class="flex justify-between items-center w-full px-12 py-6 max-w-screen-2xl mx-auto">
-    <a href="index.html" class="text-2xl font-headline tracking-tighter text-neutral-900 uppercase">ÉTOILE</a>
-    <div class="hidden md:flex items-center space-x-12">
-      <a class="text-neutral-500 hover:text-neutral-900 transition-colors uppercase text-xs tracking-widest font-body" href="index.html">Dashboard</a>
-      <a class="text-neutral-900 border-b border-neutral-900 pb-1 uppercase text-xs tracking-widest font-body" href="digital-closet.html">Digital Closet</a>
-      <a class="text-neutral-500 hover:text-neutral-900 transition-colors uppercase text-xs tracking-widest font-body" href="style-me.html">Saved Looks</a>
-      <a class="text-neutral-500 hover:text-neutral-900 transition-colors uppercase text-xs tracking-widest font-body" href="shopping-edit.html">Shopping Edit</a>
+<!-- NAV (dark) -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-screen-xl mx-auto flex items-center justify-between px-8 py-4">
+    <a href="index.html" class="serif italic text-2xl tracking-tight text-white">ÉTOILE</a>
+    <div class="hidden md:flex items-center gap-10">
+      <a href="index.html" class="text-[11px] uppercase tracking-[0.18em] text-white/40 hover:text-white transition-colors">Home</a>
+      <a href="digital-closet.html" class="text-[11px] uppercase tracking-[0.18em] text-white font-semibold border-b border-white pb-0.5">Closet</a>
+      <a href="style-me.html" class="text-[11px] uppercase tracking-[0.18em] text-white/40 hover:text-white transition-colors">Saved Looks</a>
+      <a href="shopping-edit.html" class="text-[11px] uppercase tracking-[0.18em] text-white/40 hover:text-white transition-colors">Shop</a>
     </div>
-    <div class="flex items-center space-x-6">
-      <span class="material-symbols-outlined cursor-pointer hover:opacity-70 transition-opacity">search</span>
-      <span class="material-symbols-outlined cursor-pointer hover:opacity-70 transition-opacity">account_circle</span>
+    <div class="flex items-center gap-5">
+      <span class="material-symbols-outlined text-white cursor-pointer hover:opacity-60">search</span>
+      <span class="material-symbols-outlined text-white cursor-pointer hover:opacity-60">account_circle</span>
     </div>
   </div>
 </nav>
 
-<div class="flex pt-24 min-h-screen">
-  <!-- SideNavBar -->
-  <aside class="hidden lg:flex flex-col w-64 h-screen fixed left-0 top-0 pt-32 px-10 tonal-shift-bg">
-    <div class="mb-12">
-      <h2 class="font-headline text-2xl tracking-tight mb-1">The Atelier</h2>
-      <p class="font-label uppercase text-[10px] tracking-[0.2em] text-on-surface-variant">Stylist Mode Active</p>
+<!-- SIDEBAR (dark) -->
+<aside class="hidden lg:flex flex-col w-60 h-screen fixed left-0 top-0 pt-20 px-6 bg-stone-950 border-r border-white/10 z-40">
+  <div class="mb-10 pt-4">
+    <p class="text-[10px] uppercase tracking-[0.2em] text-white/30 mb-1">The Atelier</p>
+    <p class="text-xs text-white/20">Stylist Mode Active</p>
+  </div>
+  <nav class="flex flex-col gap-1 flex-1">
+    <a href="style-me.html" class="flex items-center gap-3 px-3 py-3 text-white/40 hover:text-white hover:bg-white/5 rounded-sm transition-colors">
+      <span class="material-symbols-outlined">magic_button</span>
+      <span class="text-[11px] uppercase tracking-[0.15em]">Style Me</span>
+    </a>
+    <a href="onboarding.html" class="flex items-center gap-3 px-3 py-3 text-white/40 hover:text-white hover:bg-white/5 rounded-sm transition-colors">
+      <span class="material-symbols-outlined">auto_awesome</span>
+      <span class="text-[11px] uppercase tracking-[0.15em]">Build Look</span>
+    </a>
+    <a href="digital-closet.html" class="flex items-center gap-3 px-3 py-3 bg-white/10 text-white font-semibold rounded-sm">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1, 'wght' 300;">checkroom</span>
+      <span class="text-[11px] uppercase tracking-[0.15em]">My Closet</span>
+    </a>
+    <a href="shopping-edit.html" class="flex items-center gap-3 px-3 py-3 text-white/40 hover:text-white hover:bg-white/5 rounded-sm transition-colors">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span class="text-[11px] uppercase tracking-[0.15em]">Shop</span>
+    </a>
+
+    <!-- Category filters -->
+    <div class="mt-8 pt-8 border-t border-white/10">
+      <p class="text-[9px] uppercase tracking-[0.2em] text-white/20 mb-4">Filter by category</p>
+      <ul class="space-y-3">
+        <li class="text-[11px] uppercase tracking-[0.15em] text-white font-semibold cursor-pointer">All Items</li>
+        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Outerwear</li>
+        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Knitwear</li>
+        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Tops</li>
+        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Bottoms</li>
+        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Shoes</li>
+        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Accessories</li>
+      </ul>
     </div>
-    <div class="space-y-8 flex-1">
-      <a href="style-me.html" class="group cursor-pointer">
-        <div class="flex items-center space-x-4 text-neutral-400 hover:translate-x-1 transition-transform">
-          <span class="material-symbols-outlined">magic_button</span>
-          <span class="font-label uppercase text-xs tracking-widest">Style Me</span>
-        </div>
-      </a>
-      <a href="onboarding.html" class="group cursor-pointer">
-        <div class="flex items-center space-x-4 text-neutral-400 hover:translate-x-1 transition-transform">
-          <span class="material-symbols-outlined">auto_awesome</span>
-          <span class="font-label uppercase text-xs tracking-widest">Build Look</span>
-        </div>
-      </a>
-      <a href="#" class="group cursor-pointer">
-        <div class="flex items-center space-x-4 text-neutral-400 hover:translate-x-1 transition-transform">
-          <span class="material-symbols-outlined">payments</span>
-          <span class="font-label uppercase text-xs tracking-widest">Budget</span>
-        </div>
-      </a>
-      <a href="#" class="group cursor-pointer">
-        <div class="flex items-center space-x-4 text-neutral-400 hover:translate-x-1 transition-transform">
-          <span class="material-symbols-outlined">settings</span>
-          <span class="font-label uppercase text-xs tracking-widest">Settings</span>
-        </div>
-      </a>
-      <div class="pt-12">
-        <p class="font-label uppercase text-[9px] tracking-widest text-on-surface-variant mb-6 opacity-50">Filter by category</p>
-        <ul class="space-y-4">
-          <li class="font-label text-xs uppercase tracking-widest text-primary cursor-pointer font-bold">All Items</li>
-          <li class="font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Outerwear</li>
-          <li class="font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Knitwear</li>
-          <li class="font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Tops</li>
-          <li class="font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Bottoms</li>
-          <li class="font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Shoes</li>
-          <li class="font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Accessories</li>
-        </ul>
-      </div>
-    </div>
-    <button onclick="window.location='style-me.html'" class="mb-12 bg-primary text-on-primary py-4 px-6 text-[10px] uppercase tracking-widest font-bold active:scale-95 transition-transform">
+  </nav>
+  <div class="pb-8">
+    <a href="style-me.html" class="block w-full bg-white text-black py-3 text-center text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-stone-100 transition-colors">
       AI Styling Request
-    </button>
-  </aside>
+    </a>
+  </div>
+</aside>
 
-  <!-- Main Content -->
-  <main class="flex-1 lg:ml-64 px-12 pb-24">
-    <!-- Header Section -->
-    <header class="max-w-6xl mx-auto py-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
-      <div>
-        <h1 class="font-headline text-5xl md:text-7xl tracking-tight mb-4 leading-none">Digital<br/>Closet</h1>
-        <p class="max-w-md text-on-surface-variant font-light text-lg">A curated archive of your personal collection. Organized for effortless daily inspiration.</p>
+<main class="lg:ml-60 pt-20 pb-24 min-h-screen">
+
+  <!-- Header -->
+  <header class="px-8 py-12 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 max-w-screen-xl mx-auto">
+    <div>
+      <h1 class="serif text-6xl md:text-8xl tracking-tight leading-none mb-4 text-white">Digital<br/><em>Closet</em></h1>
+      <p class="text-white/40 font-light text-lg max-w-md">Your personal archive. 24 pieces catalogued.</p>
+    </div>
+    <div class="flex flex-col items-end gap-4">
+      <button class="flex items-center gap-3 group">
+        <span class="text-[11px] uppercase tracking-[0.18em] text-white border-b border-white/40 pb-0.5 hover:border-white transition-colors">Add Item</span>
+        <div class="bg-white text-black p-2">
+          <span class="material-symbols-outlined" style="color:#0d0d0d;">add</span>
+        </div>
+      </button>
+      <div class="relative w-72">
+        <input class="w-full bg-transparent border-0 border-b border-white/20 py-2 pr-8 focus:ring-0 focus:border-white text-white placeholder:text-white/20 text-[11px] tracking-widest uppercase" placeholder="Search collection..." type="text"/>
+        <span class="material-symbols-outlined absolute right-0 top-2 text-white/30">search</span>
       </div>
-      <div class="flex flex-col items-end gap-6 w-full md:w-auto">
-        <button class="flex items-center space-x-3 group active:scale-95 transition-transform">
-          <span class="font-label uppercase text-xs tracking-widest border-b border-primary pb-1">Add to Your Digital Closet</span>
-          <div class="bg-primary text-on-primary p-2">
-            <span class="material-symbols-outlined">add</span>
-          </div>
-        </button>
-        <div class="w-full md:w-80 relative">
-          <input class="w-full bg-transparent border-0 border-b border-outline-variant py-2 pr-10 focus:ring-0 focus:border-primary placeholder:text-outline-variant font-label text-[10px] tracking-widest" placeholder="SEARCH COLLECTION..." type="text"/>
-          <span class="material-symbols-outlined absolute right-0 top-2 text-outline-variant">search</span>
+    </div>
+  </header>
+
+  <!-- FILTER PILLS -->
+  <div class="px-8 py-6 flex flex-wrap gap-3 max-w-screen-xl mx-auto">
+    <button class="filter-pill active text-[10px] uppercase tracking-[0.15em] px-4 py-2 font-semibold" onclick="setFilter(this, 'all')">All Items</button>
+    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'outerwear')">Outerwear</button>
+    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'tops')">Tops</button>
+    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'bottoms')">Bottoms</button>
+    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'shoes')">Shoes</button>
+    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'accessories')">Accessories</button>
+  </div>
+
+  <!-- CLOSET GRID (scattered cards) -->
+  <section class="px-8 py-8 max-w-screen-xl mx-auto">
+
+    <!-- Central hanger element -->
+    <div class="flex justify-center mb-16 pointer-events-none select-none">
+      <div class="relative">
+        <div class="hanger-hook"></div>
+        <div class="hanger-graphic"></div>
+        <p class="absolute top-16 left-1/2 -translate-x-1/2 text-[#0d0d0d] text-[10px] uppercase tracking-[0.2em] font-bold whitespace-nowrap opacity-60">Your Wardrobe</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-8 lg:gap-12">
+
+      <!-- Card 1 -->
+      <div class="closet-card card-1 shadow-2xl">
+        <span class="card-tag frequent">Worn Often</span>
+        <div class="aspect-[3/4] overflow-hidden">
+          <img class="w-full h-full object-cover" alt="Max Mara Coat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIWCvgIenXSxLsos_STTJhWL0456JbEBnO0UdTR_N-7T6gnIK9sWoovsp1-PkA0ly1_AGDINT5uoYWafqJwWOo6AUzJmTet5DId6EYbYky-jcUW3eTQJjrxuci_lPT18ZeNlrvgob9NZauU-13dv82Fx5R0ZI-84yj3LZxMwcYS6m9hCX69E79Zx06ZGIxLPjI3l2c_zYNARYYpJh7O49ieOZoiqV7nqBsrtSzW5t2SLQIFPfaaK-cZu62RmYvZ6mJt6Uzy9fyNlQ"/>
+        </div>
+        <div class="p-4 border-t border-stone-100">
+          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">Max Mara</p>
+          <p class="text-sm font-semibold">Labbro Cashmere Coat</p>
+          <p class="text-xs text-stone-400 serif italic mt-1">$6,250</p>
         </div>
       </div>
-    </header>
 
-    <!-- Closet Grid -->
-    <section class="max-w-6xl mx-auto mt-12">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-20 gap-x-12">
-
-        <!-- Item 1 -->
-        <div class="group cursor-pointer">
-          <div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
-            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Minimalist beige cashmere coat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIWCvgIenXSxLsos_STTJhWL0456JbEBnO0UdTR_N-7T6gnIK9sWoovsp1-PkA0ly1_AGDINT5uoYWafqJwWOo6AUzJmTet5DId6EYbYky-jcUW3eTQJjrxuci_lPT18ZeNlrvgob9NZauU-13dv82Fx5R0ZI-84yj3LZxMwcYS6m9hCX69E79Zx06ZGIxLPjI3l2c_zYNARYYpJh7O49ieOZoiqV7nqBsrtSzW5t2SLQIFPfaaK-cZu62RmYvZ6mJt6Uzy9fyNlQ"/>
-            <div class="absolute top-4 left-4">
-              <span class="bg-secondary-container text-on-secondary-container px-3 py-1 text-[9px] font-label uppercase tracking-widest">Frequently Worn</span>
-            </div>
-            <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <button class="bg-white text-primary px-6 py-3 font-label text-[10px] uppercase tracking-widest">View Details</button>
-            </div>
-          </div>
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="font-label text-xs uppercase tracking-widest font-bold">Max Mara</h3>
-              <p class="text-on-surface-variant text-xs mt-1">Labbro Cashmere Coat</p>
-            </div>
-            <p class="font-headline italic text-sm text-on-surface-variant">$6,250</p>
-          </div>
+      <!-- Card 2 -->
+      <div class="closet-card card-2 shadow-2xl">
+        <span class="card-tag">In Closet</span>
+        <div class="aspect-[3/4] overflow-hidden">
+          <img class="w-full h-full object-cover" alt="Saint Laurent Bag" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBen7f3-Uwv8J8GOOOSkxCpnMZnOzV_fBFZB2iG212jqbG7Hy_ln-S9cBh9AEOYa0B5S9JQPY6c_XySewFmm3remFn-5yEd6ZNoRicTaPGOFb1GuhWS72xc7PRNCkLVrX_D7CFi4zl2ND8EtzV3MeGpkc6h4nwM4kwdnLrqAHDgJWC4Mg0GKbIvKL9K1mhiV_uFl1Uz9Qz224iJFz0YKYpDIc18SegyshDcmeHKl7BeYjT9k7OfJUQRSN9uRBaaqQuCgGc6mpYEvY8"/>
         </div>
-
-        <!-- Item 2 -->
-        <div class="group cursor-pointer">
-          <div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
-            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Black leather structured handbag with gold hardware" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBen7f3-Uwv8J8GOOOSkxCpnMZnOzV_fBFZB2iG212jqbG7Hy_ln-S9cBh9AEOYa0B5S9JQPY6c_XySewFmm3remFn-5yEd6ZNoRicTaPGOFb1GuhWS72xc7PRNCkLVrX_D7CFi4zl2ND8EtzV3MeGpkc6h4nwM4kwdnLrqAHDgJWC4Mg0GKbIvKL9K1mhiV_uFl1Uz9Qz224iJFz0YKYpDIc18SegyshDcmeHKl7BeYjT9k7OfJUQRSN9uRBaaqQuCgGc6mpYEvY8"/>
-            <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <button class="bg-white text-primary px-6 py-3 font-label text-[10px] uppercase tracking-widest">View Details</button>
-            </div>
-          </div>
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="font-label text-xs uppercase tracking-widest font-bold">Saint Laurent</h3>
-              <p class="text-on-surface-variant text-xs mt-1">Le 5 à 7 Shoulder Bag</p>
-            </div>
-            <p class="font-headline italic text-sm text-on-surface-variant">$2,450</p>
-          </div>
+        <div class="p-4 border-t border-stone-100">
+          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">Saint Laurent</p>
+          <p class="text-sm font-semibold">Le 5 à 7 Shoulder Bag</p>
+          <p class="text-xs text-stone-400 serif italic mt-1">$2,450</p>
         </div>
-
-        <!-- Item 3 -->
-        <div class="group cursor-pointer">
-          <div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
-            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="White leather luxury sneakers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABeV1xbvTPRVINGg-CJkC4q7w8pyaFegj_CTFMXHmYhNocbu4BQ0ie1GEoJAC8UYtcNZLwE0rFgxHWHVRiJJzwcvYVzA5nOorMSNqBFbhpgPra8FVC97COXPwAa8wMLj1LjJdFD3vk52N3wLm6fgDd6_XYBdECWqq538Dp8ZoZqQ6ThsgYgYJQ_oaWLpGPtz3vuzOypkRcPEOSGi_MY4Q225a2Y6Q6763wHkxLovO5t_ozc6VFnqQ2PSiasItsn6yf7qcJBvcUkCs"/>
-            <div class="absolute top-4 left-4">
-              <span class="bg-secondary-container text-on-secondary-container px-3 py-1 text-[9px] font-label uppercase tracking-widest">Frequently Worn</span>
-            </div>
-            <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <button class="bg-white text-primary px-6 py-3 font-label text-[10px] uppercase tracking-widest">View Details</button>
-            </div>
-          </div>
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="font-label text-xs uppercase tracking-widest font-bold">The Row</h3>
-              <p class="text-on-surface-variant text-xs mt-1">Owen Runner Sneaker</p>
-            </div>
-            <p class="font-headline italic text-sm text-on-surface-variant">$720</p>
-          </div>
-        </div>
-
-        <!-- Item 4 -->
-        <div class="group cursor-pointer">
-          <div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
-            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Oversized white poplin button-down shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB45wbwZpXve4xa7wx3Q-fYqnw-sCgqbOPKblA0oZEXZ7OpDn_MS0SFIA-lNCw1OYwgylSmBGisEs2BZSEx92mRG-pzUl9XqHw2Ya-WbkESHNkhOcYVBTN5U-2ROb0OAb24glr7k5lME9wGjoQNsuSdBwrpBvVnPQftWVG14tnG6d5jApbodNQKTGT__IHJOyYM50tz74hOWmtdMjDKUHlCh75mqdHdlgKnxZHKk2VH5EstXO8jC9lttXT7ZiUEi0F1Yh-gd46At8s"/>
-            <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <button class="bg-white text-primary px-6 py-3 font-label text-[10px] uppercase tracking-widest">View Details</button>
-            </div>
-          </div>
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="font-label text-xs uppercase tracking-widest font-bold">Toteme</h3>
-              <p class="text-on-surface-variant text-xs mt-1">Signature Cotton Shirt</p>
-            </div>
-            <p class="font-headline italic text-sm text-on-surface-variant">$310</p>
-          </div>
-        </div>
-
-        <!-- Item 5 -->
-        <div class="group cursor-pointer">
-          <div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
-            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Wide leg pleated charcoal grey wool trousers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbcyrxnJfDotR60RoeXdmAA12ySc4k455nCW6aOS_AzyRNSJ1g9-wVfv4PFi7lEH0uW6W1s4B9Z8dy31x9HffeFR4LghCUSTcXQL1u8IAte_IeTgP60W55WYWlIZ-7-0SXdQV-Fgw9Ed-zyNucV-EyvnzGvTBAcQDpZrtHKgFPuJNVrtNRxq1de8G8ttFnPAq8c9nhosuJzLvq_zavN6sXVtOUMIQ4o3i3zExN1PuhUNmfqwilDKF9NnMHVrnXRp5My1BYZFbbdhU"/>
-            <div class="absolute top-4 left-4">
-              <span class="bg-secondary-container text-on-secondary-container px-3 py-1 text-[9px] font-label uppercase tracking-widest">Frequently Worn</span>
-            </div>
-            <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <button class="bg-white text-primary px-6 py-3 font-label text-[10px] uppercase tracking-widest">View Details</button>
-            </div>
-          </div>
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="font-label text-xs uppercase tracking-widest font-bold">Jil Sander</h3>
-              <p class="text-on-surface-variant text-xs mt-1">High-Rise Tailored Pants</p>
-            </div>
-            <p class="font-headline italic text-sm text-on-surface-variant">$980</p>
-          </div>
-        </div>
-
-        <!-- Item 6 -->
-        <div class="group cursor-pointer lg:translate-y-12">
-          <div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low shadow-2xl">
-            <img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Black silk tie on white marble" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvqoZx38xGSEFBtKt1gNHMAsbh-n5L5Q3I4Wo9Y70m4g4cfyXD9pcGk1CLDNsx9q6RGuWCKVkF3S-j8XDqJHRfdMCqp1JUqHeJQIZWbxNQvrOhhaOm6Ej6MyEE2xXFHauJUJSbIrc6XrsrkLyrsAjjvPds-y5_MggB05q--QkiYFMFKCj_UasLT6_utdKsQXyyQjnpq_lkdI9xkNGqR9xNmcy6FSsxfzZwPPpT_yUE_S8qyNNS9zg-wJYluWvcXnrOmhgEGinMYoU"/>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-            <div class="absolute bottom-6 left-6 right-6">
-              <p class="font-label text-[10px] uppercase tracking-[0.3em] text-white/70 mb-2">Editor's Choice</p>
-              <h3 class="font-headline text-2xl text-white">Hermès Silk Tie</h3>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </section>
-  </main>
-</div>
+
+      <!-- Card 3 -->
+      <div class="closet-card card-3 shadow-2xl">
+        <span class="card-tag frequent">Worn Often</span>
+        <div class="aspect-[3/4] overflow-hidden">
+          <img class="w-full h-full object-cover" alt="The Row Sneakers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABeV1xbvTPRVINGg-CJkC4q7w8pyaFegj_CTFMXHmYhNocbu4BQ0ie1GEoJAC8UYtcNZLwE0rFgxHWHVRiJJzwcvYVzA5nOorMSNqBFbhpgPra8FVC97COXPwAa8wMLj1LjJdFD3vk52N3wLm6fgDd6_XYBdECWqq538Dp8ZoZqQ6ThsgYgYJQ_oaWLpGPtz3vuzOypkRcPEOSGi_MY4Q225a2Y6Q6763wHkxLovO5t_ozc6VFnqQ2PSiasItsn6yf7qcJBvcUkCs"/>
+        </div>
+        <div class="p-4 border-t border-stone-100">
+          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">The Row</p>
+          <p class="text-sm font-semibold">Owen Runner Sneaker</p>
+          <p class="text-xs text-stone-400 serif italic mt-1">$720</p>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="closet-card card-4 shadow-2xl">
+        <span class="card-tag">In Closet</span>
+        <div class="aspect-[3/4] overflow-hidden">
+          <img class="w-full h-full object-cover" alt="Toteme Shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB45wbwZpXve4xa7wx3Q-fYqnw-sCgqbOPKblA0oZEXZ7OpDn_MS0SFIA-lNCw1OYwgylSmBGisEs2BZSEx92mRG-pzUl9XqHw2Ya-WbkESHNkhOcYVBTN5U-2ROb0OAb24glr7k5lME9wGjoQNsuSdBwrpBvVnPQftWVG14tnG6d5jApbodNQKTGT__IHJOyYM50tz74hOWmtdMjDKUHlCh75mqdHdlgKnxZHKk2VH5EstXO8jC9lttXT7ZiUEi0F1Yh-gd46At8s"/>
+        </div>
+        <div class="p-4 border-t border-stone-100">
+          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">Toteme</p>
+          <p class="text-sm font-semibold">Signature Cotton Shirt</p>
+          <p class="text-xs text-stone-400 serif italic mt-1">$310</p>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="closet-card card-5 shadow-2xl">
+        <span class="card-tag frequent">Worn Often</span>
+        <div class="aspect-[3/4] overflow-hidden">
+          <img class="w-full h-full object-cover" alt="Jil Sander Trousers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbcyrxnJfDotR60RoeXdmAA12ySc4k455nCW6aOS_AzyRNSJ1g9-wVfv4PFi7lEH0uW6W1s4B9Z8dy31x9HffeFR4LghCUSTcXQL1u8IAte_IeTgP60W55WYWlIZ-7-0SXdQV-Fgw9Ed-zyNucV-EyvnzGvTBAcQDpZrtHKgFPuJNVrtNRxq1de8G8ttFnPAq8c9nhosuJzLvq_zavN6sXVtOUMIQ4o3i3zExN1PuhUNmfqwilDKF9NnMHVrnXRp5My1BYZFbbdhU"/>
+        </div>
+        <div class="p-4 border-t border-stone-100">
+          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">Jil Sander</p>
+          <p class="text-sm font-semibold">High-Rise Tailored Pants</p>
+          <p class="text-xs text-stone-400 serif italic mt-1">$980</p>
+        </div>
+      </div>
+
+      <!-- Card 6: Editor's choice special card -->
+      <div class="closet-card card-6 shadow-2xl overflow-hidden">
+        <div class="relative aspect-[3/4]">
+          <img class="w-full h-full object-cover" alt="Hermès Silk Tie" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvqoZx38xGSEFBtKt1gNHMAsbh-n5L5Q3I4Wo9Y70m4g4cfyXD9pcGk1CLDNsx9q6RGuWCKVkF3S-j8XDqJHRfdMCqp1JUqHeJQIZWbxNQvrOhhaOm6Ej6MyEE2xXFHauJUJSbIrc6XrsrkLyrsAjjvPds-y5_MggB05q--QkiYFMFKCj_UasLT6_utdKsQXyyQjnpq_lkdI9xkNGqR9xNmcy6FSsxfzZwPPpT_yUE_S8qyNNS9zg-wJYluWvcXnrOmhgEGinMYoU"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <p class="text-[9px] uppercase tracking-[0.3em] text-white/60 mb-1">Editor's Choice</p>
+            <p class="serif text-white text-xl">Hermès Silk Tie</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Add more items CTA -->
+    <div class="mt-16 border border-dashed border-white/20 flex flex-col items-center justify-center py-16 hover:border-white/40 transition-colors cursor-pointer group">
+      <div class="w-12 h-12 border border-white/20 flex items-center justify-center mb-4 group-hover:border-white/60 transition-colors">
+        <span class="material-symbols-outlined text-white/40 group-hover:text-white/80 transition-colors">add</span>
+      </div>
+      <p class="text-[11px] uppercase tracking-[0.2em] text-white/30 group-hover:text-white/60 transition-colors">Add more items to your closet</p>
+    </div>
+  </section>
+
+</main>
 
 <!-- Footer -->
-<footer class="w-full bg-neutral-100 py-20 px-12 mt-20">
-  <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-screen-2xl mx-auto">
-    <div class="mb-8 md:mb-0">
-      <span class="font-headline text-sm tracking-widest uppercase">ÉTOILE EDITORIAL</span>
+<footer class="bg-stone-950 border-t border-white/10 py-10 px-8">
+  <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <p class="serif italic text-xl text-white">ÉTOILE</p>
+    <div class="flex gap-10">
+      <a href="index.html" class="text-[11px] text-white/30 hover:text-white transition-colors">Home</a>
+      <a href="style-me.html" class="text-[11px] text-white/30 hover:text-white transition-colors">Saved Looks</a>
+      <a href="shopping-edit.html" class="text-[11px] text-white/30 hover:text-white transition-colors">Shop</a>
     </div>
-    <div class="flex flex-wrap justify-center gap-10">
-      <a class="text-[10px] uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Editorial Policy</a>
-      <a class="text-[10px] uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Privacy</a>
-      <a class="text-[10px] uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Pinterest</a>
-      <a class="text-[10px] uppercase tracking-widest font-body text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Instagram</a>
-    </div>
-    <div class="mt-12 md:mt-0">
-      <p class="text-[10px] uppercase tracking-widest font-body text-neutral-400">© 2024 ÉTOILE EDITORIAL. ALL RIGHTS RESERVED.</p>
-    </div>
+    <p class="text-[11px] text-white/20">© 2025 ÉTOILE</p>
   </div>
 </footer>
+
+<script>
+  function setFilter(btn, cat) {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+  }
+</script>
 
 </body>
 </html>
