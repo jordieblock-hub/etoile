@@ -128,10 +128,10 @@
       <div class="mb-10">
         <p class="text-[10px] uppercase tracking-[0.15em] text-stone-300 mb-3">Or try an example style:</p>
         <div class="flex flex-wrap gap-2">
+          <button onclick="setExample('https://www.pinterest.com/jordieblock/cloet/')" class="text-[11px] px-3 py-1.5 bg-black text-white border border-black hover:bg-stone-900 transition-colors">✦ My Cloet Board</button>
           <button onclick="setExample('https://pinterest.com/example/quiet-luxury')" class="text-[11px] px-3 py-1.5 bg-white border border-stone-200 hover:border-black transition-colors">Quiet Luxury</button>
           <button onclick="setExample('https://pinterest.com/example/parisian-chic')" class="text-[11px] px-3 py-1.5 bg-white border border-stone-200 hover:border-black transition-colors">Parisian Chic</button>
           <button onclick="setExample('https://pinterest.com/example/minimalist-wardrobe')" class="text-[11px] px-3 py-1.5 bg-white border border-stone-200 hover:border-black transition-colors">Minimalist</button>
-          <button onclick="setExample('https://pinterest.com/example/old-money-aesthetic')" class="text-[11px] px-3 py-1.5 bg-white border border-stone-200 hover:border-black transition-colors">Old Money</button>
         </div>
       </div>
 
@@ -192,6 +192,12 @@
 </footer>
 
 <script>
+  // Pre-fill with user's saved board or default
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('pinterest_url') || 'https://www.pinterest.com/jordieblock/cloet/';
+    document.getElementById('pinterest-url').value = saved;
+  });
+
   function setExample(url) {
     document.getElementById('pinterest-url').value = url;
     document.getElementById('pinterest-url').focus();
@@ -203,7 +209,7 @@
 
   function submitPinterest() {
     const url = document.getElementById('pinterest-url').value.trim();
-    const finalUrl = url || 'https://pinterest.com/example/quiet-luxury';
+    const finalUrl = url || 'https://www.pinterest.com/jordieblock/cloet/';
 
     // Save to localStorage
     localStorage.setItem('pinterest_url', finalUrl);

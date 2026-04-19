@@ -294,6 +294,23 @@
     </div>
   </section>
 
+  <!-- ── FROM YOUR PHOTOS ─────────────────────────────────────────── -->
+  <section class="px-8 py-16 max-w-screen-xl mx-auto">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <p class="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-1">Your Library</p>
+        <h2 class="serif text-3xl text-white">From Your Photos</h2>
+      </div>
+      <div class="text-right">
+        <p id="photos-count" class="text-[11px] text-white/30"></p>
+        <p class="text-[10px] text-white/20 mt-1">Drop images into <code class="bg-white/10 px-1 py-0.5 rounded text-[9px]">photos/</code> folder</p>
+      </div>
+    </div>
+    <div id="photos-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- populated by photos.js -->
+    </div>
+  </section>
+
 </main>
 
 <!-- Footer -->
@@ -313,6 +330,29 @@
   function setFilter(btn, cat) {
     document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
+  }
+</script>
+
+<script type="module">
+  import { loadPhotosDirectory, renderPhotoGrid } from './js/photos.js';
+
+  const grid = document.getElementById('photos-grid');
+  const countEl = document.getElementById('photos-count');
+
+  try {
+    const photos = await loadPhotosDirectory();
+    if (photos.length) {
+      countEl.textContent = `${photos.length} photo${photos.length !== 1 ? 's' : ''} found`;
+    }
+    renderPhotoGrid(grid, photos, {
+      onSelect: (photo) => {
+        // Future: open a detail view or "add to closet" modal
+        console.log('Selected photo:', photo.url);
+      }
+    });
+  } catch (e) {
+    console.warn('[digital-closet] Photos failed to load:', e);
+    grid.innerHTML = `<p class="text-white/20 text-sm col-span-full">Drop your fashion photos into the <code class="bg-white/10 px-1 py-0.5">photos/</code> folder to see them here.</p>`;
   }
 </script>
 
