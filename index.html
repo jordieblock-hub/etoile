@@ -1,318 +1,739 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ÉTOILE</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÉTOILE — Set Up Your Style Profile</title>
+<link rel="stylesheet" href="css/etoile.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0">
 <style>
-  * { box-sizing: border-box; }
-  body { font-family: 'Manrope', sans-serif; background: #f8f6f2; color: #0d0d0d; }
-  .serif { font-family: 'Noto Serif', serif; }
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; font-size: 20px; }
+/* ── Layout ───────────────────────────── */
+.onboarding-shell {
+  min-height: 100vh;
+}
 
-  /* Clipboard card */
-  .clip-card { background: white; border: 1px solid #e8e4de; position: relative; padding-top: 12px; transition: transform 0.3s, box-shadow 0.3s; }
-  .clip-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
-  .clip-ring { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); width: 26px; height: 26px; border-radius: 50%; background: #c8c4be; border: 3px solid #a8a49e; z-index: 2; }
-  .clip-ring::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 3px; height: 8px; background: #a8a49e; }
+/* Left panel — fixed editorial sidebar */
+.ob-sidebar {
+  background: var(--black);
+  position: fixed;
+  top: 0; left: 0;
+  width: 420px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 48px;
+  overflow: hidden;
+}
+.ob-logo {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  letter-spacing: 0.28em;
+  color: var(--white);
+  font-weight: 400;
+  margin-bottom: auto;
+}
+.ob-sidebar-headline {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 5vw, 72px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+}
+.ob-sidebar-headline em {
+  color: var(--pink);
+  font-style: italic;
+  font-weight: 400;
+}
+.ob-sidebar-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+  font-family: var(--font-sans);
+  margin-bottom: 48px;
+  max-width: 300px;
+}
+.ob-step-list { display: flex; flex-direction: column; gap: 0; margin-bottom: 0; }
+.ob-step-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.ob-step-item:last-child { border: none; }
+.ob-step-num {
+  width: 28px; height: 28px;
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600;
+  color: rgba(255,255,255,0.35);
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  transition: all 0.2s;
+}
+.ob-step-text {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: rgba(255,255,255,0.3);
+  font-family: var(--font-sans);
+  transition: color 0.2s;
+}
+.ob-step-item.active .ob-step-num { background: var(--pink); border-color: var(--pink); color: var(--white); }
+.ob-step-item.active .ob-step-text { color: var(--white); }
+.ob-step-item.done .ob-step-num { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.08); color: var(--pink); }
+.ob-step-item.done .ob-step-text { color: rgba(255,255,255,0.4); }
+.ob-photo-strip {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 160px;
+  display: flex;
+  overflow: hidden;
+  opacity: 0.18;
+  mask-image: linear-gradient(to top, black 40%, transparent 100%);
+}
+.ob-photo-strip img { width: 33.33%; object-fit: cover; }
 
-  /* Pink accent */
-  .bg-blush { background-color: #e8b4bc; }
-  .text-blush { color: #c4767f; }
+/* Right panel — scrollable steps */
+.ob-main {
+  margin-left: 420px;
+  min-height: 100vh;
+  background: var(--cream);
+}
+.ob-step-panel {
+  display: none;
+  padding: 80px 72px;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+}
+.ob-step-panel.active { display: flex; }
 
-  /* Category pill */
-  .cat-pill { display: inline-block; padding: 3px 12px; border: 1px solid #0d0d0d; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; }
+.ob-step-header { margin-bottom: 56px; }
+.ob-step-kicker {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--pink);
+  font-family: var(--font-sans);
+  margin-bottom: 16px;
+}
+.ob-step-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 900;
+  line-height: 0.95;
+  color: var(--black);
+  margin-bottom: 16px;
+}
+.ob-step-title em { font-style: italic; color: var(--pink); font-weight: 400; }
+.ob-step-desc {
+  font-size: 14px;
+  color: var(--warm-gray);
+  line-height: 1.7;
+  max-width: 480px;
+  font-family: var(--font-sans);
+}
 
-  /* Hover reveal */
-  .product-card .overlay { opacity: 0; transition: opacity 0.3s; }
-  .product-card:hover .overlay { opacity: 1; }
-  .product-card img { transition: transform 0.6s; }
-  .product-card:hover img { transform: scale(1.04); }
+/* Pinterest step */
+.url-input-wrap {
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  transition: border-color 0.2s;
+}
+.url-input-wrap:focus-within { border-color: var(--black); }
+.url-input-wrap input {
+  flex: 1; border: none; outline: none;
+  padding: 20px 0;
+  font-size: 14px;
+  color: var(--charcoal);
+  background: transparent;
+  font-family: var(--font-sans);
+}
+.url-input-wrap input::placeholder { color: var(--mid-gray); }
+.url-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--pink-light);
+  border: 1px solid rgba(232,117,106,0.2);
+  font-size: 13px;
+  color: var(--pink-mid);
+  font-family: var(--font-sans);
+  display: none;
+}
+.upload-area {
+  border: 1px dashed var(--border-dark);
+  padding: 48px 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--white);
+}
+.upload-area:hover { border-color: var(--pink); background: var(--pink-light); }
+.upload-icon { font-size: 32px; color: var(--mid-gray); margin-bottom: 12px; font-family: 'Material Symbols Outlined'; }
 
-  /* Marquee */
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  .marquee-inner { animation: marquee 20s linear infinite; }
-  .marquee-inner:hover { animation-play-state: paused; }
+/* Category grid */
+.ob-category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.ob-cat-tile {
+  padding: 20px 16px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.18s;
+  background: var(--white);
+  text-align: center;
+}
+.ob-cat-tile:hover { border-color: var(--charcoal); }
+.ob-cat-tile.selected { background: var(--black); border-color: var(--black); }
+.ob-cat-tile.selected .ob-cat-name { color: var(--white); }
+.ob-cat-icon { font-size: 22px; margin-bottom: 8px; color: var(--border-dark); font-family: 'Material Symbols Outlined'; }
+.ob-cat-tile.selected .ob-cat-icon { color: rgba(255,255,255,0.4); }
+.ob-cat-name { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; color: var(--charcoal); font-family: var(--font-sans); }
+
+/* Price tier */
+.ob-price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.ob-price-tile {
+  padding: 32px 24px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.18s;
+  background: var(--white);
+  text-align: center;
+}
+.ob-price-tile:hover { border-color: var(--charcoal); }
+.ob-price-tile.selected { background: var(--black); border-color: var(--black); }
+.ob-price-tile.selected * { color: var(--white) !important; }
+.ob-price-name { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--black); margin-bottom: 6px; }
+.ob-price-range { font-size: 12px; color: var(--mid-gray); font-family: var(--font-sans); margin-bottom: 8px; }
+.ob-price-desc { font-size: 11px; color: var(--warm-gray); font-family: var(--font-sans); line-height: 1.5; }
+
+/* Brand chips */
+.brand-input-wrap { display: flex; gap: 10px; margin-bottom: 16px; }
+.brand-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.brand-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  background: var(--black);
+  color: var(--white);
+  font-size: 11px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+}
+.brand-chip-remove { cursor: pointer; opacity: 0.5; font-size: 14px; font-family: 'Material Symbols Outlined'; }
+.brand-chip-remove:hover { opacity: 1; }
+
+/* Color swatches */
+.ob-swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.ob-swatch {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  position: relative;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.ob-swatch:hover { transform: scale(1.1); }
+.ob-swatch.selected { border-color: var(--black); }
+.ob-swatch.selected::after {
+  content: '✓';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--white);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Nav buttons */
+.ob-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--border); }
+.ob-progress-bar { height: 2px; background: var(--border); position: relative; overflow: hidden; margin-bottom: 12px; }
+.ob-progress-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--pink); transition: width 0.4s ease; }
+.ob-progress-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid-gray); font-family: var(--font-sans); margin-bottom: 48px; }
+
+/* Complete screen */
+.ob-complete { display: none; padding: 80px 72px; min-height: 100vh; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+.ob-complete.active { display: flex; }
+.ob-complete-icon { font-size: 56px; color: var(--pink); margin-bottom: 32px; font-family: 'Material Symbols Outlined'; }
 </style>
 </head>
 <body>
+<script>
+  // If already onboarded, go to home
+  if (localStorage.getItem('etoile_onboarded') === 'true') {
+    window.location.href = 'home.html';
+  }
+</script>
 
-<!-- NAV -->
-<nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-100">
-  <div class="max-w-screen-xl mx-auto flex items-center justify-between px-8 py-4">
-    <a href="index.html" class="serif italic text-2xl tracking-tight">ÉTOILE</a>
-    <div class="hidden md:flex items-center gap-10">
-      <a href="index.html" class="text-[11px] uppercase tracking-[0.18em] font-semibold border-b border-black pb-0.5">Home</a>
-      <a href="digital-closet.html" class="text-[11px] uppercase tracking-[0.18em] text-stone-400 hover:text-black transition-colors">Closet</a>
-      <a href="style-me.html" class="text-[11px] uppercase tracking-[0.18em] text-stone-400 hover:text-black transition-colors">Saved Looks</a>
-      <a href="shopping-edit.html" class="text-[11px] uppercase tracking-[0.18em] text-stone-400 hover:text-black transition-colors">Shop</a>
+<div class="onboarding-shell">
+
+  <!-- SIDEBAR -->
+  <div class="ob-sidebar">
+    <div class="ob-logo">ÉTOILE</div>
+    <div style="margin-bottom: 40px;">
+      <div class="ob-sidebar-headline">Build your<br><em>style profile.</em></div>
+      <p class="ob-sidebar-sub">Tell us your aesthetic, your closet, and your budget. We'll do the styling from here.</p>
     </div>
-    <div class="flex items-center gap-5">
-      <span class="material-symbols-outlined cursor-pointer hover:opacity-60 transition-opacity">search</span>
-      <a href="onboarding.html" class="text-[10px] uppercase tracking-[0.18em] font-bold bg-black text-white px-4 py-2">Start →</a>
+    <div class="ob-step-list">
+      <div class="ob-step-item active" data-goto="1">
+        <div class="ob-step-num">1</div>
+        <div class="ob-step-text">Pinterest Inspiration</div>
+      </div>
+      <div class="ob-step-item" data-goto="2">
+        <div class="ob-step-num">2</div>
+        <div class="ob-step-text">Your Closet</div>
+      </div>
+      <div class="ob-step-item" data-goto="3">
+        <div class="ob-step-num">3</div>
+        <div class="ob-step-text">Most Worn</div>
+      </div>
+      <div class="ob-step-item" data-goto="4">
+        <div class="ob-step-num">4</div>
+        <div class="ob-step-text">Shopping Goals</div>
+      </div>
+      <div class="ob-step-item" data-goto="5">
+        <div class="ob-step-num">5</div>
+        <div class="ob-step-text">Style Preferences</div>
+      </div>
+    </div>
+    <div class="ob-photo-strip">
+      <img src="photos/991a9dfe12a8a18daeec45fb32646bfb.jpg" alt="" onerror="this.remove()">
+      <img src="photos/355cc53949087ba5a82e8805e41af36e.jpg" alt="" onerror="this.remove()">
+      <img src="photos/53f4fbd8da5ea134e12fe0a43db1e9bc.jpg" alt="" onerror="this.remove()">
     </div>
   </div>
-</nav>
 
-<!-- HERO -->
-<section class="relative h-screen bg-[#0d0d0d] flex items-end overflow-hidden">
-  <img class="absolute inset-0 w-full h-full object-cover opacity-70"
-       src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5DWPL9v3iKZiwRp9RWeh9uqkzeu6ls56Np9Zc9sStDcnhPTUiElXY1QjXYMLhjmsp-MwW_-F7HhnxjF7gh-idDc-kaFI5SHAEWafx5odjzmiZKfid8pmEUN7SRjFLj3fo_eYiORb4cYcD9tuxKR910nyEBSpr7g7peB0R1FqdsOj2kNVt24gswMS28lCSMculA_-SfpT3enhliKI5z2FldncjMzb3BL1VZqjJvDQwYlsCZMcWzF92d0yF2pPiCz_NLlQIa4KP1BA"
-       alt="Fashion editorial"/>
-  <!-- Gradient overlay -->
-  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-  <div class="relative z-10 px-10 md:px-20 pb-20 w-full max-w-screen-xl mx-auto">
-    <p class="text-white/50 text-[11px] uppercase tracking-[0.3em] mb-4">Your personal AI stylist</p>
-    <h1 class="serif text-white text-6xl md:text-9xl leading-none tracking-tight mb-8">ÉTOILE</h1>
-    <p class="text-white/70 text-lg max-w-md font-light mb-10">Paste your Pinterest board. We'll build looks from it — using what you own and what to buy next.</p>
-    <div class="flex flex-col sm:flex-row gap-4">
-      <a href="onboarding.html" class="bg-white text-black px-10 py-4 text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-stone-100 transition-colors text-center">Connect Pinterest →</a>
-      <a href="digital-closet.html" class="border border-white/40 text-white px-10 py-4 text-[11px] uppercase tracking-[0.2em] hover:border-white transition-colors text-center">View My Closet</a>
+  <!-- MAIN CONTENT -->
+  <div class="ob-main">
+
+    <!-- STEP 1: Pinterest -->
+    <div class="ob-step-panel active" id="step-1">
+      <div>
+        <div class="ob-step-kicker">Step 1 of 5 &nbsp;·&nbsp; Style Inspiration</div>
+        <div class="ob-progress-bar"><div class="ob-progress-fill" style="width: 20%"></div></div>
+        <div class="ob-step-header">
+          <h1 class="ob-step-title">Where do you<br><em>find your style?</em></h1>
+          <p class="ob-step-desc">Share your Pinterest board or upload screenshots. We'll read your aesthetic — the silhouettes, colors, textures, and brands you're drawn to — and use it to style you.</p>
+        </div>
+
+        <div style="margin-bottom: 32px;">
+          <div class="input-label" style="margin-bottom: 10px;">Pinterest Board URL</div>
+          <div class="url-input-wrap">
+            <span class="material-symbols-outlined" style="color: var(--mid-gray); margin-right: 12px; font-size: 18px;">link</span>
+            <input type="url" id="pinterestUrl" placeholder="https://www.pinterest.com/username/board-name/" oninput="handleUrlInput(this.value)">
+          </div>
+          <div class="url-preview" id="urlPreview">
+            <span class="material-symbols-outlined" style="color: var(--pink); font-size: 18px;">check_circle</span>
+            Board connected — we'll analyze your pins.
+          </div>
+        </div>
+
+        <div style="margin-bottom: 8px;">
+          <div class="input-label" style="margin-bottom: 10px;">Or upload Pinterest screenshots</div>
+          <div class="upload-area" onclick="document.getElementById('photoUpload').click()">
+            <div class="upload-icon">upload</div>
+            <div style="font-size: 13px; color: var(--warm-gray); font-family: var(--font-sans);">Drop screenshots here, or click to browse</div>
+            <div style="font-size: 11px; color: var(--mid-gray); font-family: var(--font-sans); margin-top: 6px; letter-spacing: 0.1em; text-transform: uppercase;">JPG, PNG — up to 20 images</div>
+          </div>
+          <input type="file" id="photoUpload" multiple accept="image/*" style="display:none" onchange="handleUpload(this.files)">
+        </div>
+
+        <div id="uploadedPreviews" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px;"></div>
+
+        <div class="ob-nav">
+          <div></div>
+          <button class="btn btn-dark" onclick="goToStep(2)">Next: Your Closet →</button>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
 
-<!-- MARQUEE TICKER -->
-<div class="bg-black text-white py-3 overflow-hidden">
-  <div class="marquee-inner flex whitespace-nowrap">
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">AI Styling</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Digital Closet</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Pinterest Sync</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Quiet Luxury</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Outfit Curation</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Wardrobe Gaps</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Season '25</span>
-    <span class="mx-2 text-white/30">·</span>
-    <!-- duplicate for seamless loop -->
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">AI Styling</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Digital Closet</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Pinterest Sync</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Quiet Luxury</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Outfit Curation</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Wardrobe Gaps</span>
-    <span class="mx-2 text-white/30">·</span>
-    <span class="mx-8 text-[11px] uppercase tracking-[0.2em]">Season '25</span>
-    <span class="mx-2 text-white/30">·</span>
+    <!-- STEP 2: Closet Categories -->
+    <div class="ob-step-panel" id="step-2">
+      <div>
+        <div class="ob-step-kicker">Step 2 of 5 &nbsp;·&nbsp; Your Closet</div>
+        <div class="ob-progress-bar"><div class="ob-progress-fill" style="width: 40%"></div></div>
+        <div class="ob-step-header">
+          <h1 class="ob-step-title">What's in<br><em>your closet?</em></h1>
+          <p class="ob-step-desc">Select the categories you own. This helps Étoile build looks around what you actually have before recommending anything new.</p>
+        </div>
+
+        <div class="ob-category-grid" id="closetCategories">
+          <div class="ob-cat-tile" data-cat="tops" onclick="toggleCat(this)"><div class="ob-cat-icon">checkroom</div><div class="ob-cat-name">Tops</div></div>
+          <div class="ob-cat-tile" data-cat="bottoms" onclick="toggleCat(this)"><div class="ob-cat-icon">straighten</div><div class="ob-cat-name">Bottoms</div></div>
+          <div class="ob-cat-tile" data-cat="dresses" onclick="toggleCat(this)"><div class="ob-cat-icon">dry_cleaning</div><div class="ob-cat-name">Dresses</div></div>
+          <div class="ob-cat-tile" data-cat="outerwear" onclick="toggleCat(this)"><div class="ob-cat-icon">umbrella</div><div class="ob-cat-name">Outerwear</div></div>
+          <div class="ob-cat-tile" data-cat="shoes" onclick="toggleCat(this)"><div class="ob-cat-icon">footprint</div><div class="ob-cat-name">Shoes</div></div>
+          <div class="ob-cat-tile" data-cat="bags" onclick="toggleCat(this)"><div class="ob-cat-icon">shopping_bag</div><div class="ob-cat-name">Bags</div></div>
+          <div class="ob-cat-tile" data-cat="jewelry" onclick="toggleCat(this)"><div class="ob-cat-icon">diamond</div><div class="ob-cat-name">Jewelry</div></div>
+          <div class="ob-cat-tile" data-cat="accessories" onclick="toggleCat(this)"><div class="ob-cat-icon">style</div><div class="ob-cat-name">Accessories</div></div>
+          <div class="ob-cat-tile" data-cat="suiting" onclick="toggleCat(this)"><div class="ob-cat-icon">business_center</div><div class="ob-cat-name">Suiting</div></div>
+          <div class="ob-cat-tile" data-cat="denim" onclick="toggleCat(this)"><div class="ob-cat-icon">content_cut</div><div class="ob-cat-name">Denim</div></div>
+          <div class="ob-cat-tile" data-cat="activewear" onclick="toggleCat(this)"><div class="ob-cat-icon">fitness_center</div><div class="ob-cat-name">Activewear</div></div>
+          <div class="ob-cat-tile" data-cat="occasionwear" onclick="toggleCat(this)"><div class="ob-cat-icon">celebration</div><div class="ob-cat-name">Occasionwear</div></div>
+          <div class="ob-cat-tile" data-cat="seasonal" onclick="toggleCat(this)"><div class="ob-cat-icon">ac_unit</div><div class="ob-cat-name">Seasonal</div></div>
+          <div class="ob-cat-tile" data-cat="knitwear" onclick="toggleCat(this)"><div class="ob-cat-icon">texture</div><div class="ob-cat-name">Knitwear</div></div>
+          <div class="ob-cat-tile" data-cat="loungewear" onclick="toggleCat(this)"><div class="ob-cat-icon">bedtime</div><div class="ob-cat-name">Loungewear</div></div>
+          <div class="ob-cat-tile" data-cat="swimwear" onclick="toggleCat(this)"><div class="ob-cat-icon">pool</div><div class="ob-cat-name">Swimwear</div></div>
+        </div>
+
+        <div class="ob-nav">
+          <button class="btn btn-ghost" onclick="goToStep(1)">← Back</button>
+          <button class="btn btn-dark" onclick="goToStep(3)">Next: Most Worn →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Most Worn -->
+    <div class="ob-step-panel" id="step-3">
+      <div>
+        <div class="ob-step-kicker">Step 3 of 5 &nbsp;·&nbsp; Real Style Habits</div>
+        <div class="ob-progress-bar"><div class="ob-progress-fill" style="width: 60%"></div></div>
+        <div class="ob-step-header">
+          <h1 class="ob-step-title">What do you<br><em>actually wear?</em></h1>
+          <p class="ob-step-desc">This isn't about your aspirational wardrobe — it's about what you actually reach for. Select the categories you wear most often. This helps us style you realistically, not just beautifully.</p>
+        </div>
+
+        <div class="ob-category-grid" id="mostWornCategories">
+          <div class="ob-cat-tile" data-cat="tops" onclick="toggleCat(this)"><div class="ob-cat-icon">checkroom</div><div class="ob-cat-name">Tops</div></div>
+          <div class="ob-cat-tile" data-cat="denim" onclick="toggleCat(this)"><div class="ob-cat-icon">content_cut</div><div class="ob-cat-name">Denim</div></div>
+          <div class="ob-cat-tile" data-cat="dresses" onclick="toggleCat(this)"><div class="ob-cat-icon">dry_cleaning</div><div class="ob-cat-name">Dresses</div></div>
+          <div class="ob-cat-tile" data-cat="shoes" onclick="toggleCat(this)"><div class="ob-cat-icon">footprint</div><div class="ob-cat-name">Shoes</div></div>
+          <div class="ob-cat-tile" data-cat="knitwear" onclick="toggleCat(this)"><div class="ob-cat-icon">texture</div><div class="ob-cat-name">Knitwear</div></div>
+          <div class="ob-cat-tile" data-cat="outerwear" onclick="toggleCat(this)"><div class="ob-cat-icon">umbrella</div><div class="ob-cat-name">Outerwear</div></div>
+          <div class="ob-cat-tile" data-cat="bags" onclick="toggleCat(this)"><div class="ob-cat-icon">shopping_bag</div><div class="ob-cat-name">Bags</div></div>
+          <div class="ob-cat-tile" data-cat="jewelry" onclick="toggleCat(this)"><div class="ob-cat-icon">diamond</div><div class="ob-cat-name">Jewelry</div></div>
+          <div class="ob-cat-tile" data-cat="suiting" onclick="toggleCat(this)"><div class="ob-cat-icon">business_center</div><div class="ob-cat-name">Suiting</div></div>
+          <div class="ob-cat-tile" data-cat="bottoms" onclick="toggleCat(this)"><div class="ob-cat-icon">straighten</div><div class="ob-cat-name">Bottoms</div></div>
+          <div class="ob-cat-tile" data-cat="activewear" onclick="toggleCat(this)"><div class="ob-cat-icon">fitness_center</div><div class="ob-cat-name">Activewear</div></div>
+          <div class="ob-cat-tile" data-cat="accessories" onclick="toggleCat(this)"><div class="ob-cat-icon">style</div><div class="ob-cat-name">Accessories</div></div>
+        </div>
+
+        <div class="ob-nav">
+          <button class="btn btn-ghost" onclick="goToStep(2)">← Back</button>
+          <button class="btn btn-dark" onclick="goToStep(4)">Next: Shopping Goals →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: Shopping Goals + Budget -->
+    <div class="ob-step-panel" id="step-4">
+      <div>
+        <div class="ob-step-kicker">Step 4 of 5 &nbsp;·&nbsp; Shopping Goals</div>
+        <div class="ob-progress-bar"><div class="ob-progress-fill" style="width: 80%"></div></div>
+        <div class="ob-step-header">
+          <h1 class="ob-step-title">What are you<br><em>looking to add?</em></h1>
+          <p class="ob-step-desc">Tell us what you want to bring into your wardrobe, and what you're willing to spend. We'll curate shopping recommendations that actually fit your life.</p>
+        </div>
+
+        <div style="margin-bottom: 40px;">
+          <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 16px;">Categories I want to add</div>
+          <div class="ob-category-grid" id="wantToBuyCategories">
+            <div class="ob-cat-tile" data-cat="tops" onclick="toggleCat(this)"><div class="ob-cat-icon">checkroom</div><div class="ob-cat-name">Tops</div></div>
+            <div class="ob-cat-tile" data-cat="bottoms" onclick="toggleCat(this)"><div class="ob-cat-icon">straighten</div><div class="ob-cat-name">Bottoms</div></div>
+            <div class="ob-cat-tile" data-cat="dresses" onclick="toggleCat(this)"><div class="ob-cat-icon">dry_cleaning</div><div class="ob-cat-name">Dresses</div></div>
+            <div class="ob-cat-tile" data-cat="shoes" onclick="toggleCat(this)"><div class="ob-cat-icon">footprint</div><div class="ob-cat-name">Shoes</div></div>
+            <div class="ob-cat-tile" data-cat="bags" onclick="toggleCat(this)"><div class="ob-cat-icon">shopping_bag</div><div class="ob-cat-name">Bags</div></div>
+            <div class="ob-cat-tile" data-cat="outerwear" onclick="toggleCat(this)"><div class="ob-cat-icon">umbrella</div><div class="ob-cat-name">Outerwear</div></div>
+            <div class="ob-cat-tile" data-cat="jewelry" onclick="toggleCat(this)"><div class="ob-cat-icon">diamond</div><div class="ob-cat-name">Jewelry</div></div>
+            <div class="ob-cat-tile" data-cat="suiting" onclick="toggleCat(this)"><div class="ob-cat-icon">business_center</div><div class="ob-cat-name">Suiting</div></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 16px;">My price range</div>
+          <div class="ob-price-grid">
+            <div class="ob-price-tile" data-tier="low" onclick="selectTier(this)">
+              <div class="ob-price-name">Low</div>
+              <div class="ob-price-range">Under $200 / item</div>
+              <div class="ob-price-desc">High-street, vintage, resale — great style at real prices</div>
+            </div>
+            <div class="ob-price-tile selected" data-tier="medium" onclick="selectTier(this)">
+              <div class="ob-price-name">Mid</div>
+              <div class="ob-price-range">$200 – $800 / item</div>
+              <div class="ob-price-desc">Contemporary brands, quality investment pieces</div>
+            </div>
+            <div class="ob-price-tile" data-tier="high" onclick="selectTier(this)">
+              <div class="ob-price-name">High</div>
+              <div class="ob-price-range">$800+ / item</div>
+              <div class="ob-price-desc">Luxury, designer, heritage — the real thing</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ob-nav">
+          <button class="btn btn-ghost" onclick="goToStep(3)">← Back</button>
+          <button class="btn btn-dark" onclick="goToStep(5)">Next: Style Preferences →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5: Style Preferences -->
+    <div class="ob-step-panel" id="step-5">
+      <div>
+        <div class="ob-step-kicker">Step 5 of 5 &nbsp;·&nbsp; Style Preferences</div>
+        <div class="ob-progress-bar"><div class="ob-progress-fill" style="width: 100%"></div></div>
+        <div class="ob-step-header">
+          <h1 class="ob-step-title">The details<br><em>that matter.</em></h1>
+          <p class="ob-step-desc">Fill in as much or as little as you like. These help Étoile recommend pieces that actually fit your body, taste, and life — not just look good on a mood board.</p>
+        </div>
+
+        <!-- Sizes -->
+        <div style="margin-bottom: 40px;">
+          <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 20px;">Sizes</div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+            <div>
+              <label class="input-label">Tops</label>
+              <select class="input-field" style="cursor: pointer;">
+                <option value="">—</option>
+                <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+              </select>
+            </div>
+            <div>
+              <label class="input-label">Bottoms</label>
+              <select class="input-field" style="cursor: pointer;">
+                <option value="">—</option>
+                <option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option><option>32</option>
+              </select>
+            </div>
+            <div>
+              <label class="input-label">Dresses</label>
+              <select class="input-field" style="cursor: pointer;">
+                <option value="">—</option>
+                <option>XS / 0-2</option><option>S / 4-6</option><option>M / 8-10</option><option>L / 12-14</option><option>XL / 16</option>
+              </select>
+            </div>
+            <div>
+              <label class="input-label">Shoes</label>
+              <select class="input-field" style="cursor: pointer;">
+                <option value="">—</option>
+                <option>5</option><option>5.5</option><option>6</option><option>6.5</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option><option>11</option><option>12</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brands -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px;">
+          <div>
+            <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 12px;">Brands I love</div>
+            <div class="brand-input-wrap">
+              <input type="text" id="likedBrandInput" class="input-field" placeholder="e.g. Totême, Arket…" style="border-bottom: none; padding: 12px 0;" onkeydown="addBrand(event,'liked')">
+              <button class="btn btn-dark btn-sm" onclick="addBrandClick('liked')">Add</button>
+            </div>
+            <div class="brand-chips" id="likedBrands"></div>
+          </div>
+          <div>
+            <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 12px;">Brands to avoid</div>
+            <div class="brand-input-wrap">
+              <input type="text" id="dislikedBrandInput" class="input-field" placeholder="e.g. Fast fashion brands…" style="border-bottom: none; padding: 12px 0;" onkeydown="addBrand(event,'disliked')">
+              <button class="btn btn-dark btn-sm" onclick="addBrandClick('disliked')">Add</button>
+            </div>
+            <div class="brand-chips" id="dislikedBrands"></div>
+          </div>
+        </div>
+
+        <!-- Colors -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px;">
+          <div>
+            <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 16px;">Colors I love</div>
+            <div class="ob-swatches" id="likedColors">
+              <div class="ob-swatch" data-color="black" style="background:#0D0D0D;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="white" style="background:#F5F5F5; border: 1px solid #ddd;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="cream" style="background:#F0E8D8;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="camel" style="background:#C8A878;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="brown" style="background:#6B4226;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="blush" style="background:#E8B4A8;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="red" style="background:#C43030;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="burgundy" style="background:#6B1E28;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="navy" style="background:#1A2C4A;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="cobalt" style="background:#2448A0;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="green" style="background:#2A4A30;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="sage" style="background:#8BA08A;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="gray" style="background:#8A8A8A;" onclick="toggleSwatch(this,'liked')"></div>
+              <div class="ob-swatch" data-color="silver" style="background:#C0C0C0;" onclick="toggleSwatch(this,'liked')"></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 16px;">Colors I avoid</div>
+            <div class="ob-swatches" id="dislikedColors">
+              <div class="ob-swatch" data-color="black" style="background:#0D0D0D;" onclick="toggleSwatch(this,'disliked')"></div>
+              <div class="ob-swatch" data-color="white" style="background:#F5F5F5; border: 1px solid #ddd;" onclick="toggleSwatch(this,'disliked')"></div>
+              <div class="ob-swatch" data-color="orange" style="background:#D4601E;" onclick="toggleSwatch(this,'disliked')"></div>
+              <div class="ob-swatch" data-color="yellow" style="background:#D4A820;" onclick="toggleSwatch(this,'disliked')"></div>
+              <div class="ob-swatch" data-color="neon" style="background:#B0E020;" onclick="toggleSwatch(this,'disliked')"></div>
+              <div class="ob-swatch" data-color="pink" style="background:#E87898;" onclick="toggleSwatch(this,'disliked')"></div>
+              <div class="ob-swatch" data-color="purple" style="background:#7840A8;" onclick="toggleSwatch(this,'disliked')"></div>
+              <div class="ob-swatch" data-color="red" style="background:#C43030;" onclick="toggleSwatch(this,'disliked')"></div>
+              <div class="ob-swatch" data-color="cobalt" style="background:#2448A0;" onclick="toggleSwatch(this,'disliked')"></div>
+              <div class="ob-swatch" data-color="brown" style="background:#6B4226;" onclick="toggleSwatch(this,'disliked')"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fit preferences -->
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 16px;">Fit preferences</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;" id="fitPrefs">
+            <div class="pill" onclick="this.classList.toggle('active')">Oversized</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Relaxed</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Tailored</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Slim</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Bodycon</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Flowy</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Structured</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Minimalist</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Maximalist</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Gender-fluid</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Modest</div>
+            <div class="pill" onclick="this.classList.toggle('active')">Form-fitting</div>
+          </div>
+        </div>
+
+        <div class="ob-nav">
+          <button class="btn btn-ghost" onclick="goToStep(4)">← Back</button>
+          <button class="btn btn-pink btn-lg" onclick="completeOnboarding()">Finish Setup →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLETE SCREEN -->
+    <div class="ob-complete" id="ob-complete">
+      <div>
+        <div class="ob-complete-icon">auto_awesome</div>
+        <h1 style="font-family: var(--font-display); font-size: clamp(40px, 5vw, 64px); font-weight: 900; line-height: 0.95; margin-bottom: 20px;">
+          Your style profile<br><em style="font-style: italic; color: var(--pink);">is ready.</em>
+        </h1>
+        <p style="font-size: 15px; color: var(--warm-gray); max-width: 420px; margin: 0 auto 48px; line-height: 1.7; font-family: var(--font-sans);">
+          Étoile has everything it needs. Let's style you.
+        </p>
+        <a href="home.html" class="btn btn-dark btn-lg">Enter Étoile →</a>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- CLIPBOARD CATEGORY CARDS -->
-<section class="py-24 px-8 bg-[#f8f6f2]">
-  <div class="max-w-screen-lg mx-auto">
-    <h2 class="serif text-center text-4xl mb-4">the <em>ÉTOILE</em> clothes menu</h2>
-    <p class="text-center text-stone-400 text-sm mb-16">Browse by category or let our AI style you from scratch.</p>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
 
-      <!-- #clothes -->
-      <a href="digital-closet.html" class="clip-card">
-        <div class="clip-ring"></div>
-        <div class="aspect-[3/4] overflow-hidden">
-          <img class="w-full h-full object-cover" alt="Clothes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIWCvgIenXSxLsos_STTJhWL0456JbEBnO0UdTR_N-7T6gnIK9sWoovsp1-PkA0ly1_AGDINT5uoYWafqJwWOo6AUzJmTet5DId6EYbYky-jcUW3eTQJjrxuci_lPT18ZeNlrvgob9NZauU-13dv82Fx5R0ZI-84yj3LZxMwcYS6m9hCX69E79Zx06ZGIxLPjI3l2c_zYNARYYpJh7O49ieOZoiqV7nqBsrtSzW5t2SLQIFPfaaK-cZu62RmYvZ6mJt6Uzy9fyNlQ"/>
-        </div>
-        <div class="p-4">
-          <p class="font-bold text-sm mb-1">#clothes</p>
-          <p class="text-[11px] text-stone-400 leading-relaxed">Outfits that define your style. Basics and statement pieces.</p>
-        </div>
-      </a>
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+let currentStep = 1;
+let _currentUser = null;
 
-      <!-- #accessories -->
-      <a href="shopping-edit.html" class="clip-card mt-6">
-        <div class="clip-ring"></div>
-        <div class="aspect-[3/4] overflow-hidden">
-          <img class="w-full h-full object-cover" alt="Accessories" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBen7f3-Uwv8J8GOOOSkxCpnMZnOzV_fBFZB2iG212jqbG7Hy_ln-S9cBh9AEOYa0B5S9JQPY6c_XySewFmm3remFn-5yEd6ZNoRicTaPGOFb1GuhWS72xc7PRNCkLVrX_D7CFi4zl2ND8EtzV3MeGpkc6h4nwM4kwdnLrqAHDgJWC4Mg0GKbIvKL9K1mhiV_uFl1Uz9Qz224iJFz0YKYpDIc18SegyshDcmeHKl7BeYjT9k7OfJUQRSN9uRBaaqQuCgGc6mpYEvY8"/>
-        </div>
-        <div class="p-4">
-          <p class="font-bold text-sm mb-1">#accessories</p>
-          <p class="text-[11px] text-stone-400 leading-relaxed">Bags, jewellery and details that set the tone.</p>
-        </div>
-      </a>
+// Auth check — if not logged in go to auth.html; if already onboarded go to home.html
+(async () => {
+  _currentUser = await requireAuth();
+  if (!_currentUser) return;
+  const prefs = await DB.getPrefs(_currentUser.id);
+  if (prefs.onboarded) window.location.href = 'home.html';
+})();
 
-      <!-- #shoes -->
-      <a href="shopping-edit.html" class="clip-card">
-        <div class="clip-ring"></div>
-        <div class="aspect-[3/4] overflow-hidden">
-          <img class="w-full h-full object-cover" alt="Shoes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABeV1xbvTPRVINGg-CJkC4q7w8pyaFegj_CTFMXHmYhNocbu4BQ0ie1GEoJAC8UYtcNZLwE0rFgxHWHVRiJJzwcvYVzA5nOorMSNqBFbhpgPra8FVC97COXPwAa8wMLj1LjJdFD3vk52N3wLm6fgDd6_XYBdECWqq538Dp8ZoZqQ6ThsgYgYJQ_oaWLpGPtz3vuzOypkRcPEOSGi_MY4Q225a2Y6Q6763wHkxLovO5t_ozc6VFnqQ2PSiasItsn6yf7qcJBvcUkCs"/>
-        </div>
-        <div class="p-4">
-          <p class="font-bold text-sm mb-1">#shoes</p>
-          <p class="text-[11px] text-stone-400 leading-relaxed">The pairs that complete every look.</p>
-        </div>
-      </a>
+function goToStep(n) {
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  document.querySelectorAll('.ob-step-item').forEach((el, i) => {
+    el.classList.remove('active');
+    if (i + 1 < n) el.classList.add('done');
+    else el.classList.remove('done');
+    if (i + 1 === n) el.classList.add('active');
+  });
+  currentStep = n;
+  const panel = document.getElementById('step-' + n);
+  if (panel) { panel.classList.add('active'); window.scrollTo(0, 0); }
+}
 
-      <!-- #cosmetics / saved looks -->
-      <a href="style-me.html" class="clip-card mt-6">
-        <div class="clip-ring"></div>
-        <div class="aspect-[3/4] overflow-hidden">
-          <img class="w-full h-full object-cover" alt="Saved Looks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvqoZx38xGSEFBtKt1gNHMAsbh-n5L5Q3I4Wo9Y70m4g4cfyXD9pcGk1CLDNsx9q6RGuWCKVkF3S-j8XDqJHRfdMCqp1JUqHeJQIZWbxNQvrOhhaOm6Ej6MyEE2xXFHauJUJSbIrc6XrsrkLyrsAjjvPds-y5_MggB05q--QkiYFMFKCj_UasLT6_utdKsQXyyQjnpq_lkdI9xkNGqR9xNmcy6FSsxfzZwPPpT_yUE_S8qyNNS9zg-wJYluWvcXnrOmhgEGinMYoU"/>
-        </div>
-        <div class="p-4">
-          <p class="font-bold text-sm mb-1">#saved looks</p>
-          <p class="text-[11px] text-stone-400 leading-relaxed">AI-curated outfits from your style board.</p>
-        </div>
-      </a>
+function toggleCat(el) { el.classList.toggle('selected'); }
 
-    </div>
-  </div>
-</section>
+function selectTier(el) {
+  el.closest('.ob-price-grid').querySelectorAll('.ob-price-tile').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+}
 
-<!-- NEW ARRIVALS STRIP -->
-<section class="py-20 px-8 bg-white">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="flex items-baseline justify-between mb-12">
-      <p class="text-[11px] uppercase tracking-[0.25em] font-semibold">New Arrivals</p>
-      <a href="shopping-edit.html" class="text-[11px] uppercase tracking-[0.18em] border-b border-black pb-0.5 hover:opacity-60 transition-opacity">View All New Items</a>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
-      <div class="product-card cursor-pointer">
-        <div class="aspect-[3/4] overflow-hidden bg-stone-50 relative mb-4">
-          <img class="w-full h-full object-cover" alt="Cashmere Coat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCawgrqpB9rYdhlrmz5VBYeClxAnF_IOAhZaGqSftbowtNWrDiSpk1KKgarX-nwlb9avt1BVMj7o7mkCoYc0e32mB6_6-fpHBm1fUlA7WVR6_lRQaTKSR-9yNhOtkw387JOrMBWKuQ8_F_kqI2cxhfglACJJtlcYnsXnmg3FCD6dBvKZvLhvfluO9vbK08xF6kjK1PAhmTHdQJ2GPKPANRu2LXqFdEFTaTVlSw1b88pCxFc1l1IFttMLBQP__89IO1mbxNySmnPFuk"/>
-          <div class="overlay absolute inset-0 bg-black/10 flex items-end p-4">
-            <button class="bg-white text-black w-full py-3 text-[10px] uppercase tracking-widest font-bold">Quick Add</button>
-          </div>
-        </div>
-        <p class="text-[10px] uppercase tracking-[0.18em] text-stone-400 mb-1">Toteme</p>
-        <p class="text-sm font-medium">Cashmere Wrap Coat</p>
-        <p class="text-sm text-stone-400 mt-1">$1,250</p>
-      </div>
-      <div class="product-card cursor-pointer">
-        <div class="aspect-[3/4] overflow-hidden bg-stone-50 relative mb-4">
-          <img class="w-full h-full object-cover" alt="Structured Tote" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_woINEO64KhgV8gp0yi-GD8sz3hy1PbodKmnwlo8lq86LS3DYe8Nyv8jaRg5iA2yDUaiOLStVPTPS4ZCAVizPqIzZpwNBucd1OMqcY_wnUltnKKdoSqffJZ2xWvHVBcx8wZY9hAePEegOmPAuZOpnSNlg5tQbYvSwrT7tvlB5BbAxke84hvKoMai_lc3QFOf1q7PzockM1oxw-hUpJ9GBuIjIiLWNLmnSW0m08PT7lVymkbokmS8j3N6IpFRI4FXmDtXteRuXZRU"/>
-          <div class="overlay absolute inset-0 bg-black/10 flex items-end p-4">
-            <button class="bg-white text-black w-full py-3 text-[10px] uppercase tracking-widest font-bold">Quick Add</button>
-          </div>
-        </div>
-        <p class="text-[10px] uppercase tracking-[0.18em] text-stone-400 mb-1">The Row</p>
-        <p class="text-sm font-medium">Margaux Structured Tote</p>
-        <p class="text-sm text-stone-400 mt-1">$4,200</p>
-      </div>
-      <div class="product-card cursor-pointer">
-        <div class="aspect-[3/4] overflow-hidden bg-stone-50 relative mb-4">
-          <img class="w-full h-full object-cover" alt="Tailored Coat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaIQv2NBMSlSQpdIVHQnPUVhCa_DQ_bP-EHaERCC9m9c7GIBKur2Wymyl2gPtZ8lrtbptX2h9KoN3ZV45CRinmH1KRxOca2giQmeQJT_tmUJYCFYjBBAGfFZwutp2RdP0i-yP5MuTh0e0kYZvQMuIi7KCv_K4RPdqf1xPBAK49Bc7oz7FkDdBTFJQ1Gh4yu4nypY3idM58lvwMWEQgS8FjCd9xD0z6WDDZb12lX2DyT4LBNzpGEuayQVRYVwQQTWCeWzluH7Ayd84"/>
-          <div class="overlay absolute inset-0 bg-black/10 flex items-end p-4">
-            <button class="bg-white text-black w-full py-3 text-[10px] uppercase tracking-widest font-bold">Quick Add</button>
-          </div>
-        </div>
-        <p class="text-[10px] uppercase tracking-[0.18em] text-stone-400 mb-1">Saint Laurent</p>
-        <p class="text-sm font-medium">Sculptural Overcoat</p>
-        <p class="text-sm text-stone-400 mt-1">$3,450</p>
-      </div>
-    </div>
-  </div>
-</section>
+function handleUrlInput(val) {
+  const preview = document.getElementById('urlPreview');
+  preview.style.display = val.includes('pinterest.com') ? 'flex' : 'none';
+  if (val) localStorage.setItem('etoile_pinterestUrl', val);
+}
 
-<!-- CATEGORY MOSAIC (inspired by Prada reference) -->
-<section class="py-2 px-8 bg-white">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="flex items-baseline justify-between mb-8">
-      <p class="text-[11px] uppercase tracking-[0.25em] font-semibold">Shop All</p>
-    </div>
-    <div class="grid grid-cols-3 gap-2 h-[480px]">
-      <!-- Large left -->
-      <a href="digital-closet.html" class="col-span-2 relative overflow-hidden group">
-        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Outerwear" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCShnXB9kS0PTvN7Zst-vJ4lUfcs2asiEULB980JWf8BbCuJHlqQDawf5gnNZhO_3JzQjNxDeVWCDmjVnLNyJ6e129bSh9for_cEm3DzKAc5Auk4IJQiHeUF81pQFemXtB_GhuAaS1XHuqy3CKzw_jMdD_nqLsBBNavqvORuGXxYhJXlclvsRYhjdDw0K-zn_CW8sVQx6SkXvlmAp_Jj4PdoX-ymw4uj2T1O_wZ6Nu2_PwQpACI4lGPdKpFQLQwSa2e_mgqb6OTYfo"/>
-        <div class="absolute bottom-6 left-6">
-          <span class="bg-white/90 backdrop-blur px-4 py-2 text-[11px] uppercase tracking-[0.2em] font-semibold">Outerwear</span>
-        </div>
-      </a>
-      <!-- Right stack -->
-      <div class="flex flex-col gap-2">
-        <a href="shopping-edit.html" class="flex-1 relative overflow-hidden group">
-          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Bags" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBen7f3-Uwv8J8GOOOSkxCpnMZnOzV_fBFZB2iG212jqbG7Hy_ln-S9cBh9AEOYa0B5S9JQPY6c_XySewFmm3remFn-5yEd6ZNoRicTaPGOFb1GuhWS72xc7PRNCkLVrX_D7CFi4zl2ND8EtzV3MeGpkc6h4nwM4kwdnLrqAHDgJWC4Mg0GKbIvKL9K1mhiV_uFl1Uz9Qz224iJFz0YKYpDIc18SegyshDcmeHKl7BeYjT9k7OfJUQRSN9uRBaaqQuCgGc6mpYEvY8"/>
-          <div class="absolute bottom-4 left-4">
-            <span class="bg-white/90 backdrop-blur px-3 py-1 text-[11px] uppercase tracking-[0.2em] font-semibold">Bags</span>
-          </div>
-        </a>
-        <a href="shopping-edit.html" class="flex-1 relative overflow-hidden group">
-          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Shoes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp8AZTJg9ybi_TO8l4YBRJBnwDiel2qRwJHgXClG7464siAPECR45coIEV9qcAn2RASgNmOud-gYOgpOwfg4BVh-JaPPxWDwXFXAGm8LjvxA-ovDabKzBXtc52K2YM0KSwc5NsNVxQah51UPqDoCIwn498btFCHeMImbrvlyqjHIu9_9J4bAoCYJdrgacg9vWN5sc8rZo0DhKMlxL7aD6S8QYYMJzM2nrC41bzUxOq-45zcs_i2ULgtQPwTANpgewNjLmO95N9tKw"/>
-          <div class="absolute bottom-4 left-4">
-            <span class="bg-white/90 backdrop-blur px-3 py-1 text-[11px] uppercase tracking-[0.2em] font-semibold">Shoes</span>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+function handleUpload(files) {
+  const container = document.getElementById('uploadedPreviews');
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.style.cssText = 'width:80px;height:80px;object-fit:cover;border:1px solid var(--border);';
+      container.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
-<!-- LOOKBOOK SPLIT (editorial + pink panel) -->
-<section class="mt-2 px-8 pb-8 bg-white">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 h-[560px]">
-      <div class="overflow-hidden">
-        <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Lookbook editorial" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSHtBDfJAsJ2L2kIevIf2kaBn1CQlejbXJx4L5rY6nYCeuvNZTSwjH3SZQL7gWfV3A2TVNz3s3jnWZXMxTAxzRxsri5MhdY6abMkNX4ZARnVkW0-4cnliJi4wfqJi1K90SNbGcDfb-6flHxkB1qV2AHJ1ntSwi2Xd-C6565wEAxGgcDxEQD_NpdorSGLHLycA4Iapn0Fmxw-LSSfxUY1nSFEmTYi36YfMH7GEhN7qU3dvighhcMNCbvyd1_6YyazfIPA3vomLgF2w"/>
-      </div>
-      <div class="bg-blush flex flex-col justify-center px-12 py-16">
-        <p class="text-[10px] uppercase tracking-[0.3em] text-white/70 mb-6">Lookbook · Spring 2025</p>
-        <h2 class="serif italic text-4xl md:text-5xl text-white leading-tight mb-6">The Quiet Luxury<br/>Edit</h2>
-        <p class="text-white/80 text-sm leading-relaxed mb-10 max-w-sm">Refined essentials for the woman who needs nothing proved. Connect your Pinterest board and let our AI build looks around your aesthetic.</p>
-        <a href="onboarding.html" class="inline-block bg-white text-black px-8 py-3 text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-stone-100 transition-colors self-start">Begin →</a>
-      </div>
-    </div>
-  </div>
-</section>
+function addBrand(e, type) { if (e.key === 'Enter') addBrandClick(type); }
+function addBrandClick(type) {
+  const input = document.getElementById(type === 'liked' ? 'likedBrandInput' : 'dislikedBrandInput');
+  const val = input.value.trim();
+  if (!val) return;
+  const container = document.getElementById(type === 'liked' ? 'likedBrands' : 'dislikedBrands');
+  const chip = document.createElement('div');
+  chip.className = 'brand-chip';
+  chip.innerHTML = val + '<span class="brand-chip-remove" onclick="this.parentElement.remove()">close</span>';
+  container.appendChild(chip);
+  input.value = '';
+}
 
-<!-- EDITORIAL FULL-WIDTH -->
-<section class="relative h-[500px] overflow-hidden">
-  <img class="w-full h-full object-cover" alt="Fashion editorial group" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvsiw6bGYID00bdOfvLysuDNSpP39h9vPl4K70FuLgWsASHeJZ7EElpNGPxWUDo6dGnP_qUj1oTLyZp-alTsYALKRo12MojR61u_opO4c6lKYijmT0W3acCnQ57RTYGFY4TxpZvf-COQ_nYPv2nl4El_BCY8pO-7Pk_eQBO83n-yQrjqiUSNLMISwkkKIjb5AYeN-gJ-_EQVyhCFgHpOKCkWbceZHWOntHztBrfijwYIuDqXIp2br63NWJmv-aoPauTqnhd3D9HPg"/>
-  <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
-    <div class="text-center text-white">
-      <p class="text-[11px] uppercase tracking-[0.3em] mb-4 text-white/70">Your style, curated by AI</p>
-      <h3 class="serif italic text-5xl md:text-7xl mb-8">Start with Pinterest</h3>
-      <a href="onboarding.html" class="bg-white text-black px-12 py-4 text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-stone-100 transition-colors">Paste Your Board →</a>
-    </div>
-  </div>
-</section>
+function toggleSwatch(el, type) { el.classList.toggle('selected'); }
 
-<!-- FOOTER -->
-<footer class="bg-[#0d0d0d] text-white py-16 px-8">
-  <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
-    <div>
-      <p class="serif italic text-2xl mb-3">ÉTOILE</p>
-      <p class="text-stone-400 text-[12px] max-w-xs leading-relaxed">Your AI-powered personal stylist. Connect your Pinterest board and discover looks tailored to you.</p>
-    </div>
-    <div class="flex gap-16">
-      <div>
-        <p class="text-[10px] uppercase tracking-[0.2em] text-stone-500 mb-4">Navigate</p>
-        <ul class="space-y-3">
-          <li><a href="index.html" class="text-[12px] text-stone-300 hover:text-white transition-colors">Home</a></li>
-          <li><a href="digital-closet.html" class="text-[12px] text-stone-300 hover:text-white transition-colors">Digital Closet</a></li>
-          <li><a href="style-me.html" class="text-[12px] text-stone-300 hover:text-white transition-colors">Saved Looks</a></li>
-          <li><a href="shopping-edit.html" class="text-[12px] text-stone-300 hover:text-white transition-colors">Shop</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="text-[10px] uppercase tracking-[0.2em] text-stone-500 mb-4">Company</p>
-        <ul class="space-y-3">
-          <li><a href="#" class="text-[12px] text-stone-300 hover:text-white transition-colors">Editorial Policy</a></li>
-          <li><a href="#" class="text-[12px] text-stone-300 hover:text-white transition-colors">Privacy</a></li>
-          <li><a href="#" class="text-[12px] text-stone-300 hover:text-white transition-colors">Instagram</a></li>
-          <li><a href="#" class="text-[12px] text-stone-300 hover:text-white transition-colors">Pinterest</a></li>
-        </ul>
-      </div>
-    </div>
-    <div>
-      <p class="text-[10px] uppercase tracking-[0.2em] text-stone-500 mb-4">Start Styling</p>
-      <a href="onboarding.html" class="block bg-white text-black px-8 py-3 text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-stone-100 transition-colors text-center">Connect Pinterest →</a>
-    </div>
-  </div>
-  <div class="max-w-screen-xl mx-auto mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-    <p class="text-stone-500 text-[11px]">© 2025 ÉTOILE. All rights reserved.</p>
-    <p class="text-stone-500 text-[11px] uppercase tracking-widest">Your personal AI stylist</p>
-  </div>
-</footer>
+async function completeOnboarding() {
+  // Collect all prefs from the form
+  const pinterestUrl = document.getElementById('pinterestUrl')?.value?.trim() || null;
+  const budget = document.querySelector('.ob-price-tile.selected')?.dataset?.tier || null;
+  const brandsLiked    = [...document.querySelectorAll('#likedBrands .brand-chip')].map(c => c.textContent.replace('close','').trim());
+  const brandsDisliked = [...document.querySelectorAll('#dislikedBrands .brand-chip')].map(c => c.textContent.replace('close','').trim());
+  const colorsLove  = [...document.querySelectorAll('#likedColors .ob-swatch.selected')].map(s => s.dataset.color);
+  const colorsAvoid = [...document.querySelectorAll('#dislikedColors .ob-swatch.selected')].map(s => s.dataset.color);
+  const fit = [...document.querySelectorAll('#fitPrefs .pill.active')].map(p => p.textContent.trim());
 
+  // Save to localStorage for fast access
+  if (pinterestUrl) localStorage.setItem('etoile_pinterestUrl', pinterestUrl);
+  localStorage.setItem('etoile_onboarded', 'true');
+
+  // Save to Supabase
+  if (_currentUser) {
+    try {
+      await DB.savePrefs(_currentUser.id, {
+        onboarded: true,
+        pinterest_url: pinterestUrl,
+        budget,
+        brands_liked:    brandsLiked,
+        brands_disliked: brandsDisliked,
+        colors_love:     colorsLove,
+        colors_avoid:    colorsAvoid,
+        fit,
+      });
+    } catch(e) { console.warn('Supabase save failed, continuing locally', e); }
+  }
+
+  document.querySelectorAll('.ob-step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('ob-complete').classList.add('active');
+}
+
+// Sidebar step click
+document.querySelectorAll('.ob-step-item[data-goto]').forEach(el => {
+  el.addEventListener('click', () => goToStep(parseInt(el.dataset.goto)));
+});
+</script>
 </body>
 </html>

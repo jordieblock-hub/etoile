@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÉTOILE — Wishlist</title>
+<link rel="stylesheet" href="css/etoile.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0">
+<style>
+.wish-header { background:var(--white); padding:72px 48px 48px; border-bottom:1px solid var(--border); }
+.wish-title { font-family:var(--font-display); font-size:clamp(44px,6vw,80px); font-weight:900; line-height:0.9; letter-spacing:-0.02em; color:var(--black); margin-bottom:12px; }
+.wish-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding:48px; background:var(--cream); }
+.wish-card { background:var(--white); border:1px solid var(--border); overflow:hidden; cursor:pointer; transition:box-shadow 0.35s,transform 0.35s; }
+.wish-card:hover { box-shadow:0 10px 40px rgba(0,0,0,0.09); transform:translateY(-2px); }
+.wish-img { aspect-ratio:3/4; overflow:hidden; position:relative; }
+.wish-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.45s; }
+.wish-card:hover .wish-img img { transform:scale(1.05); }
+.wish-remove { position:absolute; top:10px; right:10px; width:28px; height:28px; background:rgba(255,255,255,0.92); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; transition:opacity 0.2s; font-family:'Material Symbols Outlined'; font-size:14px; color:var(--charcoal); }
+.wish-card:hover .wish-remove { opacity:1; }
+.wish-remove:hover { color:var(--pink); }
+.wish-body { padding:16px; }
+.wish-brand { font-size:9.5px; letter-spacing:0.18em; text-transform:uppercase; font-weight:600; color:var(--mid-gray); font-family:var(--font-sans); }
+.wish-name { font-family:var(--font-serif); font-size:17px; font-weight:400; color:var(--charcoal); margin:5px 0 4px; line-height:1.25; }
+.wish-price { font-size:13px; color:var(--warm-gray); font-family:var(--font-sans); }
+.wish-added { font-size:10px; color:var(--mid-gray); letter-spacing:0.1em; text-transform:uppercase; font-family:var(--font-sans); margin-top:4px; }
+.wish-footer-row { display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-top:1px solid var(--border); background:var(--cream); }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="home.html" class="nav-logo">ÉTOILE</a>
+  <ul class="nav-links">
+    <li><a href="outfit-recommendations.html">Style Me</a></li>
+    <li><a href="digital-closet.html">My Closet</a></li>
+    <li><a href="shopping.html">Shop</a></li>
+    <li class="nav-dropdown"><a href="saved-looks.html" class="active">Saved ▾</a>
+      <div class="nav-dropdown-menu">
+        <a href="saved-looks.html">Saved Looks</a>
+        <a href="saved-shopping.html">Wishlist</a>
+      </div>
+    </li>
+    <li><a href="profile.html">Profile</a></li>
+  </ul>
+  <div class="nav-right"><a href="shopping.html" class="nav-cta">Discover More</a></div>
+</nav>
+
+<div class="page">
+  <section class="wish-header">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+      <div>
+        <div class="section-label">Your Wishlist</div>
+        <h1 class="wish-title">Saved<br><em style="font-style:italic;color:var(--pink);font-weight:400;">Pieces</em></h1>
+        <p style="font-size:14px;color:var(--warm-gray);font-family:var(--font-sans);">Pieces you're considering. Shop when you're ready.</p>
+      </div>
+      <a href="shopping.html" class="btn btn-dark">Discover More →</a>
+    </div>
+    <div class="pills-row mt-32">
+      <div class="pill active" onclick="setPill(this)">All</div>
+      <div class="pill" onclick="setPill(this)">Tops</div>
+      <div class="pill" onclick="setPill(this)">Bags</div>
+      <div class="pill" onclick="setPill(this)">Shoes</div>
+      <div class="pill" onclick="setPill(this)">Outerwear</div>
+      <div class="pill" onclick="setPill(this)">Dresses</div>
+    </div>
+  </section>
+
+  <section class="wish-grid">
+
+    <div class="wish-card">
+      <div class="wish-img" style="background:linear-gradient(135deg,#D4C8C0,#B8A8A0);">
+        <img src="photos/8cd742f7fe1c2b9f92c99d57e65fef7e.jpg" alt="" onerror="this.remove()">
+        <div class="wish-remove" onclick="removeWish(this)">close</div>
+      </div>
+      <div class="wish-body">
+        <div class="wish-brand">Totême</div>
+        <div class="wish-name">Double-Breasted Trench</div>
+        <div class="wish-price">$1,290</div>
+        <div class="wish-added">Added Apr 2025</div>
+      </div>
+      <div class="wish-footer-row">
+        <span class="badge badge-dark">Outerwear</span>
+        <button class="btn btn-pink btn-sm">Shop Now</button>
+      </div>
+    </div>
+
+    <div class="wish-card">
+      <div class="wish-img" style="background:linear-gradient(135deg,#C8C0D4,#A8A0B8);">
+        <img src="photos/5ba50d568468ed29caee3a91cced1128.jpg" alt="" onerror="this.remove()">
+        <div class="wish-remove" onclick="removeWish(this)">close</div>
+      </div>
+      <div class="wish-body">
+        <div class="wish-brand">The Row</div>
+        <div class="wish-name">Margaux Leather Tote</div>
+        <div class="wish-price">$890</div>
+        <div class="wish-added">Added Apr 2025</div>
+      </div>
+      <div class="wish-footer-row">
+        <span class="badge badge-dark">Bag</span>
+        <button class="btn btn-pink btn-sm">Shop Now</button>
+      </div>
+    </div>
+
+    <div class="wish-card">
+      <div class="wish-img" style="background:linear-gradient(135deg,#C8D4C0,#A8B8A0);">
+        <img src="photos/023a143224d5fd4397a3b454dddae015.jpg" alt="" onerror="this.remove()">
+        <div class="wish-remove" onclick="removeWish(this)">close</div>
+      </div>
+      <div class="wish-body">
+        <div class="wish-brand">Max Mara</div>
+        <div class="wish-name">Wool-Blend Blazer</div>
+        <div class="wish-price">$650</div>
+        <div class="wish-added">Added Mar 2025</div>
+      </div>
+      <div class="wish-footer-row">
+        <span class="badge badge-dark">Suiting</span>
+        <button class="btn btn-pink btn-sm">Shop Now</button>
+      </div>
+    </div>
+
+    <div class="wish-card">
+      <div class="wish-img" style="background:linear-gradient(135deg,#D4C0C8,#B8A0A8);">
+        <img src="photos/8a3d7999ffdd579680f32d7530870aa1.jpg" alt="" onerror="this.remove()">
+        <div class="wish-remove" onclick="removeWish(this)">close</div>
+      </div>
+      <div class="wish-body">
+        <div class="wish-brand">Jacquemus</div>
+        <div class="wish-name">La Robe Midi Dress</div>
+        <div class="wish-price">$520</div>
+        <div class="wish-added">Added Mar 2025</div>
+      </div>
+      <div class="wish-footer-row">
+        <span class="badge badge-dark">Dress</span>
+        <button class="btn btn-pink btn-sm">Shop Now</button>
+      </div>
+    </div>
+
+    <div class="wish-card">
+      <div class="wish-img" style="background:linear-gradient(135deg,#C0C8D4,#A0A8B8);">
+        <img src="photos/53f4fbd8da5ea134e12fe0a43db1e9bc.jpg" alt="" onerror="this.remove()">
+        <div class="wish-remove" onclick="removeWish(this)">close</div>
+      </div>
+      <div class="wish-body">
+        <div class="wish-brand">Arket</div>
+        <div class="wish-name">Slim Tailored Trousers</div>
+        <div class="wish-price">$185</div>
+        <div class="wish-added">Added Feb 2025</div>
+      </div>
+      <div class="wish-footer-row">
+        <span class="badge badge-dark">Bottoms</span>
+        <button class="btn btn-pink btn-sm">Shop Now</button>
+      </div>
+    </div>
+
+    <div class="wish-card">
+      <div class="wish-img" style="background:linear-gradient(135deg,#C8D0B8,#A8B098);">
+        <img src="photos/1924abb8b7cb217c634c91a20a589cb7.jpg" alt="" onerror="this.remove()">
+        <div class="wish-remove" onclick="removeWish(this)">close</div>
+      </div>
+      <div class="wish-body">
+        <div class="wish-brand">Aesther Ekme</div>
+        <div class="wish-name">Soft Crinkle Tote</div>
+        <div class="wish-price">$365</div>
+        <div class="wish-added">Added Feb 2025</div>
+      </div>
+      <div class="wish-footer-row">
+        <span class="badge badge-dark">Bag</span>
+        <button class="btn btn-pink btn-sm">Shop Now</button>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <div><div class="footer-logo">ÉTOILE</div><p class="footer-tagline">Your personal AI stylist.</p></div>
+      <div><div class="footer-col-title">Navigate</div><ul class="footer-links"><li><a href="home.html">Home</a></li><li><a href="outfit-recommendations.html">Style Me</a></li><li><a href="digital-closet.html">My Closet</a></li><li><a href="shopping.html">Shop</a></li></ul></div>
+      <div><div class="footer-col-title">Saved</div><ul class="footer-links"><li><a href="saved-looks.html">Saved Looks</a></li><li><a href="saved-shopping.html">Wishlist</a></li></ul></div>
+      <div><div class="footer-col-title">Account</div><ul class="footer-links"><li><a href="profile.html">Profile</a></li><li><a href="index.html">Redo Onboarding</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span class="footer-copy">© 2025 Étoile.</span><span class="footer-copy">Made for the <span class="footer-pink">fashion-forward</span>.</span></div>
+  </footer>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+function setPill(p) { document.querySelectorAll('.pills-row .pill').forEach(x=>x.classList.remove('active')); p.classList.add('active'); }
+function removeWish(btn) {
+  const card = btn.closest('.wish-card');
+  card.style.transition = 'opacity 0.3s'; card.style.opacity = '0';
+  setTimeout(() => card.remove(), 300);
+}
+</script>
+</body>
+</html>

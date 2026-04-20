@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÉTOILE — Profile & Preferences</title>
+<link rel="stylesheet" href="css/etoile.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0">
+<style>
+.profile-layout { display:grid; grid-template-columns:300px 1fr; min-height:calc(100vh - 60px); }
+.profile-sidebar { background:var(--black); padding:48px 32px; position:sticky; top:60px; height:calc(100vh - 60px); overflow-y:auto; }
+.profile-avatar { width:72px; height:72px; background:var(--pink); display:flex; align-items:center; justify-content:center; margin-bottom:20px; font-family:'Material Symbols Outlined'; font-size:32px; color:var(--white); }
+.profile-name { font-family:var(--font-display); font-size:26px; font-weight:900; color:var(--white); line-height:1; margin-bottom:6px; }
+.profile-stats { display:flex; gap:24px; margin:24px 0 32px; padding:20px 0; border-top:1px solid rgba(255,255,255,0.08); border-bottom:1px solid rgba(255,255,255,0.08); }
+.stat-num { font-family:var(--font-display); font-size:24px; font-weight:900; color:var(--white); line-height:1; }
+.stat-label { font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.35); font-family:var(--font-sans); margin-top:4px; }
+.p-nav-title { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; color:rgba(255,255,255,0.25); margin-bottom:12px; font-family:var(--font-sans); }
+.p-nav-link { display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:12px; color:rgba(255,255,255,0.5); cursor:pointer; transition:all 0.18s; border-left:2px solid transparent; font-family:var(--font-sans); font-weight:500; }
+.p-nav-link:hover, .p-nav-link.active { color:var(--white); border-left-color:var(--pink); background:rgba(255,255,255,0.04); padding-left:18px; }
+.p-nav-link .material-symbols-outlined { font-size:16px; }
+.profile-main { background:var(--cream); }
+.p-section { padding:56px 48px; border-bottom:1px solid var(--border); background:var(--white); }
+.p-section-title { font-family:var(--font-display); font-size:28px; font-weight:900; margin-bottom:8px; }
+.p-section-sub { font-size:13px; color:var(--warm-gray); font-family:var(--font-sans); margin-bottom:36px; }
+.pinterest-connected { display:flex; align-items:center; gap:16px; padding:20px 24px; background:var(--pink-light); border:1px solid rgba(232,117,106,0.2); }
+.pinterest-icon { font-size:24px; color:var(--pink); font-family:'Material Symbols Outlined'; }
+.size-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.price-grid-small { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.price-opt { padding:20px 16px; border:1px solid var(--border); cursor:pointer; transition:all 0.18s; text-align:center; background:var(--white); }
+.price-opt:hover { border-color:var(--charcoal); }
+.price-opt.active { background:var(--black); border-color:var(--black); }
+.price-opt.active * { color:var(--white) !important; }
+.price-name { font-family:var(--font-display); font-size:20px; font-weight:900; color:var(--black); margin-bottom:4px; }
+.price-range { font-size:11px; color:var(--mid-gray); font-family:var(--font-sans); }
+.brand-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; min-height:32px; }
+.brand-tag { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; background:var(--black); color:var(--white); font-size:11px; font-family:var(--font-sans); font-weight:500; }
+.brand-tag-x { cursor:pointer; opacity:0.5; font-size:14px; font-family:'Material Symbols Outlined'; }
+.brand-tag-x:hover { opacity:1; }
+.brand-search-wrap { position:relative; }
+.brand-search-wrap input { width:100%; }
+.brand-dropdown { position:absolute; top:100%; left:0; right:0; background:var(--white); border:1px solid var(--border); border-top:none; z-index:100; max-height:200px; overflow-y:auto; display:none; }
+.brand-dropdown.open { display:block; }
+.brand-option { padding:10px 14px; font-size:12px; font-family:var(--font-sans); cursor:pointer; color:var(--charcoal); transition:background 0.12s; }
+.brand-option:hover { background:var(--cream); }
+.ob-swatch { width:36px; height:36px; border-radius:50%; cursor:pointer; border:3px solid transparent; position:relative; transition:transform 0.15s,border-color 0.15s; flex-shrink:0; }
+.ob-swatch:hover { transform:scale(1.12); }
+.ob-swatch.selected { border-color:var(--black); box-shadow:0 0 0 1px var(--white) inset; }
+.ob-swatch.selected::after { content:'✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--white); text-shadow:0 1px 3px rgba(0,0,0,0.6); }
+.swatch-light.selected::after { color:var(--charcoal); text-shadow:none; }
+/* Upload previews */
+.upload-preview-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.upload-thumb { width:72px; height:72px; object-fit:cover; border:1px solid var(--border); }
+/* Save confirmation inline */
+.save-confirm { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#22c55e; font-family:var(--font-sans); font-weight:600; opacity:0; transition:opacity 0.3s; }
+.save-confirm.visible { opacity:1; }
+/* Toast */
+#toast { position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--black); color:var(--white); padding:14px 28px; font-size:13px; font-family:var(--font-sans); font-weight:500; letter-spacing:0.04em; z-index:9999; opacity:0; transition:all 0.35s; pointer-events:none; display:flex; align-items:center; gap:10px; }
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+#toast .t-icon { font-family:'Material Symbols Outlined'; font-size:16px; color:var(--pink); }
+/* Pinterest save state */
+.pin-save-row { display:flex; gap:10px; align-items:center; margin-top:8px; }
+.pin-saved-badge { display:none; align-items:center; gap:6px; font-size:12px; color:#22c55e; font-family:var(--font-sans); font-weight:600; }
+.pin-saved-badge.show { display:flex; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="home.html" class="nav-logo">ÉTOILE</a>
+  <ul class="nav-links">
+    <li><a href="outfit-recommendations.html">Style Me</a></li>
+    <li><a href="digital-closet.html">My Closet</a></li>
+    <li><a href="shopping.html">Shop</a></li>
+    <li class="nav-dropdown"><a href="saved-looks.html">Saved ▾</a>
+      <div class="nav-dropdown-menu">
+        <a href="saved-looks.html">Saved Looks</a>
+        <a href="saved-shopping.html">Wishlist</a>
+      </div>
+    </li>
+    <li><a href="profile.html" class="active">Profile</a></li>
+  </ul>
+  <div class="nav-right"><a href="outfit-recommendations.html" class="nav-cta">Get Styled</a></div>
+</nav>
+
+<div id="toast"><span class="t-icon">check_circle</span><span id="toastMsg">Preferences saved</span></div>
+
+<div class="page">
+  <div class="profile-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="profile-sidebar">
+      <div class="profile-avatar">person</div>
+      <div class="profile-name">Your Style<br>Profile</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.35);font-family:var(--font-sans);margin-top:6px;" id="sidebarSub">Mid budget · Tailored + Relaxed fit</div>
+      <div class="profile-stats">
+        <div><div class="stat-num">42</div><div class="stat-label">Closet Items</div></div>
+        <div><div class="stat-num">6</div><div class="stat-label">Saved Looks</div></div>
+        <div><div class="stat-num">12</div><div class="stat-label">Styled Sessions</div></div>
+      </div>
+      <div class="p-nav-title">Edit Preferences</div>
+      <div class="p-nav-link active" onclick="scrollToSection('pinterest',this)"><span class="material-symbols-outlined">photo_library</span>Pinterest</div>
+      <div class="p-nav-link" onclick="scrollToSection('sizes',this)"><span class="material-symbols-outlined">straighten</span>Sizes</div>
+      <div class="p-nav-link" onclick="scrollToSection('budget',this)"><span class="material-symbols-outlined">payments</span>Budget</div>
+      <div class="p-nav-link" onclick="scrollToSection('brands',this)"><span class="material-symbols-outlined">label</span>Brands</div>
+      <div class="p-nav-link" onclick="scrollToSection('colors',this)"><span class="material-symbols-outlined">palette</span>Colors</div>
+      <div class="p-nav-link" onclick="scrollToSection('fit',this)"><span class="material-symbols-outlined">tune</span>Fit</div>
+
+      <div style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);">
+        <a href="index.html" class="btn btn-outline-white btn-sm w-full" style="justify-content:center;">Redo Onboarding</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="profile-main">
+
+      <!-- Pinterest -->
+      <div class="p-section" id="pinterest">
+        <h2 class="p-section-title">Pinterest Inspiration</h2>
+        <p class="p-section-sub">Add outfit photos from Pinterest — they'll appear in your styled looks. Paste directly from your browser, drag & drop, or upload files.</p>
+
+        <!-- Tip -->
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:13px 16px;background:var(--cream);border:1px solid var(--border);margin-bottom:20px;">
+          <span class="material-symbols-outlined" style="font-size:16px;color:var(--pink);flex-shrink:0;margin-top:1px;">tips_and_updates</span>
+          <div style="font-size:11.5px;color:var(--warm-gray);font-family:var(--font-sans);line-height:1.7;">
+            On Pinterest, right-click any outfit photo → <strong style="color:var(--charcoal);">Copy Image</strong> → come back here and press <kbd style="background:var(--border-dark);padding:1px 5px;font-size:10px;">⌘V</kbd> to paste it in. Add as many as you like.
+          </div>
+        </div>
+
+        <!-- Combined upload / paste zone -->
+        <div id="inspoUploadZone" style="border:2px dashed var(--border-dark);padding:36px 28px;text-align:center;cursor:pointer;background:var(--cream);transition:background 0.15s;" onclick="document.getElementById('inspoFileInput').click()" ondragover="event.preventDefault();this.style.background='var(--pink-light)'" ondragleave="this.style.background='var(--cream)'" ondrop="handleInspoDrop(event)">
+          <span class="material-symbols-outlined" style="font-size:32px;color:var(--mid-gray);display:block;margin-bottom:10px;">add_photo_alternate</span>
+          <div style="font-size:13px;font-weight:600;color:var(--charcoal);font-family:var(--font-sans);margin-bottom:4px;">Paste, drag & drop, or click to upload</div>
+          <div style="font-size:11px;color:var(--mid-gray);font-family:var(--font-sans);">Right-click a Pinterest photo → Copy Image → ⌘V anywhere on this page</div>
+        </div>
+        <input type="file" id="inspoFileInput" accept="image/*" multiple style="display:none" onchange="handleInspoUpload(this.files)">
+
+        <!-- Photo grid -->
+        <div id="inspoGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;"></div>
+        <div id="inspoCount" style="font-size:12px;color:#22c55e;font-family:var(--font-sans);font-weight:600;margin-top:10px;display:none;"></div>
+
+        <!-- Board screenshot for aesthetic analysis (compact, secondary) -->
+        <div style="margin-top:28px;padding-top:22px;border-top:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <label class="input-label" style="margin-bottom:0;">Aesthetic Analysis <span style="font-size:10px;font-weight:400;color:var(--mid-gray);letter-spacing:0;">(optional)</span></label>
+            <button id="pinScreenshotBtn" style="background:none;border:1px solid var(--border-dark);padding:5px 12px;font-size:10px;font-family:var(--font-sans);font-weight:700;letter-spacing:0.08em;cursor:pointer;color:var(--charcoal);" onclick="document.getElementById('pinScreenshotInput').click()">Upload board screenshot</button>
+          </div>
+          <p style="font-size:11.5px;color:var(--warm-gray);font-family:var(--font-sans);line-height:1.6;margin-bottom:14px;">Upload a screenshot of your Pinterest board and Étoile will read your overall aesthetic to influence styling choices.</p>
+          <input type="file" id="pinScreenshotInput" accept="image/*" style="display:none" onchange="analyzePinterestScreenshot(this.files[0])">
+
+          <!-- Analyzing -->
+          <div id="pinAnalyzing" style="display:none;padding:16px;background:var(--cream);border:1px solid var(--border);text-align:center;">
+            <div style="display:inline-flex;align-items:center;gap:10px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="animation:spin 1s linear infinite;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="var(--border-dark)" stroke-width="2.5"/><path d="M12 2a10 10 0 0 1 10 10" stroke="var(--pink)" stroke-width="2.5" stroke-linecap="round"/></svg>
+              <span style="font-size:12px;font-weight:600;color:var(--charcoal);font-family:var(--font-sans);">Analyzing your aesthetic…</span>
+            </div>
+          </div>
+
+          <!-- Result -->
+          <div id="pinAestheticCard" style="display:none;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span class="material-symbols-outlined" style="font-size:15px;color:#22c55e;">check_circle</span>
+                <span style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#22c55e;font-family:var(--font-sans);">Aesthetic Captured</span>
+              </div>
+              <button style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--warm-gray);font-family:var(--font-sans);text-decoration:underline;" onclick="resetPinAesthetic()">Re-upload</button>
+            </div>
+            <div style="padding:18px;border:1px solid var(--border);background:var(--white);display:flex;align-items:flex-start;gap:16px;">
+              <img id="pinThumb" src="" alt="" style="width:72px;height:72px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);">
+              <div style="flex:1;">
+                <div id="pinAestheticTitle" style="font-family:var(--font-display);font-size:18px;font-weight:900;color:var(--black);line-height:1.1;margin-bottom:6px;"></div>
+                <div id="pinAestheticDesc" style="font-size:11.5px;color:var(--warm-gray);font-family:var(--font-sans);line-height:1.65;margin-bottom:10px;"></div>
+                <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+                  <div id="pinColorDots" style="display:flex;gap:5px;"></div>
+                  <div id="pinKeywordPills" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="pinAnalyzeError" style="display:none;margin-top:12px;padding:12px 14px;background:#fff0f0;border:1px solid #fca5a5;font-size:12px;color:#dc2626;font-family:var(--font-sans);"></div>
+        </div>
+      </div>
+
+      <!-- Sizes -->
+      <div class="p-section" id="sizes">
+        <h2 class="p-section-title">Sizes</h2>
+        <p class="p-section-sub">Select all that apply — useful if you're between sizes or shop multiple categories.</p>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <label class="input-label" style="margin-bottom:10px;">Tops</label>
+            <div class="size-pills" data-group="top">
+              <div class="pill" onclick="this.classList.toggle('active')">XS</div>
+              <div class="pill active" onclick="this.classList.toggle('active')">S</div>
+              <div class="pill" onclick="this.classList.toggle('active')">M</div>
+              <div class="pill" onclick="this.classList.toggle('active')">L</div>
+              <div class="pill" onclick="this.classList.toggle('active')">XL</div>
+              <div class="pill" onclick="this.classList.toggle('active')">XXL</div>
+            </div>
+          </div>
+          <div>
+            <label class="input-label" style="margin-bottom:10px;">Bottoms / Waist</label>
+            <div class="size-pills" data-group="bottom">
+              <div class="pill" onclick="this.classList.toggle('active')">24</div>
+              <div class="pill" onclick="this.classList.toggle('active')">25</div>
+              <div class="pill" onclick="this.classList.toggle('active')">26</div>
+              <div class="pill active" onclick="this.classList.toggle('active')">27</div>
+              <div class="pill" onclick="this.classList.toggle('active')">28</div>
+              <div class="pill" onclick="this.classList.toggle('active')">29</div>
+              <div class="pill" onclick="this.classList.toggle('active')">30</div>
+              <div class="pill" onclick="this.classList.toggle('active')">31</div>
+              <div class="pill" onclick="this.classList.toggle('active')">32</div>
+            </div>
+          </div>
+          <div>
+            <label class="input-label" style="margin-bottom:10px;">Dresses</label>
+            <div class="size-pills" data-group="dress">
+              <div class="pill" onclick="this.classList.toggle('active')">XS / 0-2</div>
+              <div class="pill active" onclick="this.classList.toggle('active')">S / 4-6</div>
+              <div class="pill" onclick="this.classList.toggle('active')">M / 8-10</div>
+              <div class="pill" onclick="this.classList.toggle('active')">L / 12-14</div>
+              <div class="pill" onclick="this.classList.toggle('active')">XL / 16-18</div>
+            </div>
+          </div>
+          <div>
+            <label class="input-label" style="margin-bottom:10px;">Shoes (US)</label>
+            <div class="size-pills" data-group="shoe">
+              <div class="pill" onclick="this.classList.toggle('active')">5.5</div>
+              <div class="pill" onclick="this.classList.toggle('active')">6</div>
+              <div class="pill" onclick="this.classList.toggle('active')">6.5</div>
+              <div class="pill" onclick="this.classList.toggle('active')">7</div>
+              <div class="pill active" onclick="this.classList.toggle('active')">7.5</div>
+              <div class="pill" onclick="this.classList.toggle('active')">8</div>
+              <div class="pill" onclick="this.classList.toggle('active')">8.5</div>
+              <div class="pill" onclick="this.classList.toggle('active')">9</div>
+              <div class="pill" onclick="this.classList.toggle('active')">9.5</div>
+              <div class="pill" onclick="this.classList.toggle('active')">10</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:24px;display:flex;align-items:center;justify-content:flex-end;gap:12px;">
+          <span class="save-confirm" id="sizeConfirm"><span class="material-symbols-outlined" style="font-size:15px;">check_circle</span>Saved!</span>
+          <button class="btn btn-dark btn-sm" onclick="saveSizes()">Save Sizes</button>
+        </div>
+      </div>
+
+      <!-- Budget -->
+      <div class="p-section" id="budget">
+        <h2 class="p-section-title">Budget Tier</h2>
+        <p class="p-section-sub">Controls which brands and price points appear in your shopping recommendations.</p>
+        <div class="price-grid-small">
+          <div class="price-opt" onclick="selectBudget(this)" data-budget="low">
+            <div class="price-name">Low</div>
+            <div class="price-range">$0 – $50 / item</div>
+          </div>
+          <div class="price-opt active" onclick="selectBudget(this)" data-budget="mid">
+            <div class="price-name">Mid</div>
+            <div class="price-range">$50 – $150 / item</div>
+          </div>
+          <div class="price-opt" onclick="selectBudget(this)" data-budget="high">
+            <div class="price-name">High</div>
+            <div class="price-range">$150+ / item</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;display:flex;align-items:center;justify-content:flex-end;gap:12px;">
+          <span class="save-confirm" id="budgetConfirm"><span class="material-symbols-outlined" style="font-size:15px;">check_circle</span>Saved!</span>
+          <button class="btn btn-dark btn-sm" onclick="saveBudget()">Save Budget</button>
+        </div>
+      </div>
+
+      <!-- Brands -->
+      <div class="p-section" id="brands">
+        <h2 class="p-section-title">Brands</h2>
+        <p class="p-section-sub">Your brand preferences are applied to every styling and shopping recommendation Étoile makes.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+          <div>
+            <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:var(--warm-gray);font-family:var(--font-sans);margin-bottom:12px;">Brands I love</div>
+            <div class="brand-search-wrap">
+              <input type="text" class="input-field" placeholder="Search brands or type your own…" id="searchLike" autocomplete="off"
+                oninput="filterBrands('liked')" onfocus="openDropdown('liked')" onblur="setTimeout(()=>closeDropdown('liked'),150)" onkeydown="brandKeydown(event,'liked')">
+              <div class="brand-dropdown" id="dropLiked"></div>
+            </div>
+            <div class="brand-tags" id="likedTags"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:var(--warm-gray);font-family:var(--font-sans);margin-bottom:12px;">Brands to avoid</div>
+            <div class="brand-search-wrap">
+              <input type="text" class="input-field" placeholder="Search brands or type your own…" id="searchDislike" autocomplete="off"
+                oninput="filterBrands('disliked')" onfocus="openDropdown('disliked')" onblur="setTimeout(()=>closeDropdown('disliked'),150)" onkeydown="brandKeydown(event,'disliked')">
+              <div class="brand-dropdown" id="dropDisliked"></div>
+            </div>
+            <div class="brand-tags" id="dislikedTags"></div>
+          </div>
+        </div>
+        <div style="margin-top:24px;display:flex;align-items:center;justify-content:flex-end;gap:12px;">
+          <span class="save-confirm" id="brandConfirm"><span class="material-symbols-outlined" style="font-size:15px;">check_circle</span>Saved!</span>
+          <button class="btn btn-dark btn-sm" onclick="saveBrands()">Save Brands</button>
+        </div>
+      </div>
+
+      <!-- Colors -->
+      <div class="p-section" id="colors">
+        <h2 class="p-section-title">Color Palette</h2>
+        <p class="p-section-sub">Shapes which items we show you and prioritise in every look — select from the full palette below.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+          <div>
+            <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:var(--warm-gray);font-family:var(--font-sans);margin-bottom:14px;">Colors I love</div>
+            <div id="swatchesLove" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:var(--warm-gray);font-family:var(--font-sans);margin-bottom:14px;">Colors I avoid</div>
+            <div id="swatchesAvoid" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+          </div>
+        </div>
+        <div style="margin-top:24px;display:flex;align-items:center;justify-content:flex-end;gap:12px;">
+          <span class="save-confirm" id="colorConfirm"><span class="material-symbols-outlined" style="font-size:15px;">check_circle</span>Saved!</span>
+          <button class="btn btn-dark btn-sm" onclick="saveColors()">Save Colors</button>
+        </div>
+      </div>
+
+      <!-- Fit -->
+      <div class="p-section" id="fit" style="border-bottom:none;">
+        <h2 class="p-section-title">Fit Preferences</h2>
+        <p class="p-section-sub">Select all that apply — Étoile filters silhouettes to match your preferred fit in every recommendation.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;" id="fitPills">
+          <div class="pill active" onclick="this.classList.toggle('active')">Oversized</div>
+          <div class="pill active" onclick="this.classList.toggle('active')">Relaxed</div>
+          <div class="pill active" onclick="this.classList.toggle('active')">Tailored</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Slim</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Bodycon</div>
+          <div class="pill active" onclick="this.classList.toggle('active')">Flowy</div>
+          <div class="pill active" onclick="this.classList.toggle('active')">Structured</div>
+          <div class="pill active" onclick="this.classList.toggle('active')">Minimalist</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Maximalist</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Gender-fluid</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Modest</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Form-fitting</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Cropped</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Wide-leg</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Midi length</div>
+          <div class="pill" onclick="this.classList.toggle('active')">Maxi length</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span class="save-confirm" id="fitConfirm"><span class="material-symbols-outlined" style="font-size:15px;">check_circle</span>Saved!</span>
+          <button class="btn btn-dark" onclick="saveAll()">Save All Preferences</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+// ── Color palette (shared between love + avoid) ────────────────────────────
+const ALL_COLORS = [
+  { hex:'#0D0D0D', name:'Black',       light:false },
+  { hex:'#3D3D3D', name:'Charcoal',    light:false },
+  { hex:'#8A8A8A', name:'Gray',        light:false },
+  { hex:'#C0C0C0', name:'Silver',      light:true  },
+  { hex:'#F5F5F5', name:'White',       light:true, border:true },
+  { hex:'#F0E8D8', name:'Cream',       light:true  },
+  { hex:'#E8D5C0', name:'Ivory',       light:true  },
+  { hex:'#C8A878', name:'Camel',       light:false },
+  { hex:'#A07848', name:'Tan',         light:false },
+  { hex:'#7A5030', name:'Cognac',      light:false },
+  { hex:'#6B4226', name:'Brown',       light:false },
+  { hex:'#3D2010', name:'Espresso',    light:false },
+  { hex:'#E8C4B8', name:'Blush',       light:true  },
+  { hex:'#F472B6', name:'Pink',        light:false },
+  { hex:'#DB2777', name:'Hot Pink',    light:false },
+  { hex:'#C43030', name:'Red',         light:false },
+  { hex:'#8B1A1A', name:'Burgundy',    light:false },
+  { hex:'#7A1A2E', name:'Wine',        light:false },
+  { hex:'#D4601E', name:'Orange',      light:false },
+  { hex:'#D4A820', name:'Mustard',     light:false },
+  { hex:'#F0D060', name:'Yellow',      light:true  },
+  { hex:'#B0E020', name:'Lime',        light:true  },
+  { hex:'#6B7340', name:'Olive',       light:false },
+  { hex:'#2A4A30', name:'Forest',      light:false },
+  { hex:'#8BA08A', name:'Sage',        light:true  },
+  { hex:'#A0D8B0', name:'Mint',        light:true  },
+  { hex:'#2A7878', name:'Teal',        light:false },
+  { hex:'#1A2C4A', name:'Navy',        light:false },
+  { hex:'#2448A0', name:'Cobalt',      light:false },
+  { hex:'#6090D8', name:'Sky Blue',    light:false },
+  { hex:'#C4A8D8', name:'Lavender',    light:true  },
+  { hex:'#7840A8', name:'Purple',      light:false },
+  { hex:'#4A1A70', name:'Plum',        light:false },
+];
+
+// Defaults
+const DEFAULT_LOVE = ['Black','Charcoal','Cream','Ivory','Camel','Blush'];
+const DEFAULT_AVOID = [];
+
+function buildSwatches(containerId, savedKey, defaults) {
+  const saved = JSON.parse(localStorage.getItem(savedKey) || 'null') || defaults;
+  const container = document.getElementById(containerId);
+  ALL_COLORS.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'ob-swatch' + (saved.includes(c.name) ? ' selected' : '') + (c.light ? ' swatch-light' : '');
+    div.style.background = c.hex;
+    if (c.border) div.style.border = '3px solid #ddd';
+    div.title = c.name;
+    div.dataset.color = c.name;
+    div.addEventListener('click', () => div.classList.toggle('selected'));
+    container.appendChild(div);
+  });
+}
+
+buildSwatches('swatchesLove',  'etoile_colorsLove',  DEFAULT_LOVE);
+buildSwatches('swatchesAvoid', 'etoile_colorsAvoid', DEFAULT_AVOID);
+
+// ── Brand autocomplete ─────────────────────────────────────────────────────
+const KNOWN_BRANDS = [
+  'A.P.C.','Acne Studios','Alaïa','Alexander McQueen','Alexander Wang',
+  'AllSaints','Ami Paris','Anthropologie','Arket','ASOS','Ba&sh',
+  'Banana Republic','Balenciaga','Bottega Veneta','Burberry',
+  'By Malene Birger','Calvin Klein','Celine','Chanel','Chloé','COS',
+  'Club Monaco','Dior','Equipment','Everlane','Frame','Free People',
+  'Ganni','Gap','Givenchy','Gucci','H&M','Helmut Lang','Hermès',
+  'Isabel Marant','Jacquemus','J.Crew','Kate Spade','Khaite',
+  'L\'Agence','Loewe','Lululemon','Mango','Marant Étoile','Max Mara',
+  'Miu Miu','Nanushka','NILI LOTAN','& Other Stories','Prada',
+  'Rag & Bone','Reformation','Saint Laurent','Sandro','Sézane',
+  'Staud','Stella McCartney','The Row','Theory','Tibi','Tory Burch',
+  'Totême','Uniqlo','Valentino','Vince','Versace','Zara','Zimmermann',
+];
+
+let likedBrands = JSON.parse(localStorage.getItem('etoile_brandsLiked') || '["Totême","The Row","Arket","Jacquemus","COS"]');
+let dislikedBrands = JSON.parse(localStorage.getItem('etoile_brandsDisliked') || '[]');
+
+function renderBrandTags() {
+  renderTags('likedTags', likedBrands, 'liked');
+  renderTags('dislikedTags', dislikedBrands, 'disliked');
+}
+function renderTags(containerId, list, type) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  list.forEach(b => {
+    const tag = document.createElement('div');
+    tag.className = 'brand-tag';
+    tag.innerHTML = b + '<span class="brand-tag-x" onclick="removeBrand(\''+type+'\',\''+b+'\')">close</span>';
+    c.appendChild(tag);
+  });
+}
+function removeBrand(type, name) {
+  if (type === 'liked') likedBrands = likedBrands.filter(b => b !== name);
+  else dislikedBrands = dislikedBrands.filter(b => b !== name);
+  renderBrandTags();
+}
+function addBrand(type, name) {
+  if (!name) return;
+  if (type === 'liked' && !likedBrands.includes(name)) { likedBrands.push(name); }
+  if (type === 'disliked' && !dislikedBrands.includes(name)) { dislikedBrands.push(name); }
+  renderBrandTags();
+  document.getElementById(type === 'liked' ? 'searchLike' : 'searchDislike').value = '';
+  closeDropdown(type);
+}
+function filterBrands(type) {
+  const input = document.getElementById(type === 'liked' ? 'searchLike' : 'searchDislike');
+  const drop = document.getElementById(type === 'liked' ? 'dropLiked' : 'dropDisliked');
+  const q = input.value.trim();
+  if (!q) { drop.innerHTML = ''; drop.classList.remove('open'); return; }
+  const matches = KNOWN_BRANDS.filter(b => b.toLowerCase().includes(q.toLowerCase())).slice(0, 8);
+  const rows = matches.map(b =>
+    `<div class="brand-option" onmousedown="addBrand('${type}','${b}')">${b}</div>`
+  );
+  // Always show "Add as custom" if typed value isn't an exact match already
+  if (!KNOWN_BRANDS.some(b => b.toLowerCase() === q.toLowerCase())) {
+    rows.push(`<div class="brand-option" style="color:var(--pink);font-style:italic;" onmousedown="addBrand('${type}','${q.trim()}')">+ Add "${q.trim()}"</div>`);
+  }
+  drop.innerHTML = rows.join('');
+  drop.classList.add('open');
+}
+
+function brandKeydown(e, type) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const input = document.getElementById(type === 'liked' ? 'searchLike' : 'searchDislike');
+    const val = input.value.trim();
+    if (val) addBrand(type, val);
+  }
+}
+function openDropdown(type) {
+  filterBrands(type);
+}
+function closeDropdown(type) {
+  document.getElementById(type === 'liked' ? 'dropLiked' : 'dropDisliked').classList.remove('open');
+}
+
+renderBrandTags();
+
+// ── Budget ─────────────────────────────────────────────────────────────────
+function selectBudget(el) {
+  el.closest('.price-grid-small').querySelectorAll('.price-opt').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+}
+const savedBudget = localStorage.getItem('etoile_budget');
+if (savedBudget) {
+  document.querySelectorAll('.price-opt').forEach(o => {
+    o.classList.toggle('active', o.dataset.budget === savedBudget);
+  });
+}
+
+// ── Sizes – load saved ─────────────────────────────────────────────────────
+const savedSizes = JSON.parse(localStorage.getItem('etoile_sizes') || 'null');
+if (savedSizes) {
+  ['top','bottom','dress','shoe'].forEach(group => {
+    const saved = savedSizes[group];
+    if (!saved) return;
+    document.querySelectorAll(`.size-pills[data-group="${group}"] .pill`).forEach(p => {
+      p.classList.toggle('active', saved.includes(p.textContent.trim()));
+    });
+  });
+}
+
+// ── Fit – load saved ───────────────────────────────────────────────────────
+const savedFit = JSON.parse(localStorage.getItem('etoile_fit') || 'null');
+if (savedFit) {
+  document.querySelectorAll('#fitPills .pill').forEach(p => {
+    p.classList.toggle('active', savedFit.includes(p.textContent.trim()));
+  });
+}
+
+// ── Load from Supabase (or localStorage fallback) ──────────────────────────
+let _sbUser = null;
+(async () => {
+  _sbUser = await requireAuth();
+  if (!_sbUser) return;
+
+  // Show user name in sidebar
+  const profile = await sb.from('profiles').select('name').eq('id', _sbUser.id).maybeSingle();
+  if (profile?.data?.name) {
+    document.querySelector('.profile-name').textContent = profile.data.name;
+  }
+
+  let prefs = {};
+  try { prefs = await DB.getPrefs(_sbUser.id); } catch(e) { /* fall through to localStorage */ }
+
+  // Budget
+  if (prefs.budget) {
+    document.querySelectorAll('.price-opt').forEach(o => o.classList.toggle('active', o.dataset.budget === prefs.budget));
+  }
+
+  // Brands
+  if (prefs.brands_liked?.length)    { likedBrands    = prefs.brands_liked;    renderBrandTags(); }
+  if (prefs.brands_disliked?.length) { dislikedBrands = prefs.brands_disliked; renderBrandTags(); }
+
+  // Colors
+  if (prefs.colors_love?.length) {
+    document.querySelectorAll('#swatchesLove .ob-swatch').forEach(s => s.classList.toggle('selected', prefs.colors_love.includes(s.dataset.color)));
+  }
+  if (prefs.colors_avoid?.length) {
+    document.querySelectorAll('#swatchesAvoid .ob-swatch').forEach(s => s.classList.toggle('selected', prefs.colors_avoid.includes(s.dataset.color)));
+  }
+
+  // Fit
+  if (prefs.fit?.length) {
+    document.querySelectorAll('#fitPills .pill').forEach(p => p.classList.toggle('active', prefs.fit.includes(p.textContent.trim())));
+  }
+
+  // Sizes
+  if (prefs.sizes) {
+    ['top','bottom','dress','shoe'].forEach(group => {
+      const saved = prefs.sizes[group];
+      if (!saved) return;
+      document.querySelectorAll(`.size-pills[data-group="${group}"] .pill`).forEach(p => {
+        p.classList.toggle('active', saved.includes(p.textContent.trim()));
+      });
+    });
+  }
+
+})();
+
+// ── Pinterest aesthetic analysis ────────────────────────────────────────────
+const ANALYZE_URL = 'https://pqtlqcfqbnoptexjvagh.supabase.co/functions/v1/analyze-aesthetic';
+const SUPABASE_ANON_KEY_PIN = 'sb_publishable_iRup46G7cNmey1WdPmqf_g_kIwypDko';
+
+// Restore saved aesthetic on page load
+(function restoreAesthetic() {
+  const saved = localStorage.getItem('etoile_aestheticAnalysis');
+  const savedImg = localStorage.getItem('etoile_aestheticImg');
+  if (saved) {
+    try { renderAestheticCard(JSON.parse(saved), savedImg); } catch(e) {}
+  }
+})();
+
+function handlePinDrop(e) {
+  e.preventDefault();
+  document.getElementById('pinUploadZone').style.background = 'var(--cream)';
+  const file = e.dataTransfer.files[0];
+  if (file) analyzePinterestScreenshot(file);
+}
+
+async function analyzePinterestScreenshot(file) {
+  if (!file) return;
+
+  // Show analyzing state
+  document.getElementById('pinUploadZone').style.display = 'none';
+  document.getElementById('pinAnalyzing').style.display = 'block';
+  document.getElementById('pinAestheticCard').style.display = 'none';
+  document.getElementById('pinAnalyzeError').style.display = 'none';
+
+  try {
+    // Two versions: small for Claude API, large for display cropping
+    const [base64Api, base64Display] = await Promise.all([
+      resizeAndEncode(file, 1024),
+      resizeAndEncode(file, 3000),
+    ]);
+    const mediaType = 'image/jpeg';
+    const imageBase64 = base64Api.split(',')[1];
+
+    const res = await fetch(ANALYZE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY_PIN },
+      body: JSON.stringify({ imageBase64, mediaType }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    // Save to localStorage — high-res copy used for pin cropping
+    localStorage.setItem('etoile_aestheticAnalysis', JSON.stringify(data));
+    localStorage.setItem('etoile_aestheticImg', base64Api);
+    localStorage.setItem('etoile_aestheticImgHD', base64Display);
+
+    renderAestheticCard(data, base64Api);
+    showToast('Aesthetic captured — Étoile will use this to style you');
+  } catch (err) {
+    document.getElementById('pinUploadZone').style.display = 'block';
+    document.getElementById('pinAnalyzing').style.display = 'none';
+    const errEl = document.getElementById('pinAnalyzeError');
+    errEl.textContent = 'Analysis failed: ' + (err.message || 'Unknown error');
+    errEl.style.display = 'block';
+  }
+}
+
+function renderAestheticCard(data, imgSrc) {
+  document.getElementById('pinUploadZone').style.display = 'none';
+  document.getElementById('pinAnalyzing').style.display = 'none';
+  document.getElementById('pinAestheticCard').style.display = 'block';
+
+  document.getElementById('pinAestheticTitle').textContent = data.aestheticTitle || 'Your Aesthetic';
+  document.getElementById('pinAestheticDesc').textContent = data.description || '';
+
+  if (imgSrc) {
+    document.getElementById('pinThumb').src = imgSrc;
+    document.getElementById('pinThumb').style.display = 'block';
+  } else {
+    document.getElementById('pinThumb').style.display = 'none';
+  }
+
+  const dots = document.getElementById('pinColorDots');
+  dots.innerHTML = '';
+  (data.colorPalette || []).slice(0,6).forEach(color => {
+    const dot = document.createElement('span');
+    dot.title = color;
+    dot.style.cssText = `width:18px;height:18px;border-radius:50%;background:${color};border:1px solid rgba(0,0,0,0.1);display:inline-block;`;
+    dots.appendChild(dot);
+  });
+
+  const pills = document.getElementById('pinKeywordPills');
+  pills.innerHTML = '';
+  (data.keywords || []).forEach(kw => {
+    const pill = document.createElement('span');
+    pill.textContent = kw;
+    pill.style.cssText = 'display:inline-block;padding:3px 10px;background:var(--cream);border:1px solid var(--border-dark);font-size:10px;font-family:var(--font-sans);color:var(--charcoal);font-weight:600;letter-spacing:0.06em;';
+    pills.appendChild(pill);
+  });
+}
+
+function resetPinAesthetic() {
+  localStorage.removeItem('etoile_aestheticAnalysis');
+  localStorage.removeItem('etoile_aestheticImg');
+  document.getElementById('pinUploadZone').style.display = 'block';
+  document.getElementById('pinAestheticCard').style.display = 'none';
+  document.getElementById('pinAnalyzeError').style.display = 'none';
+  document.getElementById('pinScreenshotInput').value = '';
+}
+
+// ── Individual inspiration photos ──────────────────────────────────────────
+function handleInspoDrop(e) {
+  e.preventDefault();
+  document.getElementById('inspoUploadZone').style.background = 'var(--cream)';
+  handleInspoUpload(e.dataTransfer.files);
+}
+
+async function handleInspoUpload(files) {
+  if (!files?.length) return;
+  const existing = JSON.parse(localStorage.getItem('etoile_inspirationPhotos') || '[]');
+  const toAdd = Array.from(files).slice(0, 20);
+  const encoded = await Promise.all(toAdd.map(f => resizeAndEncode(f, 1400)));
+  const updated = [...existing, ...encoded];
+  localStorage.setItem('etoile_inspirationPhotos', JSON.stringify(updated));
+  renderInspoGrid(updated);
+  showToast(toAdd.length + ' photo' + (toAdd.length > 1 ? 's' : '') + ' added');
+}
+
+function renderInspoGrid(photos) {
+  const grid = document.getElementById('inspoGrid');
+  const countEl = document.getElementById('inspoCount');
+  grid.innerHTML = photos.map((src, i) => `
+    <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--border);">
+      <img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <button onclick="removeInspoPhoto(${i})" style="position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.6);border:none;cursor:pointer;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;line-height:1;">×</button>
+    </div>`).join('');
+  if (photos.length) {
+    countEl.textContent = '✓ ' + photos.length + ' outfit photo' + (photos.length > 1 ? 's' : '') + ' saved';
+    countEl.style.display = 'block';
+  } else {
+    countEl.style.display = 'none';
+  }
+}
+
+function removeInspoPhoto(index) {
+  const photos = JSON.parse(localStorage.getItem('etoile_inspirationPhotos') || '[]');
+  photos.splice(index, 1);
+  localStorage.setItem('etoile_inspirationPhotos', JSON.stringify(photos));
+  renderInspoGrid(photos);
+}
+
+// Paste support — copy image from Pinterest, Cmd+V anywhere on page
+document.addEventListener('paste', (e) => {
+  const items = Array.from(e.clipboardData?.items || []);
+  const imageItems = items.filter(it => it.type.startsWith('image/'));
+  if (!imageItems.length) return;
+  e.preventDefault();
+  const files = imageItems.map(it => it.getAsFile()).filter(Boolean);
+  handleInspoUpload(files);
+  // Brief highlight on the upload zone to confirm paste was received
+  const zone = document.getElementById('inspoUploadZone');
+  if (zone) {
+    zone.style.background = 'var(--pink-light)';
+    setTimeout(() => zone.style.background = 'var(--cream)', 600);
+  }
+});
+
+// Restore on load
+(function restoreInspoPhotos() {
+  const saved = JSON.parse(localStorage.getItem('etoile_inspirationPhotos') || 'null');
+  if (saved?.length) renderInspoGrid(saved);
+})();
+
+function resizeAndEncode(file, maxPx) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width  = Math.round(img.width  * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+// ── Save functions ─────────────────────────────────────────────────────────
+function flashConfirm(id) {
+  const el = document.getElementById(id);
+  el.classList.add('visible');
+  setTimeout(() => el.classList.remove('visible'), 3000);
+}
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg || 'Preferences saved';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2800);
+}
+function _collectAllPrefs() {
+  const sizes = {};
+  ['top','bottom','dress','shoe'].forEach(group => {
+    sizes[group] = [...document.querySelectorAll(`.size-pills[data-group="${group}"] .pill.active`)].map(p => p.textContent.trim());
+  });
+  const budget = document.querySelector('.price-opt.active')?.dataset?.budget || null;
+  const love   = [...document.querySelectorAll('#swatchesLove .ob-swatch.selected')].map(s => s.dataset.color);
+  const avoid  = [...document.querySelectorAll('#swatchesAvoid .ob-swatch.selected')].map(s => s.dataset.color);
+  const fit    = [...document.querySelectorAll('#fitPills .pill.active')].map(p => p.textContent.trim());
+  return { sizes, budget, brands_liked: likedBrands, brands_disliked: dislikedBrands, colors_love: love, colors_avoid: avoid, fit };
+}
+
+async function _syncPrefs(partial) {
+  // Update localStorage
+  if (partial.sizes)            localStorage.setItem('etoile_sizes',          JSON.stringify(partial.sizes));
+  if (partial.budget)           localStorage.setItem('etoile_budget',         partial.budget);
+  if (partial.brands_liked)     localStorage.setItem('etoile_brandsLiked',    JSON.stringify(partial.brands_liked));
+  if (partial.brands_disliked)  localStorage.setItem('etoile_brandsDisliked', JSON.stringify(partial.brands_disliked));
+  if (partial.colors_love)      localStorage.setItem('etoile_colorsLove',     JSON.stringify(partial.colors_love));
+  if (partial.colors_avoid)     localStorage.setItem('etoile_colorsAvoid',    JSON.stringify(partial.colors_avoid));
+  if (partial.fit)              localStorage.setItem('etoile_fit',            JSON.stringify(partial.fit));
+  // Sync to Supabase
+  if (_sbUser) {
+    try { await DB.savePrefs(_sbUser.id, partial); } catch(e) { console.warn('Supabase pref save failed', e); }
+  }
+}
+
+function saveSizes() {
+  const sizes = {};
+  ['top','bottom','dress','shoe'].forEach(group => {
+    sizes[group] = [...document.querySelectorAll(`.size-pills[data-group="${group}"] .pill.active`)].map(p => p.textContent.trim());
+  });
+  _syncPrefs({ sizes });
+  flashConfirm('sizeConfirm');
+  showToast('Sizes saved — used in recommendations');
+}
+function saveBudget() {
+  const budget = document.querySelector('.price-opt.active')?.dataset?.budget || null;
+  if (budget) _syncPrefs({ budget });
+  flashConfirm('budgetConfirm');
+  showToast('Budget tier saved — used in recommendations');
+}
+function saveBrands() {
+  _syncPrefs({ brands_liked: likedBrands, brands_disliked: dislikedBrands });
+  flashConfirm('brandConfirm');
+  showToast('Brand preferences saved — applied to all styling');
+}
+function saveColors() {
+  const love  = [...document.querySelectorAll('#swatchesLove .ob-swatch.selected')].map(s => s.dataset.color);
+  const avoid = [...document.querySelectorAll('#swatchesAvoid .ob-swatch.selected')].map(s => s.dataset.color);
+  _syncPrefs({ colors_love: love, colors_avoid: avoid });
+  flashConfirm('colorConfirm');
+  showToast('Color palette saved — applied to all styling');
+}
+function saveFit() {
+  const fit = [...document.querySelectorAll('#fitPills .pill.active')].map(p => p.textContent.trim());
+  _syncPrefs({ fit });
+}
+function saveAll() {
+  _syncPrefs(_collectAllPrefs());
+  flashConfirm('fitConfirm');
+  showToast('All preferences saved — Étoile will style you accordingly');
+}
+
+function scrollToSection(id, el) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('.p-nav-link').forEach(l => l.classList.remove('active'));
+  el.classList.add('active');
+}
+
+
+</script>
+</body>
+</html>

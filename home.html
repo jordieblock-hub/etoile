@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÉTOILE</title>
+<link rel="stylesheet" href="css/etoile.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0">
+<style>
+/* Full-screen centering */
+.home-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 48px;
+  background: var(--cream);
+  position: relative;
+  text-align: center;
+}
+
+/* Subtle background editorial image */
+.home-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.home-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.04;
+  filter: grayscale(100%);
+}
+
+/* Main content */
+.home-content {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  width: 100%;
+}
+
+.home-greeting {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--pink);
+  font-family: var(--font-sans);
+  margin-bottom: 28px;
+}
+
+.home-headline {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 7vw, 96px);
+  font-weight: 900;
+  color: var(--black);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 48px;
+}
+.home-headline em {
+  display: block;
+  font-style: italic;
+  color: var(--pink);
+  font-weight: 400;
+  font-size: 0.75em;
+  margin-top: 8px;
+}
+
+/* Input */
+.home-bar {
+  display: flex;
+  align-items: center;
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 0 24px;
+  gap: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 20px;
+}
+.home-bar:focus-within {
+  border-color: var(--black);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.09);
+}
+.home-bar input {
+  flex: 1; border: none; outline: none;
+  padding: 24px 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--charcoal);
+  background: transparent;
+}
+.home-bar input::placeholder { color: var(--mid-gray); }
+
+/* Quick chips */
+.home-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 64px;
+}
+.home-chip {
+  padding: 8px 18px;
+  border: 1px solid var(--border);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--warm-gray);
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: var(--font-sans);
+  background: var(--white);
+}
+.home-chip:hover {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+
+/* Secondary links */
+.home-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  justify-content: center;
+}
+.home-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s;
+  color: var(--warm-gray);
+}
+.home-link:hover { color: var(--black); }
+.home-link-icon {
+  width: 52px; height: 52px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--white);
+  transition: all 0.18s;
+  font-family: 'Material Symbols Outlined';
+  font-size: 20px;
+  color: var(--warm-gray);
+}
+.home-link:hover .home-link-icon {
+  border-color: var(--black);
+  color: var(--black);
+}
+.home-link-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: var(--font-sans);
+}
+
+/* Nav */
+.home-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
+.home-nav-logo {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  letter-spacing: 0.28em;
+  font-weight: 400;
+  color: var(--black);
+  text-decoration: none;
+}
+.home-nav-links {
+  display: flex; gap: 32px;
+  list-style: none;
+}
+.home-nav-links a {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--warm-gray);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.home-nav-links a:hover { color: var(--black); }
+.home-nav-right { display: flex; align-items: center; gap: 16px; }
+.home-nav-profile {
+  width: 32px; height: 32px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-family: 'Material Symbols Outlined';
+  font-size: 16px;
+  color: var(--warm-gray);
+  text-decoration: none;
+  transition: all 0.18s;
+}
+.home-nav-profile:hover { border-color: var(--black); color: var(--black); }
+
+/* Recent section — minimal */
+.recent-section {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.recent-section::-webkit-scrollbar { display: none; }
+.recent-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--mid-gray);
+  font-family: var(--font-sans);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.recent-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  cursor: pointer;
+  transition: all 0.18s;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+.recent-chip:hover { border-color: var(--black); background: var(--black); }
+.recent-chip:hover .recent-chip-text { color: var(--white); }
+.recent-chip-icon { font-size: 14px; color: var(--pink); font-family: 'Material Symbols Outlined'; }
+.recent-chip-text { font-size: 11px; color: var(--charcoal); font-family: var(--font-sans); white-space: nowrap; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="home-nav">
+  <a href="home.html" class="home-nav-logo">ÉTOILE</a>
+  <ul class="home-nav-links">
+    <li><a href="outfit-recommendations.html">Style Me</a></li>
+    <li><a href="digital-closet.html">My Closet</a></li>
+    <li><a href="shopping.html">Shop</a></li>
+    <li><a href="saved-looks.html">Saved</a></li>
+  </ul>
+  <div class="home-nav-right">
+    <span id="navUserName" style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:var(--warm-gray);font-family:var(--font-sans);"></span>
+    <a href="profile.html" class="home-nav-profile">person</a>
+    <button onclick="signOut()" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:var(--mid-gray);font-family:var(--font-sans);">Sign Out</button>
+  </div>
+</nav>
+
+<!-- SUBTLE EDITORIAL BG -->
+<div class="home-bg">
+  <img src="photos/a685e23b02171dce4928bb22615b3361.jpg" alt="" onerror="this.remove()">
+</div>
+
+<!-- MAIN -->
+<div class="home-shell" style="padding-top: 60px; padding-bottom: 80px;">
+  <div class="home-content">
+
+    <div class="home-greeting" id="greeting">● Good morning</div>
+
+    <h1 class="home-headline">
+      How can I
+      <em>style you today?</em>
+    </h1>
+
+    <div class="home-bar">
+      <span class="material-symbols-outlined" style="color: var(--pink); font-size: 20px;">auto_awesome</span>
+      <input type="text" id="styleInput" placeholder="Tell me the occasion, vibe, or piece…">
+      <button class="btn btn-dark btn-sm" onclick="submitStyle()">Style Me →</button>
+    </div>
+
+    <div class="home-chips">
+      <div class="home-chip" onclick="go('date night dinner')">Date Night</div>
+      <div class="home-chip" onclick="go('work event')">Work Event</div>
+      <div class="home-chip" onclick="go('vacation outfits')">Vacation</div>
+      <div class="home-chip" onclick="go('Sunday brunch')">Brunch</div>
+      <div class="home-chip" onclick="go('wedding guest')">Wedding Guest</div>
+      <div class="home-chip" onclick="go('packing for a trip')">Pack a Trip</div>
+      <div class="home-chip" onclick="go('casual everyday')">Everyday</div>
+    </div>
+
+    <!-- Quick access icons -->
+    <div class="home-links">
+      <a href="digital-closet.html" class="home-link">
+        <div class="home-link-icon">checkroom</div>
+        <span class="home-link-label">My Closet</span>
+      </a>
+      <a href="saved-looks.html" class="home-link">
+        <div class="home-link-icon">bookmark</div>
+        <span class="home-link-label">Saved Looks</span>
+      </a>
+      <a href="shopping.html" class="home-link">
+        <div class="home-link-icon">shopping_bag</div>
+        <span class="home-link-label">Shop</span>
+      </a>
+      <a href="profile.html" class="home-link">
+        <div class="home-link-icon">tune</div>
+        <span class="home-link-label">Preferences</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- RECENT BAR -->
+<div class="recent-section" id="recentBar" style="display: none;">
+  <span class="recent-label">Recent</span>
+  <div id="recentChips"></div>
+</div>
+
+
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  // Show name in nav and greeting
+  const prefs = await DB.getPrefs(user.id);
+  const profile = await sb.from('profiles').select('name').eq('id', user.id).maybeSingle();
+  const name = profile?.data?.name || user.email.split('@')[0];
+  const el = document.getElementById('navUserName');
+  if (el) el.textContent = name;
+  const h = new Date().getHours();
+  const period = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
+  document.getElementById('greeting').textContent = `● Good ${period}, ${name}`;
+})();
+
+// Greeting by time of day (fallback while auth loads)
+const h = new Date().getHours();
+const greetings = { morning: 'Good morning', afternoon: 'Good afternoon', evening: 'Good evening' };
+const key = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
+document.getElementById('greeting').textContent = '● ' + greetings[key];
+
+function go(text) {
+  window.location.href = 'outfit-recommendations.html?q=' + encodeURIComponent(text);
+}
+function submitStyle() {
+  const v = document.getElementById('styleInput').value.trim();
+  if (v) go(v);
+}
+document.getElementById('styleInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitStyle(); });
+
+// Show recent requests
+const recent = JSON.parse(localStorage.getItem('etoile_styleRequests') || '[]');
+if (recent.length) {
+  const bar = document.getElementById('recentBar');
+  const chips = document.getElementById('recentChips');
+  bar.style.display = 'flex';
+  recent.slice(0, 6).forEach(r => {
+    const chip = document.createElement('a');
+    chip.href = 'outfit-recommendations.html?q=' + encodeURIComponent(r.text);
+    chip.className = 'recent-chip';
+    chip.innerHTML = '<span class="material-symbols-outlined recent-chip-icon">history</span><span class="recent-chip-text">' + r.text + '</span>';
+    chips.appendChild(chip);
+  });
+}
+</script>
+</body>
+</html>

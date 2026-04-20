@@ -1,360 +1,605 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ÉTOILE | Digital Closet</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÉTOILE — My Closet</title>
+<link rel="stylesheet" href="css/etoile.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0">
 <style>
-  * { box-sizing: border-box; }
-  body { font-family: 'Manrope', sans-serif; background: #0d0d0d; color: #f5f2ee; }
-  .serif { font-family: 'Noto Serif', serif; }
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; font-size: 20px; }
-
-  /* Scattered card effect — each card gets its own rotation + offset */
-  .closet-card {
-    background: white;
-    color: #0d0d0d;
-    transition: transform 0.3s, box-shadow 0.3s, z-index 0s;
-    cursor: pointer;
-    position: relative;
-  }
-  .closet-card:hover {
-    transform: rotate(0deg) translateY(-8px) scale(1.03) !important;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-    z-index: 20;
-  }
-
-  .card-1 { transform: rotate(-2deg); }
-  .card-2 { transform: rotate(1.5deg) translateY(12px); }
-  .card-3 { transform: rotate(-1deg) translateY(4px); }
-  .card-4 { transform: rotate(2.5deg) translateY(8px); }
-  .card-5 { transform: rotate(-1.5deg); }
-  .card-6 { transform: rotate(0.8deg) translateY(16px); }
-
-  /* Tag label (like 29 Closet cards) */
-  .card-tag {
-    position: absolute;
-    top: -10px;
-    right: 12px;
-    background: #0d0d0d;
-    color: white;
-    font-size: 9px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    font-weight: 700;
-  }
-  .card-tag.owned { background: #2d6a2d; }
-  .card-tag.frequent { background: #e8b4bc; color: #0d0d0d; }
-
-  /* Category filter pills */
-  .filter-pill { border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); transition: all 0.2s; cursor: pointer; }
-  .filter-pill:hover, .filter-pill.active { border-color: white; color: white; }
-  .filter-pill.active { background: white; color: #0d0d0d; }
-
-  /* Central hanger graphic */
-  .hanger-graphic {
-    width: 0;
-    height: 0;
-    border-left: 70px solid transparent;
-    border-right: 70px solid transparent;
-    border-bottom: 50px solid #e8b4bc;
-    position: relative;
-  }
-  .hanger-graphic::after {
-    content: '';
-    position: absolute;
-    top: 50px;
-    left: -70px;
-    width: 140px;
-    height: 60px;
-    background: #e8b4bc;
-    border-radius: 0 0 70px 70px;
-  }
-  .hanger-hook {
-    width: 20px;
-    height: 20px;
-    border: 4px solid #e8b4bc;
-    border-radius: 50%;
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .hanger-hook::before {
-    content: '';
-    position: absolute;
-    top: -16px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 16px;
-    background: #e8b4bc;
-  }
+.closet-layout { display:grid; grid-template-columns:280px 1fr; min-height:calc(100vh - 60px); }
+.closet-sidebar { background:var(--white); border-right:1px solid var(--border); padding:32px 20px 40px; position:sticky; top:60px; height:calc(100vh - 60px); overflow-y:auto; }
+.sb-heading { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; color:var(--mid-gray); margin:20px 0 8px 10px; font-family:var(--font-sans); }
+.sb-all { display:flex; align-items:center; gap:8px; padding:9px 12px; font-size:12px; color:var(--warm-gray); cursor:pointer; transition:all 0.16s; border-left:2px solid transparent; font-family:var(--font-sans); font-weight:600; margin-bottom:4px; }
+.sb-all:hover, .sb-all.active { color:var(--black); border-left-color:var(--pink); background:var(--cream); }
+.sb-all .material-symbols-outlined { font-size:15px; }
+.sb-count { margin-left:auto; font-size:9px; color:var(--mid-gray); background:var(--cream); padding:1px 7px; border-radius:20px; }
+.sb-parent { display:flex; align-items:center; gap:8px; padding:9px 12px; font-size:11.5px; color:var(--charcoal); cursor:pointer; transition:all 0.16s; font-family:var(--font-sans); font-weight:700; letter-spacing:0.04em; text-transform:uppercase; font-size:9.5px; }
+.sb-parent:hover { background:var(--cream); }
+.sb-parent.active-group { color:var(--black); }
+.sb-parent .material-symbols-outlined { font-size:14px; color:var(--mid-gray); }
+.sb-arrow { margin-left:auto; font-size:13px; color:var(--mid-gray); transition:transform 0.2s; font-family:'Material Symbols Outlined'; font-size:14px; }
+.sb-parent.open .sb-arrow { transform:rotate(180deg); }
+.sb-children { display:none; padding:0 0 4px 0; }
+.sb-parent.open + .sb-children { display:block; }
+.sb-sub { display:flex; align-items:center; justify-content:space-between; padding:7px 12px 7px 34px; font-size:11.5px; color:var(--warm-gray); cursor:pointer; font-family:var(--font-sans); transition:all 0.14s; border-left:2px solid transparent; }
+.sb-sub:hover { color:var(--black); background:var(--cream); }
+.sb-sub.active { color:var(--black); border-left-color:var(--pink); background:var(--cream); font-weight:600; }
+.sb-sub-count { font-size:9px; color:var(--mid-gray); }
+.closet-main { background:var(--cream); }
+.closet-topbar { background:var(--white); padding:24px 36px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:space-between; }
+.closet-section-label { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; color:var(--mid-gray); font-family:var(--font-sans); padding:24px 36px 0; }
+.closet-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; padding:16px 36px 40px; }
+.cl-item { background:var(--white); border:1px solid var(--border); overflow:hidden; cursor:pointer; transition:box-shadow 0.3s,transform 0.3s; position:relative; }
+.cl-item:hover { box-shadow:0 6px 24px rgba(0,0,0,0.09); transform:translateY(-2px); }
+.cl-img { aspect-ratio:3/4; overflow:hidden; position:relative; background:var(--cream); }
+.cl-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s; }
+.cl-item:hover .cl-img img { transform:scale(1.06); }
+.cl-worn-tag { position:absolute; bottom:6px; left:6px; background:var(--pink); color:var(--white); font-size:7px; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; padding:3px 8px; font-family:var(--font-sans); }
+.cl-info { padding:10px 12px; }
+.cl-name { font-family:var(--font-serif); font-size:13px; color:var(--charcoal); line-height:1.3; }
+.cl-sub { font-size:8.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--mid-gray); font-family:var(--font-sans); margin-top:3px; font-weight:600; }
+.cl-brand { font-size:9px; color:var(--pink); font-family:var(--font-sans); margin-top:2px; }
+.cl-item-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.5); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; opacity:0; transition:opacity 0.2s; padding:12px; }
+.cl-item:hover .cl-item-overlay { opacity:1; }
+.cl-no-photo { width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:6px; background:linear-gradient(135deg,#f0ede8,#e8e4de); }
+.cl-no-photo .material-symbols-outlined { font-size:28px; color:var(--border-dark); }
+.cl-no-photo span.lbl { font-size:8px; color:var(--mid-gray); font-family:var(--font-sans); letter-spacing:0.1em; text-transform:uppercase; }
+.cl-photo-loading { width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:var(--cream); }
+.cl-photo-loading::after { content:''; width:20px; height:20px; border:2px solid var(--border-dark); border-top-color:var(--pink); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.add-cta { margin:24px 36px 0; background:var(--white); border:1px dashed var(--border-dark); padding:28px; text-align:center; cursor:pointer; transition:all 0.2s; }
+.add-cta:hover { border-color:var(--pink); background:var(--pink-light); }
+/* Modal */
+.modal-step { display:none; }
+.modal-step.active { display:block; }
+.photo-suggest-wrap { position:relative; width:100%; aspect-ratio:3/4; background:var(--cream); overflow:hidden; margin-bottom:16px; border:1px solid var(--border); }
+.photo-suggest-wrap img { width:100%; height:100%; object-fit:cover; }
+.photo-suggest-loading { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:var(--cream); }
+.photo-suggest-actions { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.upload-zone { border:1px dashed var(--border-dark); padding:20px; text-align:center; cursor:pointer; background:var(--cream); transition:background 0.15s; }
+.upload-zone:hover { border-color:var(--pink); background:var(--pink-light); }
+.upload-preview { position:relative; width:100%; aspect-ratio:3/4; overflow:hidden; border:1px solid var(--border); margin-bottom:4px; }
+.upload-preview img { width:100%; height:100%; object-fit:cover; }
+.upload-preview-remove { position:absolute; top:6px; right:6px; background:rgba(0,0,0,0.6); color:#fff; border:none; cursor:pointer; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-family:'Material Symbols Outlined'; font-size:14px; }
+select.input-field optgroup { font-weight:700; color:var(--charcoal); font-size:11px; }
+select.input-field option { font-weight:400; color:var(--warm-gray); padding-left:8px; }
 </style>
 </head>
-<body class="min-h-screen">
-
-<!-- NAV (dark) -->
-<nav class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
-  <div class="max-w-screen-xl mx-auto flex items-center justify-between px-8 py-4">
-    <a href="index.html" class="serif italic text-2xl tracking-tight text-white">ÉTOILE</a>
-    <div class="hidden md:flex items-center gap-10">
-      <a href="index.html" class="text-[11px] uppercase tracking-[0.18em] text-white/40 hover:text-white transition-colors">Home</a>
-      <a href="digital-closet.html" class="text-[11px] uppercase tracking-[0.18em] text-white font-semibold border-b border-white pb-0.5">Closet</a>
-      <a href="style-me.html" class="text-[11px] uppercase tracking-[0.18em] text-white/40 hover:text-white transition-colors">Saved Looks</a>
-      <a href="shopping-edit.html" class="text-[11px] uppercase tracking-[0.18em] text-white/40 hover:text-white transition-colors">Shop</a>
-    </div>
-    <div class="flex items-center gap-5">
-      <span class="material-symbols-outlined text-white cursor-pointer hover:opacity-60">search</span>
-      <span class="material-symbols-outlined text-white cursor-pointer hover:opacity-60">account_circle</span>
-    </div>
-  </div>
+<body>
+<nav class="nav">
+  <a href="home.html" class="nav-logo">ÉTOILE</a>
+  <ul class="nav-links">
+    <li><a href="outfit-recommendations.html">Style Me</a></li>
+    <li><a href="digital-closet.html" class="active">My Closet</a></li>
+    <li><a href="shopping.html">Shop</a></li>
+    <li class="nav-dropdown"><a href="saved-looks.html">Saved ▾</a>
+      <div class="nav-dropdown-menu">
+        <a href="saved-looks.html">Saved Looks</a>
+        <a href="saved-shopping.html">Wishlist</a>
+      </div>
+    </li>
+    <li><a href="profile.html">Profile</a></li>
+  </ul>
+  <div class="nav-right"><a href="outfit-recommendations.html" class="nav-cta">Get Styled</a></div>
 </nav>
 
-<!-- SIDEBAR (dark) -->
-<aside class="hidden lg:flex flex-col w-60 h-screen fixed left-0 top-0 pt-20 px-6 bg-stone-950 border-r border-white/10 z-40">
-  <div class="mb-10 pt-4">
-    <p class="text-[10px] uppercase tracking-[0.2em] text-white/30 mb-1">The Atelier</p>
-    <p class="text-xs text-white/20">Stylist Mode Active</p>
-  </div>
-  <nav class="flex flex-col gap-1 flex-1">
-    <a href="style-me.html" class="flex items-center gap-3 px-3 py-3 text-white/40 hover:text-white hover:bg-white/5 rounded-sm transition-colors">
-      <span class="material-symbols-outlined">magic_button</span>
-      <span class="text-[11px] uppercase tracking-[0.15em]">Style Me</span>
-    </a>
-    <a href="onboarding.html" class="flex items-center gap-3 px-3 py-3 text-white/40 hover:text-white hover:bg-white/5 rounded-sm transition-colors">
-      <span class="material-symbols-outlined">auto_awesome</span>
-      <span class="text-[11px] uppercase tracking-[0.15em]">Build Look</span>
-    </a>
-    <a href="digital-closet.html" class="flex items-center gap-3 px-3 py-3 bg-white/10 text-white font-semibold rounded-sm">
-      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1, 'wght' 300;">checkroom</span>
-      <span class="text-[11px] uppercase tracking-[0.15em]">My Closet</span>
-    </a>
-    <a href="shopping-edit.html" class="flex items-center gap-3 px-3 py-3 text-white/40 hover:text-white hover:bg-white/5 rounded-sm transition-colors">
-      <span class="material-symbols-outlined">shopping_bag</span>
-      <span class="text-[11px] uppercase tracking-[0.15em]">Shop</span>
-    </a>
+<div class="page">
+  <div class="closet-layout">
 
-    <!-- Category filters -->
-    <div class="mt-8 pt-8 border-t border-white/10">
-      <p class="text-[9px] uppercase tracking-[0.2em] text-white/20 mb-4">Filter by category</p>
-      <ul class="space-y-3">
-        <li class="text-[11px] uppercase tracking-[0.15em] text-white font-semibold cursor-pointer">All Items</li>
-        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Outerwear</li>
-        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Knitwear</li>
-        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Tops</li>
-        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Bottoms</li>
-        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Shoes</li>
-        <li class="text-[11px] uppercase tracking-[0.15em] text-white/40 hover:text-white cursor-pointer transition-colors">Accessories</li>
-      </ul>
-    </div>
-  </nav>
-  <div class="pb-8">
-    <a href="style-me.html" class="block w-full bg-white text-black py-3 text-center text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-stone-100 transition-colors">
-      AI Styling Request
-    </a>
-  </div>
-</aside>
-
-<main class="lg:ml-60 pt-20 pb-24 min-h-screen">
-
-  <!-- Header -->
-  <header class="px-8 py-12 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 max-w-screen-xl mx-auto">
-    <div>
-      <h1 class="serif text-6xl md:text-8xl tracking-tight leading-none mb-4 text-white">Digital<br/><em>Closet</em></h1>
-      <p class="text-white/40 font-light text-lg max-w-md">Your personal archive. 24 pieces catalogued.</p>
-    </div>
-    <div class="flex flex-col items-end gap-4">
-      <button class="flex items-center gap-3 group">
-        <span class="text-[11px] uppercase tracking-[0.18em] text-white border-b border-white/40 pb-0.5 hover:border-white transition-colors">Add Item</span>
-        <div class="bg-white text-black p-2">
-          <span class="material-symbols-outlined" style="color:#0d0d0d;">add</span>
-        </div>
-      </button>
-      <div class="relative w-72">
-        <input class="w-full bg-transparent border-0 border-b border-white/20 py-2 pr-8 focus:ring-0 focus:border-white text-white placeholder:text-white/20 text-[11px] tracking-widest uppercase" placeholder="Search collection..." type="text"/>
-        <span class="material-symbols-outlined absolute right-0 top-2 text-white/30">search</span>
+    <!-- SIDEBAR -->
+    <aside class="closet-sidebar">
+      <div style="padding:0 10px 20px;">
+        <div style="font-family:var(--font-display);font-size:24px;font-weight:900;line-height:1;margin-bottom:4px;">My Closet</div>
+        <div style="font-size:12px;color:var(--warm-gray);font-family:var(--font-sans);" id="itemCountLabel">0 items</div>
       </div>
-    </div>
-  </header>
 
-  <!-- FILTER PILLS -->
-  <div class="px-8 py-6 flex flex-wrap gap-3 max-w-screen-xl mx-auto">
-    <button class="filter-pill active text-[10px] uppercase tracking-[0.15em] px-4 py-2 font-semibold" onclick="setFilter(this, 'all')">All Items</button>
-    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'outerwear')">Outerwear</button>
-    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'tops')">Tops</button>
-    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'bottoms')">Bottoms</button>
-    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'shoes')">Shoes</button>
-    <button class="filter-pill text-[10px] uppercase tracking-[0.15em] px-4 py-2" onclick="setFilter(this, 'accessories')">Accessories</button>
+      <div class="sb-all active" onclick="setFilter(this,'all','All Items')">
+        <span class="material-symbols-outlined">apps</span>All Items
+        <span class="sb-count" id="cnt-all">0</span>
+      </div>
+
+      <div class="sb-heading">Categories</div>
+      <div id="categoryTree"></div>
+
+      <div style="padding:20px 10px 0;">
+        <button class="btn btn-pink w-full" style="justify-content:center;" onclick="openAddModal()">
+          <span class="material-symbols-outlined" style="font-size:16px;">add</span>Add Item
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="closet-main">
+      <div class="closet-topbar">
+        <div>
+          <div style="font-family:var(--font-display);font-size:22px;font-weight:900;" id="sectionTitle">All Items</div>
+        </div>
+        <div class="search-bar" style="width:280px;">
+          <span class="material-symbols-outlined search-icon">search</span>
+          <input type="text" placeholder="Search your closet…" oninput="searchItems(this.value)">
+        </div>
+      </div>
+
+      <div class="add-cta" onclick="openAddModal()">
+        <span class="material-symbols-outlined" style="font-size:26px;color:var(--mid-gray);display:block;margin-bottom:8px;">add_circle</span>
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;color:var(--charcoal);font-family:var(--font-sans);">Add to Your Digital Closet</div>
+        <div style="font-size:12px;color:var(--warm-gray);font-family:var(--font-sans);margin-top:4px;">Upload a photo, or describe the item and we'll find a visual match</div>
+      </div>
+
+      <div class="closet-grid" id="closetGrid"></div>
+
+      <div id="closetEmpty" style="display:none;padding:80px 40px;text-align:center;">
+        <span class="material-symbols-outlined" style="font-size:40px;color:var(--border-dark);display:block;margin-bottom:16px;">checkroom</span>
+        <p style="font-size:13px;color:var(--warm-gray);font-family:var(--font-sans);">No items in this category yet.</p>
+      </div>
+    </main>
   </div>
 
-  <!-- CLOSET GRID (scattered cards) -->
-  <section class="px-8 py-8 max-w-screen-xl mx-auto">
+  <footer class="footer">
+    <div class="footer-bottom"><span class="footer-copy">© 2025 Étoile.</span></div>
+  </footer>
+</div>
 
-    <!-- Central hanger element -->
-    <div class="flex justify-center mb-16 pointer-events-none select-none">
-      <div class="relative">
-        <div class="hanger-hook"></div>
-        <div class="hanger-graphic"></div>
-        <p class="absolute top-16 left-1/2 -translate-x-1/2 text-[#0d0d0d] text-[10px] uppercase tracking-[0.2em] font-bold whitespace-nowrap opacity-60">Your Wardrobe</p>
-      </div>
+<!-- ADD ITEM MODAL -->
+<div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAddModal()">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-header">
+      <h3 style="font-family:var(--font-display);font-size:22px;font-weight:900;" id="modalTitle">Add to Closet</h3>
+      <span class="modal-close" onclick="closeAddModal()">close</span>
     </div>
+    <div class="modal-body">
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-8 lg:gap-12">
-
-      <!-- Card 1 -->
-      <div class="closet-card card-1 shadow-2xl">
-        <span class="card-tag frequent">Worn Often</span>
-        <div class="aspect-[3/4] overflow-hidden">
-          <img class="w-full h-full object-cover" alt="Max Mara Coat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIWCvgIenXSxLsos_STTJhWL0456JbEBnO0UdTR_N-7T6gnIK9sWoovsp1-PkA0ly1_AGDINT5uoYWafqJwWOo6AUzJmTet5DId6EYbYky-jcUW3eTQJjrxuci_lPT18ZeNlrvgob9NZauU-13dv82Fx5R0ZI-84yj3LZxMwcYS6m9hCX69E79Zx06ZGIxLPjI3l2c_zYNARYYpJh7O49ieOZoiqV7nqBsrtSzW5t2SLQIFPfaaK-cZu62RmYvZ6mJt6Uzy9fyNlQ"/>
-        </div>
-        <div class="p-4 border-t border-stone-100">
-          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">Max Mara</p>
-          <p class="text-sm font-semibold">Labbro Cashmere Coat</p>
-          <p class="text-xs text-stone-400 serif italic mt-1">$6,250</p>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="closet-card card-2 shadow-2xl">
-        <span class="card-tag">In Closet</span>
-        <div class="aspect-[3/4] overflow-hidden">
-          <img class="w-full h-full object-cover" alt="Saint Laurent Bag" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBen7f3-Uwv8J8GOOOSkxCpnMZnOzV_fBFZB2iG212jqbG7Hy_ln-S9cBh9AEOYa0B5S9JQPY6c_XySewFmm3remFn-5yEd6ZNoRicTaPGOFb1GuhWS72xc7PRNCkLVrX_D7CFi4zl2ND8EtzV3MeGpkc6h4nwM4kwdnLrqAHDgJWC4Mg0GKbIvKL9K1mhiV_uFl1Uz9Qz224iJFz0YKYpDIc18SegyshDcmeHKl7BeYjT9k7OfJUQRSN9uRBaaqQuCgGc6mpYEvY8"/>
-        </div>
-        <div class="p-4 border-t border-stone-100">
-          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">Saint Laurent</p>
-          <p class="text-sm font-semibold">Le 5 à 7 Shoulder Bag</p>
-          <p class="text-xs text-stone-400 serif italic mt-1">$2,450</p>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="closet-card card-3 shadow-2xl">
-        <span class="card-tag frequent">Worn Often</span>
-        <div class="aspect-[3/4] overflow-hidden">
-          <img class="w-full h-full object-cover" alt="The Row Sneakers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABeV1xbvTPRVINGg-CJkC4q7w8pyaFegj_CTFMXHmYhNocbu4BQ0ie1GEoJAC8UYtcNZLwE0rFgxHWHVRiJJzwcvYVzA5nOorMSNqBFbhpgPra8FVC97COXPwAa8wMLj1LjJdFD3vk52N3wLm6fgDd6_XYBdECWqq538Dp8ZoZqQ6ThsgYgYJQ_oaWLpGPtz3vuzOypkRcPEOSGi_MY4Q225a2Y6Q6763wHkxLovO5t_ozc6VFnqQ2PSiasItsn6yf7qcJBvcUkCs"/>
-        </div>
-        <div class="p-4 border-t border-stone-100">
-          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">The Row</p>
-          <p class="text-sm font-semibold">Owen Runner Sneaker</p>
-          <p class="text-xs text-stone-400 serif italic mt-1">$720</p>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="closet-card card-4 shadow-2xl">
-        <span class="card-tag">In Closet</span>
-        <div class="aspect-[3/4] overflow-hidden">
-          <img class="w-full h-full object-cover" alt="Toteme Shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB45wbwZpXve4xa7wx3Q-fYqnw-sCgqbOPKblA0oZEXZ7OpDn_MS0SFIA-lNCw1OYwgylSmBGisEs2BZSEx92mRG-pzUl9XqHw2Ya-WbkESHNkhOcYVBTN5U-2ROb0OAb24glr7k5lME9wGjoQNsuSdBwrpBvVnPQftWVG14tnG6d5jApbodNQKTGT__IHJOyYM50tz74hOWmtdMjDKUHlCh75mqdHdlgKnxZHKk2VH5EstXO8jC9lttXT7ZiUEi0F1Yh-gd46At8s"/>
-        </div>
-        <div class="p-4 border-t border-stone-100">
-          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">Toteme</p>
-          <p class="text-sm font-semibold">Signature Cotton Shirt</p>
-          <p class="text-xs text-stone-400 serif italic mt-1">$310</p>
-        </div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="closet-card card-5 shadow-2xl">
-        <span class="card-tag frequent">Worn Often</span>
-        <div class="aspect-[3/4] overflow-hidden">
-          <img class="w-full h-full object-cover" alt="Jil Sander Trousers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbcyrxnJfDotR60RoeXdmAA12ySc4k455nCW6aOS_AzyRNSJ1g9-wVfv4PFi7lEH0uW6W1s4B9Z8dy31x9HffeFR4LghCUSTcXQL1u8IAte_IeTgP60W55WYWlIZ-7-0SXdQV-Fgw9Ed-zyNucV-EyvnzGvTBAcQDpZrtHKgFPuJNVrtNRxq1de8G8ttFnPAq8c9nhosuJzLvq_zavN6sXVtOUMIQ4o3i3zExN1PuhUNmfqwilDKF9NnMHVrnXRp5My1BYZFbbdhU"/>
-        </div>
-        <div class="p-4 border-t border-stone-100">
-          <p class="text-[10px] uppercase tracking-[0.15em] text-stone-400 mb-1">Jil Sander</p>
-          <p class="text-sm font-semibold">High-Rise Tailored Pants</p>
-          <p class="text-xs text-stone-400 serif italic mt-1">$980</p>
-        </div>
-      </div>
-
-      <!-- Card 6: Editor's choice special card -->
-      <div class="closet-card card-6 shadow-2xl overflow-hidden">
-        <div class="relative aspect-[3/4]">
-          <img class="w-full h-full object-cover" alt="Hermès Silk Tie" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvqoZx38xGSEFBtKt1gNHMAsbh-n5L5Q3I4Wo9Y70m4g4cfyXD9pcGk1CLDNsx9q6RGuWCKVkF3S-j8XDqJHRfdMCqp1JUqHeJQIZWbxNQvrOhhaOm6Ej6MyEE2xXFHauJUJSbIrc6XrsrkLyrsAjjvPds-y5_MggB05q--QkiYFMFKCj_UasLT6_utdKsQXyyQjnpq_lkdI9xkNGqR9xNmcy6FSsxfzZwPPpT_yUE_S8qyNNS9zg-wJYluWvcXnrOmhgEGinMYoU"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-          <div class="absolute bottom-4 left-4 right-4">
-            <p class="text-[9px] uppercase tracking-[0.3em] text-white/60 mb-1">Editor's Choice</p>
-            <p class="serif text-white text-xl">Hermès Silk Tie</p>
+      <!-- STEP 1: Details -->
+      <div class="modal-step active" id="step1">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+          <div>
+            <label class="input-label">Item Name *</label>
+            <input type="text" class="input-field" id="itemName" placeholder="e.g. Ribbed cream knit top">
+          </div>
+          <div>
+            <label class="input-label">Brand (optional)</label>
+            <input type="text" class="input-field" id="itemBrand" placeholder="e.g. The Row, Zara, COS">
           </div>
         </div>
+        <div style="margin-bottom:16px;">
+          <label class="input-label">Category *</label>
+          <select class="input-field" id="itemCategory" style="cursor:pointer;"></select>
+        </div>
+        <div style="margin-bottom:16px;">
+          <label class="input-label">Color / Description (helps generate photo)</label>
+          <input type="text" class="input-field" id="itemDesc" placeholder="e.g. cream, ribbed knit, fitted, long sleeve">
+        </div>
+
+        <!-- Upload -->
+        <div style="margin-bottom:18px;">
+          <label class="input-label">Upload your own photo (optional)</label>
+          <div id="uploadPreviewWrap" style="display:none;" class="upload-preview">
+            <img id="uploadPreviewImg" src="" alt="">
+            <button class="upload-preview-remove" onclick="clearUpload()">close</button>
+          </div>
+          <div id="uploadZone" class="upload-zone" onclick="document.getElementById('closetUpload').click()">
+            <span class="material-symbols-outlined" style="font-size:20px;color:var(--mid-gray);display:block;margin-bottom:6px;">upload</span>
+            <div style="font-size:11px;color:var(--warm-gray);font-family:var(--font-sans);" id="uploadLabel">Click to upload · JPG or PNG</div>
+          </div>
+          <input type="file" id="closetUpload" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
+        </div>
+
+        <button class="btn btn-dark w-full" style="justify-content:center;" onclick="submitStep1()">
+          <span class="material-symbols-outlined" style="font-size:15px;">add</span>Add to Closet
+        </button>
+        <div id="step1Error" style="font-size:11px;color:#dc2626;font-family:var(--font-sans);margin-top:8px;display:none;">Please enter an item name and category.</div>
+      </div>
+
+      <!-- STEP 2: Photo confirmation -->
+      <div class="modal-step" id="step2">
+        <p style="font-size:12px;color:var(--warm-gray);font-family:var(--font-sans);margin-bottom:14px;" id="step2Label">
+          We found a visual match based on your item — does this look right?
+        </p>
+        <div class="photo-suggest-wrap">
+          <div class="photo-suggest-loading" id="photoLoading">
+            <span class="material-symbols-outlined" style="font-size:32px;color:var(--mid-gray);">image_search</span>
+            <span style="font-size:11px;color:var(--warm-gray);font-family:var(--font-sans);">Finding a visual match…</span>
+          </div>
+          <img id="suggestedPhoto" src="" alt="" style="display:none;" onload="photoLoaded()" onerror="photoError()">
+          <div id="photoErrorMsg" style="display:none;padding:24px;text-align:center;">
+            <span class="material-symbols-outlined" style="font-size:28px;color:var(--mid-gray);display:block;margin-bottom:8px;">image_not_supported</span>
+            <p style="font-size:12px;color:var(--warm-gray);font-family:var(--font-sans);">Couldn't find a match.</p>
+          </div>
+        </div>
+        <div class="photo-suggest-actions">
+          <button class="btn btn-dark btn-sm" style="justify-content:center;" onclick="acceptPhoto()">
+            <span class="material-symbols-outlined" style="font-size:13px;">check</span>Yes, use this
+          </button>
+          <button class="btn btn-outline btn-sm" style="justify-content:center;" onclick="tryAnotherPhoto()">
+            <span class="material-symbols-outlined" style="font-size:13px;">refresh</span>Try another
+          </button>
+          <button class="btn btn-outline btn-sm" style="justify-content:center;" onclick="document.getElementById('closetUpload2').click()">
+            <span class="material-symbols-outlined" style="font-size:13px;">upload</span>Upload mine
+          </button>
+        </div>
+        <input type="file" id="closetUpload2" accept="image/*" style="display:none" onchange="handlePhotoUpload2(this)">
+        <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%;justify-content:center;" onclick="skipPhoto()">
+          Skip — add without a photo
+        </button>
       </div>
 
     </div>
-
-    <!-- Add more items CTA -->
-    <div class="mt-16 border border-dashed border-white/20 flex flex-col items-center justify-center py-16 hover:border-white/40 transition-colors cursor-pointer group">
-      <div class="w-12 h-12 border border-white/20 flex items-center justify-center mb-4 group-hover:border-white/60 transition-colors">
-        <span class="material-symbols-outlined text-white/40 group-hover:text-white/80 transition-colors">add</span>
-      </div>
-      <p class="text-[11px] uppercase tracking-[0.2em] text-white/30 group-hover:text-white/60 transition-colors">Add more items to your closet</p>
-    </div>
-  </section>
-
-  <!-- ── FROM YOUR PHOTOS ─────────────────────────────────────────── -->
-  <section class="px-8 py-16 max-w-screen-xl mx-auto">
-    <div class="flex items-center justify-between mb-8">
-      <div>
-        <p class="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-1">Your Library</p>
-        <h2 class="serif text-3xl text-white">From Your Photos</h2>
-      </div>
-      <div class="text-right">
-        <p id="photos-count" class="text-[11px] text-white/30"></p>
-        <p class="text-[10px] text-white/20 mt-1">Drop images into <code class="bg-white/10 px-1 py-0.5 rounded text-[9px]">photos/</code> folder</p>
-      </div>
-    </div>
-    <div id="photos-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- populated by photos.js -->
-    </div>
-  </section>
-
-</main>
-
-<!-- Footer -->
-<footer class="bg-stone-950 border-t border-white/10 py-10 px-8">
-  <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-    <p class="serif italic text-xl text-white">ÉTOILE</p>
-    <div class="flex gap-10">
-      <a href="index.html" class="text-[11px] text-white/30 hover:text-white transition-colors">Home</a>
-      <a href="style-me.html" class="text-[11px] text-white/30 hover:text-white transition-colors">Saved Looks</a>
-      <a href="shopping-edit.html" class="text-[11px] text-white/30 hover:text-white transition-colors">Shop</a>
-    </div>
-    <p class="text-[11px] text-white/20">© 2025 ÉTOILE</p>
   </div>
-</footer>
+</div>
 
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
 <script>
-  function setFilter(btn, cat) {
-    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-  }
-</script>
+// ── Category taxonomy ──────────────────────────────────────────────────────
+const CATEGORY_MAP = {
+  'Tops':       ['Tank Top','T-Shirt','Button-Down Shirt','Blouse','Knit Top','Crop Top','Sweater','Turtleneck','Cardigan','Bodysuit','Corset Top'],
+  'Bottoms':    ['Black Jeans','Blue Jeans','White Jeans','Jean Skirt','Mini Skirt','Midi Skirt','Maxi Skirt','Tailored Trousers','Linen Pants','Cargo Pants','Shorts','Leggings','Bike Shorts'],
+  'Dresses':    ['Mini Dress','Midi Dress','Maxi Dress','Slip Dress','Wrap Dress','Shirt Dress','Cocktail Dress','Evening Gown','Sundress','Bodycon Dress'],
+  'Outerwear':  ['Trench Coat','Blazer','Leather Jacket','Denim Jacket','Puffer Jacket','Wool Coat','Bomber Jacket','Vest','Shearling Coat','Raincoat'],
+  'Shoes':      ['Heels','Block Heels','Kitten Heels','Ballet Flats','Loafers','Sneakers','Boots','Ankle Boots','Knee-High Boots','Over-the-Knee Boots','Sandals','Mules','Slides','Platforms','Mary Janes'],
+  'Bags':       ['Shoulder Bag','Tote Bag','Clutch','Crossbody Bag','Mini Bag','Backpack','Belt Bag','Top-Handle Bag','Bucket Bag','Hobo Bag'],
+  'Jewelry':    ['Stud Earrings','Hoop Earrings','Drop Earrings','Statement Earrings','Pendant Necklace','Chain Necklace','Statement Necklace','Choker','Tennis Bracelet','Bangle','Ring','Cuff','Pearl Jewelry'],
+  'Accessories':['Belt','Silk Scarf','Wool Scarf','Bucket Hat','Baseball Cap','Beret','Wide-Brim Hat','Sunglasses','Hair Clip','Headband','Gloves','Tights','Socks'],
+  'Suiting':    ['Suit Jacket','Suit Trousers','Two-Piece Suit','Pantsuit','Skirt Suit','Double-Breasted Blazer','Waistcoat'],
+  'Activewear': ['Sports Bra','Bike Shorts','Leggings','Athletic Top','Track Jacket','Sweatshirt','Hoodie','Joggers','Tennis Skirt','Windbreaker'],
+};
 
-<script type="module">
-  import { loadPhotosDirectory, renderPhotoGrid } from './js/photos.js';
+const PARENT_ICONS = {
+  'Tops':'checkroom','Bottoms':'straighten','Dresses':'dry_cleaning',
+  'Outerwear':'umbrella','Shoes':'footprint','Bags':'shopping_bag',
+  'Jewelry':'diamond','Accessories':'watch','Suiting':'business_center','Activewear':'sports',
+};
 
-  const grid = document.getElementById('photos-grid');
-  const countEl = document.getElementById('photos-count');
+// Reverse map: subcategory → parent
+const SUB_TO_PARENT = {};
+Object.entries(CATEGORY_MAP).forEach(([parent, subs]) => subs.forEach(s => SUB_TO_PARENT[s] = parent));
 
+function getParent(sub) { return SUB_TO_PARENT[sub] || sub; }
+
+// ── State ──────────────────────────────────────────────────────────────────
+let closetItems = [];
+let currentFilter = 'all';
+let currentFilterLabel = 'All Items';
+let pendingPhoto = null;
+let pendingFile = null;
+let suggestAttempt = 0;
+let _sbUser = null;
+
+// ── Auth + load ────────────────────────────────────────────────────────────
+(async () => {
+  _sbUser = await requireAuth();
+  if (!_sbUser) return;
   try {
-    const photos = await loadPhotosDirectory();
-    if (photos.length) {
-      countEl.textContent = `${photos.length} photo${photos.length !== 1 ? 's' : ''} found`;
+    const items = await DB.getClosetItems(_sbUser.id);
+    if (items.length > 0) {
+      closetItems = items.map(i => ({
+        id: i.id, name: i.name, brand: i.brand || '',
+        category: i.category, image: i.image || i.image_url || null, wornOften: i.wornOften || i.worn_often || false,
+      }));
+      renderCloset();
+      updateCounts();
+      return;
     }
-    renderPhotoGrid(grid, photos, {
-      onSelect: (photo) => {
-        // Future: open a detail view or "add to closet" modal
-        console.log('Selected photo:', photo.url);
-      }
-    });
-  } catch (e) {
-    console.warn('[digital-closet] Photos failed to load:', e);
-    grid.innerHTML = `<p class="text-white/20 text-sm col-span-full">Drop your fashion photos into the <code class="bg-white/10 px-1 py-0.5">photos/</code> folder to see them here.</p>`;
-  }
-</script>
+  } catch(e) { console.warn('Load failed, using cache', e); }
+})();
 
+// Seed with demo items if empty
+const _cached = JSON.parse(localStorage.getItem('etoile_closetItems') || '[]');
+if (_cached.length > 0) {
+  closetItems = _cached;
+} else {
+  closetItems = [
+    { id:'seed1', name:'Camel Trench Coat',        brand:'Totême', category:'Trench Coat',       image:'photos/8cd742f7fe1c2b9f92c99d57e65fef7e.jpg', wornOften:true  },
+    { id:'seed2', name:'Black Silk Slip Dress',     brand:'',       category:'Slip Dress',         image:'photos/991a9dfe12a8a18daeec45fb32646bfb.jpg', wornOften:false },
+    { id:'seed3', name:'Dark-Wash Straight Jeans',  brand:'',       category:'Blue Jeans',         image:'photos/53f4fbd8da5ea134e12fe0a43db1e9bc.jpg', wornOften:true  },
+    { id:'seed4', name:'Cream Ribbed Knit Top',     brand:'Arket',  category:'Knit Top',           image:'photos/1924abb8b7cb217c634c91a20a589cb7.jpg', wornOften:false },
+    { id:'seed5', name:'Tan Leather Shoulder Bag',  brand:'',       category:'Shoulder Bag',       image:'photos/5ba50d568468ed29caee3a91cced1128.jpg', wornOften:false },
+    { id:'seed6', name:'White Linen Shirt',         brand:'COS',    category:'Button-Down Shirt',  image:'photos/8a3d7999ffdd579680f32d7530870aa1.jpg', wornOften:false },
+    { id:'seed7', name:'Ivory Wide-Leg Trousers',   brand:'',       category:'Tailored Trousers',  image:'photos/355cc53949087ba5a82e8805e41af36e.jpg', wornOften:true  },
+    { id:'seed8', name:'Gold Hoop Earrings',        brand:'',       category:'Hoop Earrings',      image:'photos/023a143224d5fd4397a3b454dddae015.jpg', wornOften:false },
+    { id:'seed9', name:'Black Wool Overcoat',       brand:'',       category:'Wool Coat',          image:'photos/a685e23b02171dce4928bb22615b3361.jpg', wornOften:false },
+  ];
+  localStorage.setItem('etoile_closetItems', JSON.stringify(closetItems));
+}
+
+buildSidebar();
+buildCategorySelect();
+renderCloset();
+
+// ── Build sidebar ──────────────────────────────────────────────────────────
+function buildSidebar() {
+  const tree = document.getElementById('categoryTree');
+  tree.innerHTML = Object.entries(CATEGORY_MAP).map(([parent, subs]) => `
+    <div class="sb-parent" onclick="toggleParent(this,'${parent}')">
+      <span class="material-symbols-outlined">${PARENT_ICONS[parent] || 'category'}</span>
+      ${parent}
+      <span class="sb-count" id="cnt-${parent.toLowerCase().replace(/\s+/g,'-')}" style="margin-right:4px;">0</span>
+      <span class="sb-arrow">expand_more</span>
+    </div>
+    <div class="sb-children">
+      ${subs.map(sub => `
+        <div class="sb-sub" onclick="setFilter(this,'${sub}','${sub}')" data-sub="${sub}">
+          ${sub}<span class="sb-sub-count" id="scnt-${sub.replace(/\s+/g,'-')}"></span>
+        </div>`).join('')}
+    </div>
+  `).join('');
+  updateCounts();
+}
+
+function toggleParent(el, parent) {
+  const isOpen = el.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.sb-parent').forEach(p => p.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+  // Also set filter to the parent group
+  setFilter(el, '__parent__' + parent, parent);
+}
+
+// ── Build category select ──────────────────────────────────────────────────
+function buildCategorySelect() {
+  const sel = document.getElementById('itemCategory');
+  sel.innerHTML = '<option value="">Select category…</option>' +
+    Object.entries(CATEGORY_MAP).map(([parent, subs]) =>
+      `<optgroup label="${parent}">${subs.map(s => `<option value="${s}">${s}</option>`).join('')}</optgroup>`
+    ).join('');
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function renderCloset(filter, label) {
+  if (filter !== undefined) { currentFilter = filter; currentFilterLabel = label || filter; }
+  document.getElementById('sectionTitle').textContent = currentFilterLabel;
+
+  let items;
+  if (currentFilter === 'all') {
+    items = closetItems;
+  } else if (currentFilter.startsWith('__parent__')) {
+    const parent = currentFilter.replace('__parent__', '');
+    items = closetItems.filter(i => getParent(i.category) === parent);
+  } else {
+    items = closetItems.filter(i => i.category === currentFilter);
+  }
+
+  const grid = document.getElementById('closetGrid');
+  const empty = document.getElementById('closetEmpty');
+
+  if (items.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = items.map(item => {
+    const parent = getParent(item.category);
+    const wornTag = item.wornOften ? `<div class="cl-worn-tag">Worn Often</div>` : '';
+    const brandHtml = item.brand ? `<div class="cl-brand">${item.brand}</div>` : '';
+    let imgHtml;
+    if (item.image === '__loading__') {
+      imgHtml = `<div class="cl-photo-loading"></div>`;
+    } else if (item.image) {
+      imgHtml = `<img src="${item.image}" alt="" onerror="this.parentNode.innerHTML='<div class=cl-no-photo><span class=material-symbols-outlined>checkroom</span></div>'">`;
+    } else {
+      imgHtml = `<div class="cl-no-photo"><span class="material-symbols-outlined">checkroom</span><span class="lbl">${item.category}</span></div>`;
+    }
+    return `
+    <div class="cl-item" data-id="${item.id}">
+      <div class="cl-img">
+        ${imgHtml}${wornTag}
+        <div class="cl-item-overlay">
+          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();stylePiece('${item.name}')">Style this piece</button>
+          <button class="btn btn-outline-white btn-sm" style="font-size:9px;" onclick="event.stopPropagation();removeItem('${item.id}')">Remove</button>
+        </div>
+      </div>
+      <div class="cl-info">
+        <div class="cl-name">${item.name}</div>
+        <div class="cl-sub">${item.category}</div>
+        ${brandHtml}
+      </div>
+    </div>`;
+  }).join('');
+  updateCounts();
+}
+
+function updateCounts() {
+  const total = closetItems.length;
+  document.getElementById('itemCountLabel').textContent = total + ' item' + (total !== 1 ? 's' : '');
+  document.getElementById('cnt-all').textContent = total;
+  Object.keys(CATEGORY_MAP).forEach(parent => {
+    const key = parent.toLowerCase().replace(/\s+/g,'-');
+    const el = document.getElementById('cnt-' + key);
+    const count = closetItems.filter(i => getParent(i.category) === parent).length;
+    if (el) el.textContent = count || '';
+    CATEGORY_MAP[parent].forEach(sub => {
+      const subEl = document.getElementById('scnt-' + sub.replace(/\s+/g,'-'));
+      const subCount = closetItems.filter(i => i.category === sub).length;
+      if (subEl) subEl.textContent = subCount || '';
+    });
+  });
+}
+
+function setFilter(el, filter, label) {
+  document.querySelectorAll('.sb-all,.sb-sub').forEach(l => l.classList.remove('active'));
+  if (el.classList.contains('sb-all') || el.classList.contains('sb-sub')) el.classList.add('active');
+  renderCloset(filter, label);
+}
+
+function searchItems(v) {
+  const q = v.toLowerCase();
+  document.querySelectorAll('.cl-item').forEach(item => {
+    const name = item.querySelector('.cl-name')?.textContent.toLowerCase() || '';
+    const sub  = item.querySelector('.cl-sub')?.textContent.toLowerCase() || '';
+    const brand = item.querySelector('.cl-brand')?.textContent.toLowerCase() || '';
+    item.style.display = (!v || name.includes(q) || sub.includes(q) || brand.includes(q)) ? '' : 'none';
+  });
+}
+
+function stylePiece(name) {
+  window.location.href = 'outfit-recommendations.html?q=' + encodeURIComponent('style-piece:' + name);
+}
+
+function removeItem(id) {
+  closetItems = closetItems.filter(i => i.id !== id);
+  persist();
+  if (_sbUser) DB.removeClosetItem(id).catch(console.warn);
+  renderCloset();
+}
+
+function persist() {
+  localStorage.setItem('etoile_closetItems', JSON.stringify(closetItems));
+}
+
+// ── Modal ──────────────────────────────────────────────────────────────────
+function openAddModal() {
+  document.getElementById('addModal').classList.add('open');
+  showStep(1);
+  ['itemName','itemBrand','itemDesc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('itemCategory').value = '';
+  document.getElementById('uploadLabel').textContent = 'Click to upload · JPG or PNG';
+  document.getElementById('uploadPreviewWrap').style.display = 'none';
+  document.getElementById('uploadZone').style.display = 'block';
+  document.getElementById('step1Error').style.display = 'none';
+  pendingPhoto = null; pendingFile = null; suggestAttempt = 0;
+}
+
+function closeAddModal() { document.getElementById('addModal').classList.remove('open'); }
+
+function showStep(n) {
+  document.querySelectorAll('.modal-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  document.getElementById('modalTitle').textContent = n === 1 ? 'Add to Closet' : 'Does this look like your item?';
+}
+
+function handlePhotoUpload(input) {
+  if (!input.files[0]) return;
+  pendingFile = input.files[0];
+  const reader = new FileReader();
+  reader.onload = e => {
+    pendingPhoto = e.target.result;
+    document.getElementById('uploadPreviewImg').src = pendingPhoto;
+    document.getElementById('uploadPreviewWrap').style.display = 'block';
+    document.getElementById('uploadZone').style.display = 'none';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function handlePhotoUpload2(input) {
+  if (!input.files[0]) return;
+  pendingFile = input.files[0];
+  const reader = new FileReader();
+  reader.onload = e => { pendingPhoto = e.target.result; finalizeAdd(); };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function clearUpload() {
+  pendingPhoto = null; pendingFile = null;
+  document.getElementById('uploadPreviewWrap').style.display = 'none';
+  document.getElementById('uploadZone').style.display = 'block';
+  document.getElementById('closetUpload').value = '';
+}
+
+function submitStep1() {
+  const name = document.getElementById('itemName').value.trim();
+  const cat  = document.getElementById('itemCategory').value;
+  if (!name || !cat) {
+    document.getElementById('step1Error').style.display = 'block';
+    return;
+  }
+  // If user already uploaded a photo, add directly
+  if (pendingPhoto) {
+    finalizeAdd();
+  } else {
+    // Auto-suggest a photo
+    showStep(2);
+    loadSuggestedPhoto(0);
+  }
+}
+
+async function finalizeAdd() {
+  const name  = document.getElementById('itemName').value.trim();
+  const brand = document.getElementById('itemBrand').value.trim();
+  const cat   = document.getElementById('itemCategory').value;
+  const desc  = document.getElementById('itemDesc').value.trim();
+
+  let imageUrl = pendingPhoto || null;
+  if (pendingFile && _sbUser) {
+    try { imageUrl = await DB.uploadClosetPhoto(_sbUser.id, pendingFile); }
+    catch(e) { console.warn('Photo upload failed, using local', e); }
+  }
+
+  const localItem = {
+    id: 'item_' + Date.now(), name, brand, category: cat,
+    description: desc, image: imageUrl, wornOften: false,
+  };
+
+  if (_sbUser) {
+    try {
+      const saved = await DB.addClosetItem(_sbUser.id, { ...localItem });
+      localItem.id = saved.id;
+    } catch(e) { console.warn('DB save failed, saving locally', e); }
+  }
+
+  closetItems.unshift(localItem);
+  persist();
+  pendingPhoto = null; pendingFile = null;
+  closeAddModal();
+  document.querySelectorAll('.sb-all,.sb-sub').forEach(l => l.classList.remove('active'));
+  document.querySelector('.sb-all').classList.add('active');
+  renderCloset('all', 'All Items');
+}
+
+// ── Photo suggestion ───────────────────────────────────────────────────────
+function loadSuggestedPhoto(attempt) {
+  const name  = document.getElementById('itemName').value.trim();
+  const brand = document.getElementById('itemBrand').value.trim();
+  const cat   = document.getElementById('itemCategory').value;
+  const desc  = document.getElementById('itemDesc').value.trim();
+
+  const img     = document.getElementById('suggestedPhoto');
+  const loading = document.getElementById('photoLoading');
+  const errMsg  = document.getElementById('photoErrorMsg');
+  img.style.display = 'none';
+  loading.style.display = 'flex';
+  errMsg.style.display = 'none';
+
+  const terms = [
+    `${cat} fashion clothing ${desc}`,
+    `${name} ${brand} fashion`,
+    `${cat} ${brand} style editorial`,
+    `fashion ${cat} minimal`,
+    `clothing ${name}`,
+  ];
+  const term = encodeURIComponent((terms[attempt % terms.length] || name).trim());
+  img.src = `https://source.unsplash.com/featured/480x640/?${term}&sig=${Date.now() + attempt}`;
+}
+
+function photoLoaded() {
+  document.getElementById('photoLoading').style.display = 'none';
+  document.getElementById('suggestedPhoto').style.display = 'block';
+  document.getElementById('photoErrorMsg').style.display = 'none';
+  pendingPhoto = document.getElementById('suggestedPhoto').src;
+}
+
+function photoError() {
+  document.getElementById('photoLoading').style.display = 'none';
+  document.getElementById('suggestedPhoto').style.display = 'none';
+  document.getElementById('photoErrorMsg').style.display = 'block';
+}
+
+function acceptPhoto() {
+  pendingPhoto = document.getElementById('suggestedPhoto').src;
+  finalizeAdd();
+}
+
+function tryAnotherPhoto() {
+  suggestAttempt++;
+  loadSuggestedPhoto(suggestAttempt);
+}
+
+function skipPhoto() {
+  pendingPhoto = null;
+  finalizeAdd();
+}
+</script>
 </body>
 </html>

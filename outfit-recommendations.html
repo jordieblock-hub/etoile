@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÉTOILE — Styled Look</title>
+<link rel="stylesheet" href="css/etoile.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0">
+<style>
+/* ── Header ── */
+.rec-header { background:var(--black); padding:80px 56px 64px; }
+.rec-label { font-size:9px; letter-spacing:0.26em; text-transform:uppercase; font-weight:700; color:var(--pink); font-family:var(--font-sans); margin-bottom:18px; }
+.rec-title { font-family:var(--font-display); font-size:clamp(48px,7vw,96px); font-weight:900; color:var(--white); line-height:0.88; letter-spacing:-0.025em; margin-bottom:20px; }
+.rec-title em { color:var(--pink); font-style:italic; font-weight:400; }
+.rec-meta { font-size:12px; color:rgba(255,255,255,0.4); font-family:var(--font-sans); line-height:1.7; max-width:480px; }
+.rec-actions-top { display:flex; gap:10px; margin-top:32px; }
+
+/* ── Look section ── */
+.look-section { display:grid; grid-template-columns:1fr 1fr; min-height:680px; border-bottom:1px solid var(--border); }
+.look-section.flip { direction:rtl; }
+.look-section.flip > * { direction:ltr; }
+.look-image { position:relative; overflow:hidden; background:var(--black); }
+.look-image img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.6s; }
+.look-section:hover .look-image img { transform:scale(1.03); }
+.look-image-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%); }
+.look-image-tag { position:absolute; top:20px; left:20px; display:flex; align-items:center; gap:7px; padding:7px 14px; background:rgba(255,255,255,0.12); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.2); font-size:9px; letter-spacing:0.18em; text-transform:uppercase; font-weight:700; color:var(--white); font-family:var(--font-sans); }
+.look-num { position:absolute; bottom:28px; left:28px; font-family:var(--font-display); font-size:80px; font-weight:900; color:rgba(255,255,255,0.12); line-height:1; }
+.look-detail { background:var(--white); padding:52px 48px; display:flex; flex-direction:column; justify-content:center; }
+.look-index { font-size:9px; letter-spacing:0.24em; text-transform:uppercase; font-weight:700; color:var(--mid-gray); font-family:var(--font-sans); margin-bottom:10px; }
+.look-name { font-family:var(--font-display); font-size:clamp(26px,2.8vw,38px); font-weight:900; color:var(--black); line-height:1.05; margin-bottom:6px; }
+.look-caption { font-family:var(--font-serif); font-size:15px; font-style:italic; color:var(--warm-gray); line-height:1.65; margin-bottom:32px; max-width:400px; }
+
+/* Pieces table */
+.pieces-table { width:100%; border-collapse:collapse; margin-bottom:28px; }
+.pieces-table tr { border-bottom:1px solid var(--border); }
+.pieces-table tr:last-child { border-bottom:none; }
+.piece-cat { font-size:9px; letter-spacing:0.16em; text-transform:uppercase; font-weight:700; color:var(--mid-gray); font-family:var(--font-sans); padding:13px 12px 13px 0; width:72px; }
+.piece-name { font-size:13.5px; color:var(--charcoal); font-family:var(--font-sans); padding:13px 8px; font-weight:500; }
+.piece-source { text-align:right; padding:13px 0 13px 8px; white-space:nowrap; }
+.owned-tag { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; letter-spacing:0.06em; color:#22c55e; font-family:var(--font-sans); }
+.owned-tag .material-symbols-outlined { font-size:13px; }
+.shop-btn { display:inline-flex; align-items:center; gap:4px; padding:5px 12px; background:var(--black); color:var(--white); font-size:9.5px; letter-spacing:0.12em; text-transform:uppercase; font-weight:700; font-family:var(--font-sans); text-decoration:none; transition:background 0.15s; }
+.shop-btn:hover { background:var(--pink); }
+.shop-btn .material-symbols-outlined { font-size:12px; }
+.retailer-note { font-size:9px; color:var(--mid-gray); font-family:var(--font-sans); margin-top:1px; }
+.look-btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
+.save-look-btn { display:inline-flex; align-items:center; gap:7px; padding:13px 24px; background:var(--black); color:var(--white); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; font-family:var(--font-sans); border:none; cursor:pointer; transition:background 0.15s; }
+.save-look-btn:hover, .save-look-btn.saved { background:var(--pink); }
+.save-look-btn .material-symbols-outlined { font-size:15px; }
+.new-look-btn { display:inline-flex; align-items:center; gap:7px; padding:13px 24px; background:transparent; color:var(--charcoal); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; font-family:var(--font-sans); border:1px solid var(--border-dark); cursor:pointer; transition:all 0.15s; }
+.new-look-btn:hover { border-color:var(--black); color:var(--black); }
+.new-look-btn .material-symbols-outlined { font-size:15px; }
+
+/* ── Skeleton loading ── */
+@keyframes shimmer { 0%{background-position:-800px 0} 100%{background-position:800px 0} }
+.skeleton { background:linear-gradient(90deg, #f0ede8 25%, #e4e0da 50%, #f0ede8 75%); background-size:800px 100%; animation:shimmer 1.6s infinite; }
+.skeleton-look { display:grid; grid-template-columns:1fr 1fr; min-height:680px; border-bottom:1px solid var(--border); }
+.skeleton-img { background:#1a1a1a; }
+.skeleton-detail { background:var(--white); padding:52px 48px; display:flex; flex-direction:column; justify-content:center; gap:16px; }
+.skeleton-line { height:12px; border-radius:2px; }
+.skeleton-line.w20 { width:20%; }
+.skeleton-line.w40 { width:40%; }
+.skeleton-line.w60 { width:60%; }
+.skeleton-line.w80 { width:80%; }
+.skeleton-line.h32 { height:32px; }
+.skeleton-line.h48 { height:48px; }
+.skeleton-row { display:flex; justify-content:space-between; align-items:center; padding:13px 0; border-bottom:1px solid var(--border); }
+
+/* ── State panels ── */
+.state-panel { padding:80px 56px; background:var(--cream); text-align:center; }
+.state-panel .material-symbols-outlined { font-size:48px; color:var(--border-dark); display:block; margin-bottom:24px; }
+.state-panel h3 { font-family:var(--font-display); font-size:32px; font-weight:900; margin-bottom:12px; }
+.state-panel p { font-size:13px; color:var(--warm-gray); font-family:var(--font-sans); max-width:480px; margin:0 auto 28px; line-height:1.7; }
+
+/* ── Refine bar ── */
+.refine-section { background:var(--cream); padding:72px 56px; border-bottom:1px solid var(--border); text-align:center; }
+.refine-bar { max-width:600px; margin:28px auto 0; display:flex; align-items:center; background:var(--white); border:1px solid var(--border); padding:0 20px; gap:12px; transition:border-color 0.2s; }
+.refine-bar:focus-within { border-color:var(--black); }
+.refine-bar input { flex:1; border:none; outline:none; padding:18px 0; font-size:13.5px; color:var(--charcoal); background:transparent; font-family:var(--font-sans); }
+.refine-bar input::placeholder { color:var(--mid-gray); }
+
+/* ── Preferences banner ── */
+.pref-banner { background:var(--pink-light); border-bottom:1px solid rgba(244,114,182,0.2); padding:14px 56px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.pref-chip { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; background:var(--white); border:1px solid rgba(244,114,182,0.3); font-size:10px; font-family:var(--font-sans); color:var(--charcoal); }
+.pref-chip .material-symbols-outlined { font-size:13px; color:var(--pink); }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="home.html" class="nav-logo">ÉTOILE</a>
+  <ul class="nav-links">
+    <li><a href="outfit-recommendations.html" class="active">Style Me</a></li>
+    <li><a href="digital-closet.html">My Closet</a></li>
+    <li><a href="shopping.html">Shop</a></li>
+    <li class="nav-dropdown"><a href="saved-looks.html">Saved ▾</a>
+      <div class="nav-dropdown-menu">
+        <a href="saved-looks.html">Saved Looks</a>
+        <a href="saved-shopping.html">Wishlist</a>
+      </div>
+    </li>
+    <li><a href="profile.html">Profile</a></li>
+  </ul>
+  <div class="nav-right"><a href="outfit-recommendations.html" class="nav-cta">Get Styled</a></div>
+</nav>
+
+<div class="page">
+
+  <!-- PREFERENCES BANNER -->
+  <div class="pref-banner" id="prefBanner" style="display:none;">
+    <span style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;color:var(--pink);font-family:var(--font-sans);">Styled with your preferences</span>
+    <div id="prefChips" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+  </div>
+
+  <!-- HEADER -->
+  <section class="rec-header">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;">
+      <div>
+        <div class="rec-label" id="recLabel">● Étoile has styled you for</div>
+        <h1 class="rec-title"><em id="eventTitle">Date Night</em></h1>
+        <p class="rec-meta" id="recMeta">3 looks curated from your Pinterest aesthetic, closet inventory, and style preferences.</p>
+      </div>
+      <div class="rec-actions-top">
+        <a href="home.html" class="btn btn-outline-white btn-sm">← Style Again</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOADING SKELETON -->
+  <div id="looksLoading">
+    <div class="skeleton-look">
+      <div class="skeleton-img"></div>
+      <div class="skeleton-detail">
+        <div class="skeleton skeleton-line w20"></div>
+        <div class="skeleton skeleton-line w60 h32" style="margin-top:4px;"></div>
+        <div class="skeleton skeleton-line w80" style="margin-top:8px;"></div>
+        <div style="margin-top:24px;">
+          <div class="skeleton-row"><div class="skeleton skeleton-line w20"></div><div class="skeleton skeleton-line w40"></div><div class="skeleton skeleton-line w20"></div></div>
+          <div class="skeleton-row"><div class="skeleton skeleton-line w20"></div><div class="skeleton skeleton-line w60"></div><div class="skeleton skeleton-line w20"></div></div>
+          <div class="skeleton-row"><div class="skeleton skeleton-line w20"></div><div class="skeleton skeleton-line w40"></div><div class="skeleton skeleton-line w20"></div></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <div class="skeleton skeleton-line" style="flex:1;height:44px;"></div>
+          <div class="skeleton skeleton-line" style="flex:1;height:44px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="skeleton-look" style="direction:rtl;">
+      <div class="skeleton-img"></div>
+      <div class="skeleton-detail" style="direction:ltr;">
+        <div class="skeleton skeleton-line w20"></div>
+        <div class="skeleton skeleton-line w60 h32" style="margin-top:4px;"></div>
+        <div class="skeleton skeleton-line w80" style="margin-top:8px;"></div>
+        <div style="margin-top:24px;">
+          <div class="skeleton-row"><div class="skeleton skeleton-line w20"></div><div class="skeleton skeleton-line w40"></div><div class="skeleton skeleton-line w20"></div></div>
+          <div class="skeleton-row"><div class="skeleton skeleton-line w20"></div><div class="skeleton skeleton-line w60"></div><div class="skeleton skeleton-line w20"></div></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <div class="skeleton skeleton-line" style="flex:1;height:44px;"></div>
+          <div class="skeleton skeleton-line" style="flex:1;height:44px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="skeleton-look">
+      <div class="skeleton-img"></div>
+      <div class="skeleton-detail">
+        <div class="skeleton skeleton-line w20"></div>
+        <div class="skeleton skeleton-line w60 h32" style="margin-top:4px;"></div>
+        <div class="skeleton skeleton-line w80" style="margin-top:8px;"></div>
+        <div style="margin-top:24px;">
+          <div class="skeleton-row"><div class="skeleton skeleton-line w20"></div><div class="skeleton skeleton-line w40"></div><div class="skeleton skeleton-line w20"></div></div>
+          <div class="skeleton-row"><div class="skeleton skeleton-line w20"></div><div class="skeleton skeleton-line w60"></div><div class="skeleton skeleton-line w20"></div></div>
+          <div class="skeleton-row"><div class="skeleton skeleton-line w20"></div><div class="skeleton skeleton-line w40"></div><div class="skeleton skeleton-line w20"></div></div>
+          <div class="skeleton-row"><div class="skeleton skeleton-line w20"></div><div class="skeleton skeleton-line w60"></div><div class="skeleton skeleton-line w20"></div></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <div class="skeleton skeleton-line" style="flex:1;height:44px;"></div>
+          <div class="skeleton skeleton-line" style="flex:1;height:44px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO API KEY -->
+  <div id="noApiKeyMsg" style="display:none;" class="state-panel">
+    <span class="material-symbols-outlined">key</span>
+    <h3>Add your API key to get started</h3>
+    <p>Étoile uses Claude AI to generate personalized looks. Paste your Anthropic API key in Profile once and AI styling works instantly — it stays in your browser only.</p>
+    <a href="profile.html#ai-settings" class="btn btn-dark">Add API Key in Profile →</a>
+    <div style="margin-top:14px;font-size:11px;color:var(--warm-gray);font-family:var(--font-sans);">
+      Get your key at <a href="https://console.anthropic.com/" target="_blank" rel="noopener" style="color:var(--pink);">console.anthropic.com</a> → API Keys
+    </div>
+  </div>
+
+  <!-- API ERROR -->
+  <div id="apiErrorMsg" style="display:none;" class="state-panel">
+    <span class="material-symbols-outlined">error_outline</span>
+    <h3>Couldn't generate looks</h3>
+    <p id="apiErrorText">Something went wrong with the API call.</p>
+    <button class="btn btn-dark" onclick="generateLooks()">Try Again →</button>
+    <div style="margin-top:12px;">
+      <a href="profile.html#ai-settings" style="font-size:11px;color:var(--warm-gray);font-family:var(--font-sans);">Check your API key in Profile</a>
+    </div>
+  </div>
+
+  <!-- GENERATED LOOKS -->
+  <div id="looksContainer" style="display:none;"></div>
+
+  <!-- REFINE -->
+  <section class="refine-section">
+    <h3 style="font-family:var(--font-display);font-size:36px;font-weight:900;margin-bottom:8px;">Not quite right?</h3>
+    <p style="font-size:13px;color:var(--warm-gray);font-family:var(--font-sans);">Refine the brief — a vibe, a specific piece, a detail.</p>
+    <div class="refine-bar">
+      <span class="material-symbols-outlined" style="color:var(--pink);font-size:18px;">auto_awesome</span>
+      <input type="text" placeholder="e.g. more casual, build around my red bag, rooftop dinner vibe…" id="refineInput">
+      <button class="btn btn-dark btn-sm" onclick="refine()">Restyle →</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <div><div class="footer-logo">ÉTOILE</div><p class="footer-tagline">Your personal AI stylist.</p></div>
+      <div><div class="footer-col-title">Navigate</div><ul class="footer-links"><li><a href="home.html">Home</a></li><li><a href="outfit-recommendations.html">Style Me</a></li><li><a href="digital-closet.html">My Closet</a></li><li><a href="shopping.html">Shop</a></li></ul></div>
+      <div><div class="footer-col-title">Saved</div><ul class="footer-links"><li><a href="saved-looks.html">Saved Looks</a></li><li><a href="saved-shopping.html">Wishlist</a></li></ul></div>
+      <div><div class="footer-col-title">Account</div><ul class="footer-links"><li><a href="profile.html">Profile</a></li><li><a href="index.html">Redo Onboarding</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span class="footer-copy">© 2025 Étoile.</span><span class="footer-copy">Made for the <span class="footer-pink">fashion-forward</span>.</span></div>
+  </footer>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+<script>
+// ── Auth (non-blocking) ───────────────────────────────────────────────────
+let _sbUser = null;
+getUser().then(u => { _sbUser = u; });
+
+// ── URL params ────────────────────────────────────────────────────────────
+const q = new URLSearchParams(window.location.search).get('q') || 'Date Night';
+const _isClosetPiece = q.startsWith('style-piece:');
+const _pieceName = _isClosetPiece ? q.replace('style-piece:', '') : null;
+
+if (_isClosetPiece) {
+  document.getElementById('recLabel').textContent = '● Styling this piece from your closet';
+  document.getElementById('eventTitle').textContent = _pieceName;
+  document.getElementById('recMeta').textContent = '3 looks built around your ' + _pieceName + ', curated from your closet and style preferences.';
+} else {
+  document.getElementById('eventTitle').textContent = q.charAt(0).toUpperCase() + q.slice(1);
+}
+
+// ── Preferences banner ─────────────────────────────────────────────────────
+(function() {
+  const chips = [];
+  const budget = localStorage.getItem('etoile_budget');
+  if (budget) chips.push({ icon:'payments', text: budget.charAt(0).toUpperCase()+budget.slice(1)+' budget' });
+  const liked = JSON.parse(localStorage.getItem('etoile_brandsLiked') || '[]');
+  if (liked.length) chips.push({ icon:'label', text: liked.slice(0,2).join(', ') + (liked.length > 2 ? ' +more' : '') });
+  const love = JSON.parse(localStorage.getItem('etoile_colorsLove') || '[]');
+  if (love.length) chips.push({ icon:'palette', text: love.slice(0,3).join(', ') });
+  const fit = JSON.parse(localStorage.getItem('etoile_fit') || '[]');
+  if (fit.length) chips.push({ icon:'tune', text: fit.slice(0,2).join(', ') });
+  const aesthetic = (() => { try { return JSON.parse(localStorage.getItem('etoile_aestheticAnalysis') || 'null'); } catch(e) { return null; } })();
+  if (aesthetic?.aestheticTitle) chips.push({ icon:'photo_library', text: aesthetic.aestheticTitle });
+  if (chips.length) {
+    document.getElementById('prefBanner').style.display = 'flex';
+    document.getElementById('prefChips').innerHTML = chips.map(c =>
+      `<span class="pref-chip"><span class="material-symbols-outlined">${c.icon}</span>${c.text}</span>`
+    ).join('');
+  }
+})();
+
+// ── State ─────────────────────────────────────────────────────────────────
+let generatedLooks = [];
+
+const EDGE_FN_URL = 'https://pqtlqcfqbnoptexjvagh.supabase.co/functions/v1/generate-looks';
+const SUPABASE_ANON_KEY = 'sb_publishable_iRup46G7cNmey1WdPmqf_g_kIwypDko';
+
+// ── Load user data ─────────────────────────────────────────────────────────
+const closetItems = JSON.parse(localStorage.getItem('etoile_closetItems') || '[]');
+const prefs = {
+  budget:         localStorage.getItem('etoile_budget') || '',
+  brandsLiked:    JSON.parse(localStorage.getItem('etoile_brandsLiked')    || '[]'),
+  brandsDisliked: JSON.parse(localStorage.getItem('etoile_brandsDisliked') || '[]'),
+  colorsLove:     JSON.parse(localStorage.getItem('etoile_colorsLove')     || '[]'),
+  colorsAvoid:    JSON.parse(localStorage.getItem('etoile_colorsAvoid')    || '[]'),
+  fit:            JSON.parse(localStorage.getItem('etoile_fit')            || '[]'),
+  aestheticAnalysis: (() => { try { return JSON.parse(localStorage.getItem('etoile_aestheticAnalysis') || 'null'); } catch(e) { return null; } })(),
+};
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+generateLooks();
+
+// ── Generate looks ─────────────────────────────────────────────────────────
+async function generateLooks() {
+  showState('loading');
+  try {
+    const res = await fetch(EDGE_FN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify({
+        occasion: q,
+        isClosetPiece: _isClosetPiece,
+        pieceName: _pieceName,
+        closetItems,
+        preferences: prefs,
+        inspoPhotoCount: (JSON.parse(localStorage.getItem('etoile_inspirationPhotos') || '[]')).length,
+      }),
+    });
+    const data = await res.json();
+    const errMsg = data.error || data.message || data.msg;
+    if (errMsg) throw new Error(errMsg);
+    if (!data.looks?.length) throw new Error('No looks returned. Raw: ' + JSON.stringify(data).slice(0,200));
+    generatedLooks = data.looks;
+    // Attach cropped Pinterest pin images before rendering
+    await attachBoardPhotos(data.looks);
+    renderLooks(data.looks);
+  } catch(err) {
+    document.getElementById('apiErrorText').textContent = err.message || 'Unknown error.';
+    showState('error');
+  }
+}
+
+// ── Pinterest board cropping ───────────────────────────────────────────────
+async function attachBoardPhotos(looks) {
+  // Prefer individually uploaded outfit photos — full res, no cropping needed
+  const inspoPhotos = JSON.parse(localStorage.getItem('etoile_inspirationPhotos') || 'null');
+  if (inspoPhotos?.length) {
+    looks.forEach((look, i) => {
+      // Use Claude's suggested photoIndex if valid, otherwise cycle
+      const idx = (typeof look.photoIndex === 'number' && look.photoIndex < inspoPhotos.length)
+        ? look.photoIndex
+        : i % inspoPhotos.length;
+      look.imageUrl = inspoPhotos[idx];
+    });
+    return;
+  }
+
+  // Fallback: crop from board screenshot
+  const boardImg = localStorage.getItem('etoile_aestheticImgHD') || localStorage.getItem('etoile_aestheticImg');
+  if (!boardImg) return;
+
+  const aesthetic = prefs.aestheticAnalysis;
+  const pins = (aesthetic?.pins?.length >= 3) ? aesthetic.pins : pinGridCrops();
+
+  await Promise.all(looks.map(async (look, i) => {
+    const pin = pins[i % pins.length];
+    try { look.imageUrl = await cropBoardImage(boardImg, pin); } catch(_) {}
+  }));
+}
+
+function pinGridCrops() {
+  // Pinterest boards: 3 columns, portrait pins ~38% of board height each
+  // Sample top 2 rows × 3 cols = 6 distinct pin regions
+  const colW = 0.31, pinH = 0.38, gap = 0.015;
+  const crops = [];
+  for (let r = 0; r < 2; r++) {
+    for (let c = 0; c < 3; c++) {
+      crops.push({
+        x: c * (colW + gap),
+        y: r * (pinH + gap),
+        w: colW,
+        h: pinH,
+      });
+    }
+  }
+  return crops;
+}
+
+function cropBoardImage(base64, pin) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width  = 800;
+      canvas.height = 1100;
+      const ctx = canvas.getContext('2d');
+      const sx = pin.x * img.width;
+      const sy = pin.y * img.height;
+      const sw = Math.min(pin.w * img.width,  img.width  - sx);
+      const sh = Math.min(pin.h * img.height, img.height - sy);
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, 800, 1100);
+      resolve(canvas.toDataURL('image/jpeg', 0.88));
+    };
+    img.onerror = reject;
+    img.src = base64;
+  });
+}
+
+// ── Render looks ──────────────────────────────────────────────────────────
+function renderLooks(looks) {
+  const container = document.getElementById('looksContainer');
+  container.innerHTML = looks.map((look, i) => {
+    const flip   = i % 2 === 1 ? ' flip' : '';
+    const num    = String(i + 1).padStart(2, '0');
+    const total  = String(looks.length).padStart(2, '0');
+    const imgUrl = look.imageUrl || '';
+
+    const piecesHtml = look.pieces.map(p => `
+      <tr>
+        <td class="piece-cat">${escHtml(p.slot)}</td>
+        <td class="piece-name">${escHtml(p.fromCloset ? (p.closetItemName || p.name) : p.name)}</td>
+        <td class="piece-source">
+          ${p.fromCloset
+            ? `<span class="owned-tag"><span class="material-symbols-outlined">checkroom</span>From your closet</span>`
+            : `<a class="shop-btn" href="${p.shopUrl || '#'}" target="_blank" rel="noopener"><span class="material-symbols-outlined">open_in_new</span>Shop</a>
+               <div class="retailer-note">${escHtml(p.retailer || '')}${p.price ? ' · ' + escHtml(p.price) : ''}</div>`
+          }
+        </td>
+      </tr>`).join('');
+
+    return `
+    <div class="look-section${flip}" id="look${i}">
+      <div class="look-image" style="background:${look.gradient || 'linear-gradient(135deg,#2A2520,#1A1510)'};">
+        ${imgUrl ? `<img src="${imgUrl}" alt="Style inspiration" style="width:100%;height:100%;object-fit:cover;display:block;">` : ''}
+        <div class="look-image-overlay"></div>
+        <div class="look-image-tag"><span class="material-symbols-outlined" style="font-size:12px;">photo_library</span>Inspired by your board</div>
+        <div class="look-num">${num}</div>
+      </div>
+      <div class="look-detail">
+        <div class="look-index">Look ${num} of ${total}</div>
+        <div class="look-name">${escHtml(look.name)}</div>
+        <p class="look-caption">${escHtml(look.caption)}</p>
+        <table class="pieces-table">${piecesHtml}</table>
+        <div class="look-btns">
+          <button class="save-look-btn" onclick="saveLook(this,${i})">
+            <span class="material-symbols-outlined">bookmark</span>Save the Look
+          </button>
+          <button class="new-look-btn" onclick="generateLooks()">
+            <span class="material-symbols-outlined">refresh</span>Generate New Looks
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  showState('looks');
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Show/hide states ───────────────────────────────────────────────────────
+function showState(state) {
+  document.getElementById('looksLoading').style.display    = state === 'loading' ? 'block' : 'none';
+  document.getElementById('noApiKeyMsg').style.display     = 'none';
+  document.getElementById('apiErrorMsg').style.display     = state === 'error'   ? 'block' : 'none';
+  document.getElementById('looksContainer').style.display  = state === 'looks'   ? 'block' : 'none';
+}
+
+// ── Save a look ────────────────────────────────────────────────────────────
+const _savedLooksCache = JSON.parse(localStorage.getItem('etoile_savedLooks') || '[]');
+
+async function saveLook(btn, idx) {
+  const look = generatedLooks[idx];
+  if (!look) return;
+  const lookData = {
+    id:       'gen_' + idx + '_' + Date.now(),
+    name:     look.name,
+    occasion: (look.occasionLabel || q).toLowerCase(),
+    caption:  look.caption,
+    gradient: look.gradient,
+    savedAt:  new Date().toLocaleDateString('en-US', { month:'short', year:'numeric' }),
+    query:    q,
+  };
+  const looks = JSON.parse(localStorage.getItem('etoile_savedLooks') || '[]');
+  looks.unshift(lookData);
+  localStorage.setItem('etoile_savedLooks', JSON.stringify(looks));
+  if (_sbUser) { try { await DB.saveLook(_sbUser.id, lookData); } catch(e) { console.warn(e); } }
+  btn.classList.add('saved');
+  btn.innerHTML = '<span class="material-symbols-outlined">bookmark</span>Look Saved';
+  btn.onclick = null;
+}
+
+// ── Refine / restyle ───────────────────────────────────────────────────────
+function refine() {
+  const v = document.getElementById('refineInput').value.trim();
+  if (v) window.location.href = 'outfit-recommendations.html?q=' + encodeURIComponent(q + ' — ' + v);
+}
+document.getElementById('refineInput').addEventListener('keydown', e => { if (e.key === 'Enter') refine(); });
+</script>
+</body>
+</html>
