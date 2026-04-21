@@ -12,7 +12,8 @@ serve(async (req) => {
     const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY')
     if (!ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY secret not set in Supabase.')
 
-    const { occasion, isClosetPiece, pieceName, closetItems, preferences, inspoPhotoCount } = await req.json()
+    const { occasion, isClosetPiece, pieceName, closetItems, preferences, inspoPhotos } = await req.json()
+    const inspoPhotoCount = inspoPhotos?.length || 0
     const aesthetic = preferences?.aestheticAnalysis
 
     const closetList = closetItems?.length
@@ -68,7 +69,7 @@ serve(async (req) => {
       : 'any'
 
     const photoNote = inspoPhotoCount > 0
-      ? `The user has ${inspoPhotoCount} inspiration photos (indexed 0–${inspoPhotoCount - 1}). For each look, return a "photoIndex" (integer) picking which photo best matches that look's mood.`
+      ? `You have been shown ${inspoPhotoCount} inspiration photo(s) above (indexed 0–${inspoPhotoCount - 1}). Look at each photo carefully. For each generated look, choose the "photoIndex" of whichever photo BEST matches that look's occasion, vibe, and silhouette. A wedding guest look should match a dressy/formal photo. A casual look should match a relaxed photo. Pick the most visually fitting match — do not just cycle through them.`
       : ''
 
     // Random seed to prevent repeated identical responses
@@ -166,7 +167,17 @@ Return ONLY valid JSON — no markdown, no explanation:
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 4096,
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{
+          role: 'user',
+          content: [
+            // Send each inspiration photo so Claude can visually match them to looks
+            ...(inspoPhotos?.length ? inspoPhotos.map((b64: string, i: number) => ({
+              type: 'image',
+              source: { type: 'base64', media_type: 'image/jpeg', data: b64 },
+            })) : []),
+            { type: 'text', text: prompt },
+          ],
+        }],
       }),
     })
 

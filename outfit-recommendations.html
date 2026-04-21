@@ -289,6 +289,27 @@ const prefs = {
 // ── Boot ──────────────────────────────────────────────────────────────────
 generateLooks();
 
+// Resize inspiration photos to maxPx before sending to Claude (keeps request small)
+async function getResizedInspoPhotos(maxCount, maxPx) {
+  const stored = JSON.parse(localStorage.getItem('etoile_inspirationPhotos') || '[]');
+  const photos = stored.slice(0, maxCount);
+  if (!photos.length) return [];
+  return Promise.all(photos.map(src => new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      // Strip the data:image/jpeg;base64, prefix — edge function just needs raw base64
+      resolve(canvas.toDataURL('image/jpeg', 0.75).split(',')[1]);
+    };
+    img.onerror = () => resolve(null);
+    img.src = src;
+  }))).then(arr => arr.filter(Boolean));
+}
+
 // ── Generate looks ─────────────────────────────────────────────────────────
 async function generateLooks() {
   showState('loading');
@@ -305,7 +326,7 @@ async function generateLooks() {
         pieceName: _pieceName,
         closetItems,
         preferences: prefs,
-        inspoPhotoCount: (JSON.parse(localStorage.getItem('etoile_inspirationPhotos') || '[]')).length,
+        inspoPhotos: await getResizedInspoPhotos(6, 400),
       }),
     });
     const data = await res.json();
