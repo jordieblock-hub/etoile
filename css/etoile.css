@@ -99,15 +99,20 @@ input, textarea, select { font-family: inherit; }
 /* Dropdown */
 .nav-dropdown { position: relative; }
 .nav-dropdown-menu {
-  position: absolute; top: calc(100% + 16px); right: -16px;
+  position: absolute; top: 100%; right: -16px;
+  padding-top: 16px;
   min-width: 180px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
   opacity: 0; pointer-events: none;
   transform: translateY(-8px);
   transition: all var(--t);
   z-index: 100;
+}
+.nav-dropdown-menu::before {
+  content: ''; position: absolute; top: 16px; left: 0; right: 0; bottom: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  z-index: -1;
 }
 .nav-dropdown:hover .nav-dropdown-menu {
   opacity: 1; pointer-events: all;
