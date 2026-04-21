@@ -30,19 +30,23 @@
 .look-name { font-family:var(--font-display); font-size:clamp(26px,2.8vw,38px); font-weight:900; color:var(--black); line-height:1.05; margin-bottom:6px; }
 .look-caption { font-family:var(--font-serif); font-size:15px; font-style:italic; color:var(--warm-gray); line-height:1.65; margin-bottom:32px; max-width:400px; }
 
-/* Pieces table */
-.pieces-table { width:100%; border-collapse:collapse; margin-bottom:28px; }
-.pieces-table tr { border-bottom:1px solid var(--border); }
-.pieces-table tr:last-child { border-bottom:none; }
-.piece-cat { font-size:9px; letter-spacing:0.16em; text-transform:uppercase; font-weight:700; color:var(--mid-gray); font-family:var(--font-sans); padding:13px 12px 13px 0; width:72px; }
-.piece-name { font-size:13.5px; color:var(--charcoal); font-family:var(--font-sans); padding:13px 8px; font-weight:500; }
-.piece-source { text-align:right; padding:13px 0 13px 8px; white-space:nowrap; }
-.owned-tag { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; letter-spacing:0.06em; color:#22c55e; font-family:var(--font-sans); }
+/* Piece cards */
+.pieces-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:28px; }
+.piece-card { border:1px solid var(--border); display:flex; gap:0; overflow:hidden; background:var(--white); }
+.piece-card-img {
+  width:64px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Material Symbols Outlined'; font-size:22px; color:rgba(255,255,255,0.75);
+}
+.piece-card-body { flex:1; padding:10px 12px; min-width:0; display:flex; flex-direction:column; gap:3px; }
+.piece-card-slot { font-size:8.5px; letter-spacing:0.16em; text-transform:uppercase; font-weight:700; color:var(--mid-gray); font-family:var(--font-sans); }
+.piece-card-name { font-size:12px; color:var(--charcoal); font-family:var(--font-sans); font-weight:500; line-height:1.35; }
+.piece-card-meta { font-size:10px; color:var(--warm-gray); font-family:var(--font-sans); }
+.piece-card-price { font-size:11px; font-weight:700; color:var(--charcoal); font-family:var(--font-sans); }
+.piece-card-btn { display:inline-flex; align-items:center; gap:3px; padding:5px 10px; background:var(--black); color:var(--white); font-size:9px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700; font-family:var(--font-sans); text-decoration:none; transition:background 0.15s; margin-top:4px; align-self:flex-start; }
+.piece-card-btn:hover { background:var(--pink); }
+.piece-card-btn .material-symbols-outlined { font-size:11px; }
+.owned-tag { display:inline-flex; align-items:center; gap:4px; font-size:9.5px; font-weight:700; letter-spacing:0.06em; color:#22c55e; font-family:var(--font-sans); margin-top:4px; }
 .owned-tag .material-symbols-outlined { font-size:13px; }
-.shop-btn { display:inline-flex; align-items:center; gap:4px; padding:5px 12px; background:var(--black); color:var(--white); font-size:9.5px; letter-spacing:0.12em; text-transform:uppercase; font-weight:700; font-family:var(--font-sans); text-decoration:none; transition:background 0.15s; }
-.shop-btn:hover { background:var(--pink); }
-.shop-btn .material-symbols-outlined { font-size:12px; }
-.retailer-note { font-size:9px; color:var(--mid-gray); font-family:var(--font-sans); margin-top:1px; }
 .look-btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
 .save-look-btn { display:inline-flex; align-items:center; gap:7px; padding:13px 24px; background:var(--black); color:var(--white); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; font-family:var(--font-sans); border:none; cursor:pointer; transition:background 0.15s; }
 .save-look-btn:hover, .save-look-btn.saved { background:var(--pink); }
@@ -410,26 +414,69 @@ function cropBoardImage(base64, pin) {
 }
 
 // ── Render looks ──────────────────────────────────────────────────────────
+const SLOT_ICONS = {
+  TOP:'checkroom', SHIRT:'checkroom', BLOUSE:'checkroom', KNIT:'checkroom',
+  BOTTOM:'straighten', PANTS:'straighten', SKIRT:'straighten', JEANS:'straighten', SHORTS:'straighten',
+  DRESS:'dry_cleaning', JUMPSUIT:'dry_cleaning',
+  OUTERWEAR:'umbrella', JACKET:'umbrella', COAT:'umbrella', BLAZER:'umbrella',
+  SHOES:'footprint', BOOTS:'footprint', HEELS:'footprint', SNEAKERS:'footprint', SANDALS:'footprint',
+  BAG:'shopping_bag', HANDBAG:'shopping_bag', PURSE:'shopping_bag',
+  JEWELRY:'diamond', NECKLACE:'diamond', EARRINGS:'diamond', BRACELET:'diamond',
+  ACCESSORIES:'watch', BELT:'watch', SCARF:'watch', HAT:'watch',
+};
+const SLOT_GRADS = {
+  TOP:'linear-gradient(135deg,#B0A898,#8A8078)',
+  SHIRT:'linear-gradient(135deg,#C8D0C8,#A0A898)',
+  BOTTOM:'linear-gradient(135deg,#2E3040,#4A4860)',
+  JEANS:'linear-gradient(135deg,#2A3A5A,#1A2A4A)',
+  SKIRT:'linear-gradient(135deg,#D8C8C0,#B8A098)',
+  DRESS:'linear-gradient(135deg,#C8A8B0,#A08088)',
+  OUTERWEAR:'linear-gradient(135deg,#7A6040,#5A4020)',
+  JACKET:'linear-gradient(135deg,#2A2A2A,#484848)',
+  SHOES:'linear-gradient(135deg,#C0A878,#A08858)',
+  BOOTS:'linear-gradient(135deg,#4A3020,#2A1800)',
+  BAG:'linear-gradient(135deg,#A89878,#887858)',
+  JEWELRY:'linear-gradient(135deg,#C8B050,#A89030)',
+  ACCESSORIES:'linear-gradient(135deg,#90A898,#708078)',
+};
+function slotIcon(slot) { return SLOT_ICONS[slot?.toUpperCase().split(' ')[0]] || 'checkroom'; }
+function slotGrad(slot) { return SLOT_GRADS[slot?.toUpperCase().split(' ')[0]] || 'linear-gradient(135deg,#A8A0A0,#888080)'; }
+
 function renderLooks(looks) {
   const container = document.getElementById('looksContainer');
   container.innerHTML = looks.map((look, i) => {
-    const flip   = i % 2 === 1 ? ' flip' : '';
-    const num    = String(i + 1).padStart(2, '0');
-    const total  = String(looks.length).padStart(2, '0');
+    const flip  = i % 2 === 1 ? ' flip' : '';
+    const num   = String(i + 1).padStart(2, '0');
+    const total = String(looks.length).padStart(2, '0');
     const imgUrl = look.imageUrl || '';
 
-    const piecesHtml = look.pieces.map(p => `
-      <tr>
-        <td class="piece-cat">${escHtml(p.slot)}</td>
-        <td class="piece-name">${escHtml(p.fromCloset ? (p.closetItemName || p.name) : p.name)}</td>
-        <td class="piece-source">
-          ${p.fromCloset
-            ? `<span class="owned-tag"><span class="material-symbols-outlined">checkroom</span>From your closet</span>`
-            : `<a class="shop-btn" href="${p.shopUrl || '#'}" target="_blank" rel="noopener"><span class="material-symbols-outlined">open_in_new</span>Shop</a>
-               <div class="retailer-note">${escHtml(p.retailer || '')}${p.price ? ' · ' + escHtml(p.price) : ''}</div>`
-          }
-        </td>
-      </tr>`).join('');
+    const piecesHtml = look.pieces.map(p => {
+      const icon = slotIcon(p.slot);
+      const grad = slotGrad(p.slot);
+      const name = escHtml(p.fromCloset ? (p.closetItemName || p.name) : p.name);
+      if (p.fromCloset) {
+        return `<div class="piece-card">
+          <div class="piece-card-img" style="background:${grad}">${icon}</div>
+          <div class="piece-card-body">
+            <div class="piece-card-slot">${escHtml(p.slot)}</div>
+            <div class="piece-card-name">${name}</div>
+            <span class="owned-tag"><span class="material-symbols-outlined">check_circle</span>Your closet</span>
+          </div>
+        </div>`;
+      }
+      return `<div class="piece-card">
+        <div class="piece-card-img" style="background:${grad}">${icon}</div>
+        <div class="piece-card-body">
+          <div class="piece-card-slot">${escHtml(p.slot)}</div>
+          <div class="piece-card-name">${name}</div>
+          <div class="piece-card-meta">${escHtml(p.retailer || '')}</div>
+          <div class="piece-card-price">${escHtml(p.price || '')}</div>
+          <a class="piece-card-btn" href="${p.shopUrl || '#'}" target="_blank" rel="noopener">
+            <span class="material-symbols-outlined">open_in_new</span>Shop
+          </a>
+        </div>
+      </div>`;
+    }).join('');
 
     return `
     <div class="look-section${flip}" id="look${i}">
@@ -443,13 +490,13 @@ function renderLooks(looks) {
         <div class="look-index">Look ${num} of ${total}</div>
         <div class="look-name">${escHtml(look.name)}</div>
         <p class="look-caption">${escHtml(look.caption)}</p>
-        <table class="pieces-table">${piecesHtml}</table>
+        <div class="pieces-grid">${piecesHtml}</div>
         <div class="look-btns">
           <button class="save-look-btn" onclick="saveLook(this,${i})">
             <span class="material-symbols-outlined">bookmark</span>Save the Look
           </button>
           <button class="new-look-btn" onclick="generateLooks()">
-            <span class="material-symbols-outlined">refresh</span>Generate New Looks
+            <span class="material-symbols-outlined">refresh</span>New Looks
           </button>
         </div>
       </div>
@@ -483,8 +530,10 @@ async function saveLook(btn, idx) {
     occasion: (look.occasionLabel || q).toLowerCase(),
     caption:  look.caption,
     gradient: look.gradient,
+    image:    look.imageUrl || '',
     savedAt:  new Date().toLocaleDateString('en-US', { month:'short', year:'numeric' }),
     query:    q,
+    pieces:   (look.pieces || []).filter(p => !p.fromCloset && p.shopUrl).slice(0, 4),
   };
   const looks = JSON.parse(localStorage.getItem('etoile_savedLooks') || '[]');
   looks.unshift(lookData);

@@ -16,8 +16,11 @@
 .look-img { aspect-ratio:3/4; overflow:hidden; position:relative; }
 .look-img-bg { width:100%; height:100%; object-fit:cover; transition:transform 0.45s; }
 .look-card:hover .look-img-bg { transform:scale(1.04); }
-.look-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; gap:10px; opacity:0; transition:opacity 0.25s; }
+.look-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.55); display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:8px; opacity:0; transition:opacity 0.25s; padding:16px; }
 .look-card:hover .look-overlay { opacity:1; }
+.look-overlay-btns { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.look-piece-chip { display:inline-flex; align-items:center; gap:4px; padding:5px 11px; background:rgba(255,255,255,0.15); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.3); color:var(--white); font-size:9px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700; font-family:var(--font-sans); text-decoration:none; transition:background 0.15s; white-space:nowrap; }
+.look-piece-chip:hover { background:var(--pink); border-color:var(--pink); }
 .look-body { padding:20px; border-top:1px solid var(--border); }
 .look-name { font-family:var(--font-serif); font-size:20px; font-weight:400; color:var(--charcoal); margin:8px 0 4px; line-height:1.25; }
 .look-date { font-size:10px; color:var(--mid-gray); letter-spacing:0.12em; text-transform:uppercase; font-family:var(--font-sans); margin-top:2px; }
@@ -143,13 +146,21 @@ function renderLooks(filter) {
     const badgeClass = OCCASION_COLORS[look.occasion] || 'badge-dark';
     const label = look.occasion ? look.occasion.replace(/\b\w/g,c=>c.toUpperCase()) : 'Styled Look';
     const restyleQ = encodeURIComponent(look.query || look.occasion || look.name);
+    const pieceChips = (look.pieces || []).map(p =>
+      `<a class="look-piece-chip" href="${p.shopUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+        <span class="material-symbols-outlined" style="font-size:11px;">shopping_bag</span>${escSL(p.slot || 'Piece')}
+      </a>`
+    ).join('');
     return `
     <div class="look-card" data-occasion="${look.occasion || ''}">
       <div class="look-img" style="background:${look.gradient || 'linear-gradient(135deg,#C8C0B8,#A89888)'};">
         <img class="look-img-bg" src="${look.image || ''}" alt="" onerror="this.remove()">
         <div class="look-overlay">
-          <a href="outfit-recommendations.html?q=${restyleQ}" class="btn btn-white btn-sm">Re-style</a>
-          <button class="btn btn-outline-white btn-sm" onclick="event.stopPropagation();removeLook('${look.id}',this)">Remove</button>
+          ${pieceChips ? `<div class="look-overlay-btns">${pieceChips}</div>` : ''}
+          <div class="look-overlay-btns">
+            <a href="outfit-recommendations.html?q=${restyleQ}" class="btn btn-white btn-sm">Re-style</a>
+            <button class="btn btn-outline-white btn-sm" onclick="event.stopPropagation();removeLook('${look.id}',this)">Remove</button>
+          </div>
         </div>
       </div>
       <div class="look-body">
@@ -177,6 +188,10 @@ function removeLook(id, btn) {
   card.style.opacity = '0';
   card.style.transform = 'scale(0.95)';
   setTimeout(() => renderLooks(currentFilter), 320);
+}
+
+function escSL(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // Show cached looks immediately; Supabase async block above will re-render when loaded
