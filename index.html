@@ -185,6 +185,62 @@
 .upload-area:hover { border-color: var(--pink); background: var(--pink-light); }
 .upload-icon { font-size: 32px; color: var(--mid-gray); margin-bottom: 12px; font-family: 'Material Symbols Outlined'; }
 
+/* Closet accordion builder */
+.ob-closet-sections { display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px; }
+.ob-closet-section { border: 1px solid var(--border); background: var(--white); }
+.ob-closet-hdr {
+  display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+  cursor: pointer; user-select: none;
+}
+.ob-closet-hdr-icon { font-size: 18px; color: var(--charcoal); flex-shrink: 0; }
+.ob-closet-hdr-name { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-family: var(--font-sans); flex: 1; }
+.ob-closet-hdr-count { font-size: 11px; color: var(--pink); font-family: var(--font-sans); font-weight: 600; }
+.ob-closet-hdr-arrow { font-size: 18px; color: var(--mid-gray); transition: transform 0.2s; flex-shrink: 0; }
+.ob-closet-section.open .ob-closet-hdr-arrow { transform: rotate(180deg); }
+.ob-subcat-chips { display: none; padding: 4px 16px 16px; flex-wrap: wrap; gap: 7px; }
+.ob-closet-section.open .ob-subcat-chips { display: flex; }
+.ob-subcat-chip {
+  padding: 7px 13px; border: 1px solid var(--border); font-size: 12px;
+  font-family: var(--font-sans); cursor: pointer; transition: all 0.15s;
+  background: var(--white); color: var(--charcoal);
+}
+.ob-subcat-chip:hover { border-color: var(--charcoal); }
+.ob-subcat-chip.sel { background: var(--black); color: var(--white); border-color: var(--black); }
+
+/* Selected items photo grid */
+.ob-items-preview-wrap { margin-top: 24px; }
+.ob-items-preview {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px;
+}
+.ob-item-card {
+  position: relative; aspect-ratio: 3/4; overflow: hidden;
+  background: #f6f4f1; border: 1px solid var(--border);
+}
+.ob-item-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ob-item-card-spinner {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: #f6f4f1;
+}
+.ob-item-card-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; gap: 6px; padding: 12px;
+}
+.ob-item-card-name {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.72));
+  color: #fff; font-size: 9.5px; padding: 18px 8px 7px;
+  font-family: var(--font-sans); letter-spacing: 0.04em; line-height: 1.3;
+}
+.ob-item-card-cam {
+  position: absolute; top: 5px; right: 5px;
+}
+.ob-item-card-cam label {
+  display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; background: rgba(255,255,255,0.9); cursor: pointer;
+  border-radius: 2px;
+}
+.ob-item-card-cam label span { font-size: 14px; color: var(--charcoal); }
+
 /* Category grid */
 .ob-category-grid {
   display: grid;
@@ -353,36 +409,24 @@
       </div>
     </div>
 
-    <!-- STEP 2: Closet Categories -->
+    <!-- STEP 2: Closet Builder -->
     <div class="ob-step-panel" id="step-2">
       <div>
         <div class="ob-step-kicker">Step 2 of 5 &nbsp;·&nbsp; Your Closet</div>
         <div class="ob-progress-bar"><div class="ob-progress-fill" style="width: 40%"></div></div>
         <div class="ob-step-header">
           <h1 class="ob-step-title">What's in<br><em>your closet?</em></h1>
-          <p class="ob-step-desc">Select the categories you own. This helps Étoile build looks around what you actually have before recommending anything new.</p>
+          <p class="ob-step-desc">Tap the specific pieces you own. Étoile will auto-generate a photo for each — or you can upload your own. This builds your digital wardrobe.</p>
         </div>
 
-        <div class="ob-category-grid" id="closetCategories">
-          <div class="ob-cat-tile" data-cat="tops" onclick="toggleCat(this)"><div class="ob-cat-icon">checkroom</div><div class="ob-cat-name">Tops</div></div>
-          <div class="ob-cat-tile" data-cat="bottoms" onclick="toggleCat(this)"><div class="ob-cat-icon">straighten</div><div class="ob-cat-name">Bottoms</div></div>
-          <div class="ob-cat-tile" data-cat="dresses" onclick="toggleCat(this)"><div class="ob-cat-icon">dry_cleaning</div><div class="ob-cat-name">Dresses</div></div>
-          <div class="ob-cat-tile" data-cat="outerwear" onclick="toggleCat(this)"><div class="ob-cat-icon">umbrella</div><div class="ob-cat-name">Outerwear</div></div>
-          <div class="ob-cat-tile" data-cat="shoes" onclick="toggleCat(this)"><div class="ob-cat-icon">footprint</div><div class="ob-cat-name">Shoes</div></div>
-          <div class="ob-cat-tile" data-cat="bags" onclick="toggleCat(this)"><div class="ob-cat-icon">shopping_bag</div><div class="ob-cat-name">Bags</div></div>
-          <div class="ob-cat-tile" data-cat="jewelry" onclick="toggleCat(this)"><div class="ob-cat-icon">diamond</div><div class="ob-cat-name">Jewelry</div></div>
-          <div class="ob-cat-tile" data-cat="accessories" onclick="toggleCat(this)"><div class="ob-cat-icon">style</div><div class="ob-cat-name">Accessories</div></div>
-          <div class="ob-cat-tile" data-cat="suiting" onclick="toggleCat(this)"><div class="ob-cat-icon">business_center</div><div class="ob-cat-name">Suiting</div></div>
-          <div class="ob-cat-tile" data-cat="denim" onclick="toggleCat(this)"><div class="ob-cat-icon">content_cut</div><div class="ob-cat-name">Denim</div></div>
-          <div class="ob-cat-tile" data-cat="activewear" onclick="toggleCat(this)"><div class="ob-cat-icon">fitness_center</div><div class="ob-cat-name">Activewear</div></div>
-          <div class="ob-cat-tile" data-cat="occasionwear" onclick="toggleCat(this)"><div class="ob-cat-icon">celebration</div><div class="ob-cat-name">Occasionwear</div></div>
-          <div class="ob-cat-tile" data-cat="seasonal" onclick="toggleCat(this)"><div class="ob-cat-icon">ac_unit</div><div class="ob-cat-name">Seasonal</div></div>
-          <div class="ob-cat-tile" data-cat="knitwear" onclick="toggleCat(this)"><div class="ob-cat-icon">texture</div><div class="ob-cat-name">Knitwear</div></div>
-          <div class="ob-cat-tile" data-cat="loungewear" onclick="toggleCat(this)"><div class="ob-cat-icon">bedtime</div><div class="ob-cat-name">Loungewear</div></div>
-          <div class="ob-cat-tile" data-cat="swimwear" onclick="toggleCat(this)"><div class="ob-cat-icon">pool</div><div class="ob-cat-name">Swimwear</div></div>
+        <div class="ob-closet-sections" id="closetAccordions"></div>
+
+        <div class="ob-items-preview-wrap" id="obItemsPreviewWrap" style="display:none;">
+          <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans);">Your selected pieces</div>
+          <div class="ob-items-preview" id="obItemsPreview"></div>
         </div>
 
-        <div class="ob-nav">
+        <div class="ob-nav" style="margin-top: 32px;">
           <button class="btn btn-ghost" onclick="goToStep(1)">← Back</button>
           <button class="btn btn-dark" onclick="goToStep(3)">Next: Most Worn →</button>
         </div>
@@ -396,25 +440,12 @@
         <div class="ob-progress-bar"><div class="ob-progress-fill" style="width: 60%"></div></div>
         <div class="ob-step-header">
           <h1 class="ob-step-title">What do you<br><em>actually wear?</em></h1>
-          <p class="ob-step-desc">This isn't about your aspirational wardrobe — it's about what you actually reach for. Select the categories you wear most often. This helps us style you realistically, not just beautifully.</p>
+          <p class="ob-step-desc">Not your aspirational wardrobe — the pieces you actually reach for. This helps Étoile style you realistically.</p>
         </div>
 
-        <div class="ob-category-grid" id="mostWornCategories">
-          <div class="ob-cat-tile" data-cat="tops" onclick="toggleCat(this)"><div class="ob-cat-icon">checkroom</div><div class="ob-cat-name">Tops</div></div>
-          <div class="ob-cat-tile" data-cat="denim" onclick="toggleCat(this)"><div class="ob-cat-icon">content_cut</div><div class="ob-cat-name">Denim</div></div>
-          <div class="ob-cat-tile" data-cat="dresses" onclick="toggleCat(this)"><div class="ob-cat-icon">dry_cleaning</div><div class="ob-cat-name">Dresses</div></div>
-          <div class="ob-cat-tile" data-cat="shoes" onclick="toggleCat(this)"><div class="ob-cat-icon">footprint</div><div class="ob-cat-name">Shoes</div></div>
-          <div class="ob-cat-tile" data-cat="knitwear" onclick="toggleCat(this)"><div class="ob-cat-icon">texture</div><div class="ob-cat-name">Knitwear</div></div>
-          <div class="ob-cat-tile" data-cat="outerwear" onclick="toggleCat(this)"><div class="ob-cat-icon">umbrella</div><div class="ob-cat-name">Outerwear</div></div>
-          <div class="ob-cat-tile" data-cat="bags" onclick="toggleCat(this)"><div class="ob-cat-icon">shopping_bag</div><div class="ob-cat-name">Bags</div></div>
-          <div class="ob-cat-tile" data-cat="jewelry" onclick="toggleCat(this)"><div class="ob-cat-icon">diamond</div><div class="ob-cat-name">Jewelry</div></div>
-          <div class="ob-cat-tile" data-cat="suiting" onclick="toggleCat(this)"><div class="ob-cat-icon">business_center</div><div class="ob-cat-name">Suiting</div></div>
-          <div class="ob-cat-tile" data-cat="bottoms" onclick="toggleCat(this)"><div class="ob-cat-icon">straighten</div><div class="ob-cat-name">Bottoms</div></div>
-          <div class="ob-cat-tile" data-cat="activewear" onclick="toggleCat(this)"><div class="ob-cat-icon">fitness_center</div><div class="ob-cat-name">Activewear</div></div>
-          <div class="ob-cat-tile" data-cat="accessories" onclick="toggleCat(this)"><div class="ob-cat-icon">style</div><div class="ob-cat-name">Accessories</div></div>
-        </div>
+        <div class="ob-closet-sections" id="mostWornAccordions"></div>
 
-        <div class="ob-nav">
+        <div class="ob-nav" style="margin-top: 32px;">
           <button class="btn btn-ghost" onclick="goToStep(2)">← Back</button>
           <button class="btn btn-dark" onclick="goToStep(4)">Next: Shopping Goals →</button>
         </div>
@@ -631,6 +662,179 @@
 <script src="js/supabase.js"></script>
 <script src="js/app.js"></script>
 <script>
+// ── Closet accordion builder ───────────────────────────────────────────────
+const OB_CATEGORY_MAP = {
+  'Tops':       ['Tank Top','T-Shirt','Button-Down Shirt','Blouse','Knit Top','Crop Top','Sweater','Turtleneck','Cardigan','Bodysuit','Corset Top'],
+  'Bottoms':    ['Black Jeans','Blue Jeans','White Jeans','Jean Skirt','Mini Skirt','Midi Skirt','Maxi Skirt','Tailored Trousers','Linen Pants','Cargo Pants','Shorts','Leggings','Bike Shorts'],
+  'Dresses':    ['Mini Dress','Midi Dress','Maxi Dress','Slip Dress','Wrap Dress','Shirt Dress','Cocktail Dress','Evening Gown','Sundress','Bodycon Dress'],
+  'Outerwear':  ['Trench Coat','Blazer','Leather Jacket','Denim Jacket','Puffer Jacket','Wool Coat','Bomber Jacket','Vest','Shearling Coat'],
+  'Shoes':      ['Heels','Block Heels','Kitten Heels','Ballet Flats','Loafers','Sneakers','Boots','Ankle Boots','Knee-High Boots','Sandals','Mules','Slides','Platforms','Mary Janes'],
+  'Bags':       ['Shoulder Bag','Tote Bag','Clutch','Crossbody Bag','Mini Bag','Backpack','Belt Bag','Top-Handle Bag','Bucket Bag','Hobo Bag'],
+  'Jewelry':    ['Stud Earrings','Hoop Earrings','Drop Earrings','Statement Earrings','Pendant Necklace','Chain Necklace','Choker','Tennis Bracelet','Bangle','Ring','Cuff'],
+  'Accessories':['Belt','Silk Scarf','Wool Scarf','Bucket Hat','Baseball Cap','Beret','Wide-Brim Hat','Sunglasses','Hair Clip','Headband','Gloves','Tights'],
+  'Suiting':    ['Suit Jacket','Suit Trousers','Two-Piece Suit','Pantsuit','Skirt Suit','Double-Breasted Blazer','Waistcoat'],
+  'Activewear': ['Sports Bra','Bike Shorts','Leggings','Athletic Top','Track Jacket','Sweatshirt','Hoodie','Joggers','Tennis Skirt','Windbreaker'],
+};
+const OB_PARENT_ICONS = {
+  'Tops':'checkroom','Bottoms':'straighten','Dresses':'dry_cleaning',
+  'Outerwear':'umbrella','Shoes':'footprint','Bags':'shopping_bag',
+  'Jewelry':'diamond','Accessories':'watch','Suiting':'business_center','Activewear':'sports',
+};
+
+const obClosetState = {}; // subcatName → { photo: string|null, loading: bool }
+
+function buildAccordion(containerId, prefix, onChipClick) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = Object.entries(OB_CATEGORY_MAP).map(([parent, subs]) => {
+    const key = prefix + '-' + parent.toLowerCase().replace(/\s+/g, '-');
+    return `
+    <div class="ob-closet-section" id="${key}">
+      <div class="ob-closet-hdr" onclick="this.closest('.ob-closet-section').classList.toggle('open')">
+        <span class="ob-closet-hdr-icon material-symbols-outlined">${OB_PARENT_ICONS[parent] || 'category'}</span>
+        <span class="ob-closet-hdr-name">${parent}</span>
+        <span class="ob-closet-hdr-count" id="${key}-cnt"></span>
+        <span class="ob-closet-hdr-arrow material-symbols-outlined">expand_more</span>
+      </div>
+      <div class="ob-subcat-chips">
+        ${subs.map(sub => `<div class="ob-subcat-chip" data-sub="${sub}" data-parent="${parent}" data-prefix="${prefix}" onclick="${onChipClick}(this)">${sub}</div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildClosetAccordions() {
+  buildAccordion('closetAccordions', 'obcs', 'toggleObSubcat');
+}
+
+function buildMostWornAccordions() {
+  buildAccordion('mostWornAccordions', 'obworn', 'toggleWornSubcat');
+}
+
+function toggleObSubcat(chip) {
+  const sub = chip.dataset.sub;
+  const parent = chip.dataset.parent;
+  const prefix = chip.dataset.prefix || 'obcs';
+  if (chip.classList.contains('sel')) {
+    chip.classList.remove('sel');
+    delete obClosetState[sub];
+  } else {
+    chip.classList.add('sel');
+    obClosetState[sub] = { photo: null, loading: true };
+    autoLoadObPhoto(sub);
+  }
+  updateSectionCount(prefix, parent, obClosetState);
+  renderObSelectedItems();
+}
+
+const obWornState = {}; // subcatName → true
+
+function toggleWornSubcat(chip) {
+  const sub = chip.dataset.sub;
+  const parent = chip.dataset.parent;
+  const prefix = chip.dataset.prefix || 'obworn';
+  if (chip.classList.contains('sel')) {
+    chip.classList.remove('sel');
+    delete obWornState[sub];
+  } else {
+    chip.classList.add('sel');
+    obWornState[sub] = true;
+  }
+  updateSectionCount(prefix, parent, obWornState);
+}
+
+function updateSectionCount(prefix, parent, stateMap) {
+  const subs = OB_CATEGORY_MAP[parent] || [];
+  const count = subs.filter(s => stateMap[s]).length;
+  const key = prefix + '-' + parent.toLowerCase().replace(/\s+/g, '-') + '-cnt';
+  const el = document.getElementById(key);
+  if (el) el.textContent = count ? count + ' selected' : '';
+}
+
+const OB_CAT_GRADIENTS = {
+  'Tops':       'linear-gradient(160deg,#E8E0D8,#C8BAB0)',
+  'Bottoms':    'linear-gradient(160deg,#2E2E38,#4A4A58)',
+  'Dresses':    'linear-gradient(160deg,#EDD8D4,#D0A8A4)',
+  'Outerwear':  'linear-gradient(160deg,#8B7050,#6B5030)',
+  'Shoes':      'linear-gradient(160deg,#C8B090,#A89070)',
+  'Bags':       'linear-gradient(160deg,#B0A090,#907870)',
+  'Jewelry':    'linear-gradient(160deg,#D4C070,#B0A050)',
+  'Accessories':'linear-gradient(160deg,#9AB0A0,#6A8070)',
+  'Suiting':    'linear-gradient(160deg,#3A3A50,#20203A)',
+  'Activewear': 'linear-gradient(160deg,#D8D8D8,#B0B0B0)',
+};
+const OB_SUB_TO_PARENT = {};
+Object.entries(OB_CATEGORY_MAP).forEach(([p, subs]) => subs.forEach(s => OB_SUB_TO_PARENT[s] = p));
+
+function autoLoadObPhoto(sub) {
+  const parent = OB_SUB_TO_PARENT[sub] || 'fashion';
+  const tag = encodeURIComponent(sub.toLowerCase().replace(/\s+/g, ',') + ',fashion');
+  const lock = Math.floor(Math.random() * 10000);
+  const url = `https://loremflickr.com/400/500/${tag}?lock=${lock}`;
+  const img = new window.Image();
+  img.onload = () => {
+    if (obClosetState[sub]) {
+      obClosetState[sub] = { photo: url, loading: false };
+      renderObSelectedItems();
+    }
+  };
+  img.onerror = () => {
+    if (obClosetState[sub]) { obClosetState[sub].loading = false; renderObSelectedItems(); }
+  };
+  img.src = url;
+}
+
+function renderObSelectedItems() {
+  const entries = Object.entries(obClosetState);
+  const wrap = document.getElementById('obItemsPreviewWrap');
+  const grid = document.getElementById('obItemsPreview');
+  if (!entries.length) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  grid.innerHTML = entries.map(([sub, state]) => {
+    const safeId = sub.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
+    let inner;
+    if (state.loading) {
+      inner = `<div class="ob-item-card-spinner"><span class="material-symbols-outlined" style="animation:spin 1s linear infinite;font-size:22px;color:var(--mid-gray)">refresh</span></div>`;
+    } else if (state.photo) {
+      inner = `<img src="${state.photo}" alt="${sub}">`;
+    } else {
+      const parent = OB_SUB_TO_PARENT[sub] || 'Tops';
+      const grad = OB_CAT_GRADIENTS[parent] || OB_CAT_GRADIENTS['Tops'];
+      inner = `<div class="ob-item-card-empty" style="background:${grad};"><span class="material-symbols-outlined" style="font-size:28px;color:rgba(255,255,255,0.7)">checkroom</span><span style="font-size:9px;color:rgba(255,255,255,0.8);text-align:center;font-family:var(--font-sans);letter-spacing:0.05em;">${sub}</span></div>`;
+    }
+    return `
+    <div class="ob-item-card">
+      ${inner}
+      <div class="ob-item-card-cam">
+        <label for="obph-${safeId}" title="Upload your own photo">
+          <span class="material-symbols-outlined">photo_camera</span>
+          <input type="file" id="obph-${safeId}" accept="image/*" style="display:none" onchange="uploadObItemPhoto('${sub}',this)">
+        </label>
+      </div>
+      <div class="ob-item-card-name">${sub}</div>
+    </div>`;
+  }).join('');
+}
+
+function uploadObItemPhoto(sub, input) {
+  if (!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    if (obClosetState[sub]) {
+      obClosetState[sub] = { photo: e.target.result, loading: false };
+      renderObSelectedItems();
+    }
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function getObClosetItems() {
+  return Object.entries(obClosetState).map(([name, state]) => ({
+    id: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+    name, brand: '', category: name,
+    image: state.photo || null, wornOften: false,
+  }));
+}
+
 let currentStep = 1;
 let _currentUser = null;
 
@@ -729,6 +933,8 @@ document.addEventListener('paste', (e) => {
 (function() {
   const saved = JSON.parse(localStorage.getItem('etoile_inspirationPhotos') || 'null');
   if (saved?.length) renderObGrid(saved);
+  buildClosetAccordions();
+  buildMostWornAccordions();
 })();
 
 function addBrand(e, type) { if (e.key === 'Enter') addBrandClick(type); }
@@ -759,6 +965,10 @@ async function completeOnboarding() {
   // Save to localStorage for fast access
   if (budget) localStorage.setItem('etoile_budget', budget);
   localStorage.setItem('etoile_onboarded', 'true');
+  const obItems = getObClosetItems().map(item => ({
+    ...item, wornOften: !!obWornState[item.name],
+  }));
+  if (obItems.length) localStorage.setItem('etoile_closetItems', JSON.stringify(obItems));
 
   // Save to Supabase
   if (_currentUser) {
