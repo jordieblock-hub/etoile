@@ -123,7 +123,7 @@ STRICT RULES — every rule is mandatory:
 
 5. BRANDS: Always suggest brands the user loves when possible. The suggested retailer must carry the suggested brand.
 
-6. SPECIFICITY: Name the exact item — brand + style + color (e.g. "Sandro pleated midi skirt in ecru" not "white skirt"). This is what makes the search URL work.
+6. SEARCH TERMS must be findable: the shopUrl search query must use category + key attributes + color — NOT a specific model name or SKU, which may be out of stock. The goal is for the user to land on a results page showing real available items. Good: "pleated midi skirt ecru" → Sandro search. Bad: "Sandro Jupe Longue Plissée" → zero results if that SKU is gone. The piece "name" field can be descriptive/editorial, but the shopUrl must use broad-enough terms to always return results.
 
 7. 3 looks must be genuinely different — different silhouettes, color stories, energy. Not just color swaps.
 
