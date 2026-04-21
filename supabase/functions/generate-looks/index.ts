@@ -56,14 +56,17 @@ USER AESTHETIC:
 THEIR CLOSET:
 ${closetList}
 
-RULES:
-1. The 3 looks must be genuinely distinct — different silhouettes, different energy, not just color swaps
-2. Occasion-appropriateness comes before aesthetic. Closet items that don't fit the occasion get skipped.
-3. For non-closet pieces: suggest real specific items (e.g. "Totême ribbed tank" not just "white tank"), with correct retailer search URLs
-4. Retailer URL formats (replace TERM with search words, use + for spaces): Net-a-Porter: https://www.net-a-porter.com/en-us/shop/search?q=TERM | SSENSE: https://www.ssense.com/en-us/women/search?q=TERM | Shopbop: https://www.shopbop.com/search/results.jsp?q=TERM | Mytheresa: https://www.mytheresa.com/us/en/women/search?q=TERM | Revolve: https://www.revolve.com/search/?q=TERM | Nordstrom: https://www.nordstrom.com/sr?keyword=TERM | Zara: https://www.zara.com/us/en/search?searchTerm=TERM | ASOS: https://www.asos.com/search/?q=TERM | Mango: https://shop.mango.com/us/search?q=TERM
-5. gradient: 2 muted hex colors reflecting the look's color palette
-6. caption: editorial, max 18 words, sounds like Vogue, in quotes
-7. Look names: evocative & occasion-specific (e.g. "The After-Hours Escape", "The Rooftop Arrival")
+STRICT RULES — violating any of these is a failure:
+1. The 3 looks must be genuinely distinct — different silhouettes, different energy, not just color swaps.
+2. Occasion-appropriateness is absolute. A beach look and a job interview look share zero pieces.
+3. COLORS: Every piece must be in a color the user loves, OR a neutral (black/white/beige/gray/cream). NEVER use colors they avoid — not even accessories.
+4. BRANDS: Shopping suggestions MUST prioritize brands they love. NEVER suggest brands they avoid under any circumstances.
+5. FIT: Every silhouette must match their fit preferences. If they want Oversized → loose, relaxed cuts. Tailored → structured, fitted. Flowy → draped, loose. Apply this to every single piece.
+6. For non-closet pieces: suggest real specific items (e.g. "Totême ribbed tank" not just "white tank"), with retailer search URLs.
+7. Retailer URL formats (replace TERM with + for spaces): Net-a-Porter: https://www.net-a-porter.com/en-us/shop/search?q=TERM | SSENSE: https://www.ssense.com/en-us/women/search?q=TERM | Shopbop: https://www.shopbop.com/search/results.jsp?q=TERM | Mytheresa: https://www.mytheresa.com/us/en/women/search?q=TERM | Revolve: https://www.revolve.com/search/?q=TERM | Nordstrom: https://www.nordstrom.com/sr?keyword=TERM | Zara: https://www.zara.com/us/en/search?searchTerm=TERM | ASOS: https://www.asos.com/search/?q=TERM | Mango: https://shop.mango.com/us/search?q=TERM
+8. gradient: 2 muted hex colors from the look's actual color palette (must reflect the color choices above).
+9. caption: editorial, max 18 words, sounds like Vogue, in quotes.
+10. Look names: evocative & occasion-specific (e.g. "The After-Hours Escape", "The Rooftop Arrival").
 ${photoNote}
 
 Return ONLY valid JSON:

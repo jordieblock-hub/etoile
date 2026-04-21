@@ -241,6 +241,48 @@
 }
 .ob-item-card-cam label span { font-size: 14px; color: var(--charcoal); }
 
+/* Brand autocomplete */
+.brand-search-wrap { position: relative; }
+.brand-ac-input-row {
+  display: flex; align-items: center;
+  border: 1px solid var(--border); background: var(--white);
+  transition: border-color 0.2s; margin-bottom: 8px;
+}
+.brand-ac-input-row:focus-within { border-color: var(--black); }
+.brand-ac-input-row input {
+  flex: 1; border: none; outline: none; padding: 13px 14px;
+  font-size: 13px; color: var(--charcoal); background: transparent;
+  font-family: var(--font-sans);
+}
+.brand-dropdown {
+  position: absolute; top: 100%; left: 0; right: 0;
+  background: var(--white); border: 1px solid var(--border); border-top: none;
+  z-index: 200; max-height: 180px; overflow-y: auto; display: none;
+}
+.brand-dropdown.open { display: block; }
+.brand-dd-item {
+  padding: 10px 14px; cursor: pointer; font-size: 13px;
+  font-family: var(--font-sans); color: var(--charcoal);
+  border-bottom: 1px solid var(--border);
+}
+.brand-dd-item:last-child { border-bottom: none; }
+.brand-dd-item:hover { background: var(--off-white); }
+
+/* Full color grid */
+.ob-swatches {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.ob-swatch {
+  width: 28px; height: 28px; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s; position: relative;
+}
+.ob-swatch.selected::after {
+  content: 'check'; font-family: 'Material Symbols Outlined';
+  font-size: 14px; color: #fff; text-shadow: 0 0 4px rgba(0,0,0,0.6);
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+}
+.ob-swatch.selected { transform: scale(1.15); box-shadow: 0 0 0 2px var(--black); }
+
 /* Category grid */
 .ob-category-grid {
   display: grid;
@@ -561,17 +603,23 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px;">
           <div>
             <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 12px;">Brands I love</div>
-            <div class="brand-input-wrap">
-              <input type="text" id="likedBrandInput" class="input-field" placeholder="e.g. Totême, Arket…" style="border-bottom: none; padding: 12px 0;" onkeydown="addBrand(event,'liked')">
-              <button class="btn btn-dark btn-sm" onclick="addBrandClick('liked')">Add</button>
+            <div class="brand-search-wrap">
+              <div class="brand-ac-input-row">
+                <input type="text" id="likedBrandInput" placeholder="Search brands…" autocomplete="off"
+                  oninput="filterBrands(this,'liked')" onkeydown="brandKey(event,'liked')" onfocus="filterBrands(this,'liked')" onblur="closeBrandDD('liked',300)">
+              </div>
+              <div class="brand-dropdown" id="likedBrandDD"></div>
             </div>
             <div class="brand-chips" id="likedBrands"></div>
           </div>
           <div>
             <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 12px;">Brands to avoid</div>
-            <div class="brand-input-wrap">
-              <input type="text" id="dislikedBrandInput" class="input-field" placeholder="e.g. Fast fashion brands…" style="border-bottom: none; padding: 12px 0;" onkeydown="addBrand(event,'disliked')">
-              <button class="btn btn-dark btn-sm" onclick="addBrandClick('disliked')">Add</button>
+            <div class="brand-search-wrap">
+              <div class="brand-ac-input-row">
+                <input type="text" id="dislikedBrandInput" placeholder="Search brands…" autocomplete="off"
+                  oninput="filterBrands(this,'disliked')" onkeydown="brandKey(event,'disliked')" onfocus="filterBrands(this,'disliked')" onblur="closeBrandDD('disliked',300)">
+              </div>
+              <div class="brand-dropdown" id="dislikedBrandDD"></div>
             </div>
             <div class="brand-chips" id="dislikedBrands"></div>
           </div>
@@ -580,38 +628,12 @@
         <!-- Colors -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px;">
           <div>
-            <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 16px;">Colors I love</div>
-            <div class="ob-swatches" id="likedColors">
-              <div class="ob-swatch" data-color="black" style="background:#0D0D0D;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="white" style="background:#F5F5F5; border: 1px solid #ddd;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="cream" style="background:#F0E8D8;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="camel" style="background:#C8A878;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="brown" style="background:#6B4226;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="blush" style="background:#E8B4A8;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="red" style="background:#C43030;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="burgundy" style="background:#6B1E28;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="navy" style="background:#1A2C4A;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="cobalt" style="background:#2448A0;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="green" style="background:#2A4A30;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="sage" style="background:#8BA08A;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="gray" style="background:#8A8A8A;" onclick="toggleSwatch(this,'liked')"></div>
-              <div class="ob-swatch" data-color="silver" style="background:#C0C0C0;" onclick="toggleSwatch(this,'liked')"></div>
-            </div>
+            <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 12px;">Colors I love</div>
+            <div class="ob-swatches" id="likedColors"></div>
           </div>
           <div>
-            <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 16px;">Colors I avoid</div>
-            <div class="ob-swatches" id="dislikedColors">
-              <div class="ob-swatch" data-color="black" style="background:#0D0D0D;" onclick="toggleSwatch(this,'disliked')"></div>
-              <div class="ob-swatch" data-color="white" style="background:#F5F5F5; border: 1px solid #ddd;" onclick="toggleSwatch(this,'disliked')"></div>
-              <div class="ob-swatch" data-color="orange" style="background:#D4601E;" onclick="toggleSwatch(this,'disliked')"></div>
-              <div class="ob-swatch" data-color="yellow" style="background:#D4A820;" onclick="toggleSwatch(this,'disliked')"></div>
-              <div class="ob-swatch" data-color="neon" style="background:#B0E020;" onclick="toggleSwatch(this,'disliked')"></div>
-              <div class="ob-swatch" data-color="pink" style="background:#E87898;" onclick="toggleSwatch(this,'disliked')"></div>
-              <div class="ob-swatch" data-color="purple" style="background:#7840A8;" onclick="toggleSwatch(this,'disliked')"></div>
-              <div class="ob-swatch" data-color="red" style="background:#C43030;" onclick="toggleSwatch(this,'disliked')"></div>
-              <div class="ob-swatch" data-color="cobalt" style="background:#2448A0;" onclick="toggleSwatch(this,'disliked')"></div>
-              <div class="ob-swatch" data-color="brown" style="background:#6B4226;" onclick="toggleSwatch(this,'disliked')"></div>
-            </div>
+            <div style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--warm-gray); font-family: var(--font-sans); margin-bottom: 12px;">Colors I avoid</div>
+            <div class="ob-swatches" id="dislikedColors"></div>
           </div>
         </div>
 
@@ -766,21 +788,10 @@ const OB_SUB_TO_PARENT = {};
 Object.entries(OB_CATEGORY_MAP).forEach(([p, subs]) => subs.forEach(s => OB_SUB_TO_PARENT[s] = p));
 
 function autoLoadObPhoto(sub) {
-  const parent = OB_SUB_TO_PARENT[sub] || 'fashion';
-  const tag = encodeURIComponent(sub.toLowerCase().replace(/\s+/g, ',') + ',fashion');
-  const lock = Math.floor(Math.random() * 10000);
-  const url = `https://loremflickr.com/400/500/${tag}?lock=${lock}`;
-  const img = new window.Image();
-  img.onload = () => {
-    if (obClosetState[sub]) {
-      obClosetState[sub] = { photo: url, loading: false };
-      renderObSelectedItems();
-    }
-  };
-  img.onerror = () => {
-    if (obClosetState[sub]) { obClosetState[sub].loading = false; renderObSelectedItems(); }
-  };
-  img.src = url;
+  if (obClosetState[sub]) {
+    obClosetState[sub] = { photo: null, loading: false };
+    renderObSelectedItems();
+  }
 }
 
 function renderObSelectedItems() {
@@ -937,34 +948,144 @@ document.addEventListener('paste', (e) => {
   buildMostWornAccordions();
 })();
 
-function addBrand(e, type) { if (e.key === 'Enter') addBrandClick(type); }
-function addBrandClick(type) {
-  const input = document.getElementById(type === 'liked' ? 'likedBrandInput' : 'dislikedBrandInput');
-  const val = input.value.trim();
-  if (!val) return;
-  const container = document.getElementById(type === 'liked' ? 'likedBrands' : 'dislikedBrands');
+// ── Brand autocomplete ─────────────────────────────────────────────────────
+const FASHION_BRANDS = [
+  // Luxury
+  'Chanel','Gucci','Prada','Louis Vuitton','Hermès','Bottega Veneta','Celine','Saint Laurent',
+  'Balenciaga','Valentino','Dior','Loewe','Loro Piana','Brunello Cucinelli','Max Mara','The Row',
+  'Alaïa','Jacquemus','Isabel Marant','Acne Studios','Marni','Jil Sander','Lemaire',
+  'Rick Owens','Maison Margiela','Off-White','A-COLD-WALL','Ami Paris','Nanushka',
+  // Contemporary
+  'Totême','Arket','COS','& Other Stories','Massimo Dutti','Theory','Vince','A.L.C.',
+  'Equipment','Rails','Rag & Bone','Frame','Sandro','Maje','ba&sh','Reformation',
+  'Anine Bing','Ganni','Staud','Loeffler Randall','Veronica Beard','La Ligne',
+  'Rouje','Sézane','Apiece Apart','Creatures of Comfort','Vince','AGOLDE',
+  'Mother Denim','Paige','Citizens of Humanity','7 For All Mankind','AG Jeans',
+  // Mid-range
+  'Banana Republic','J.Crew','Club Monaco','Ted Baker','Reiss','Anthropologie',
+  'Free People','Aritzia','Wilfred','Madewell','Everlane','Quince','Cuyana',
+  'Universal Standard','Talbots','Ann Taylor','LOFT','Soma','White House Black Market',
+  // Accessible
+  'Zara','H&M','Mango','ASOS','Revolve','Shopbop','Nordstrom','Bloomingdale\'s',
+  'Net-a-Porter','SSENSE','Mytheresa','Farfetch','Matches Fashion','MatchesFashion',
+  'Urban Outfitters','Topshop','Nasty Gal','PrettyLittleThing','Shein','Boohoo',
+  'Fashion Nova','Express','Forever 21','American Eagle','Abercrombie & Fitch','Hollister',
+  // Activewear / Specialty
+  'Lululemon','Alo Yoga','Vuori','Athleta','Nike','Adidas','New Balance','Hoka',
+  'On Running','Salomon','Arc\'teryx','Patagonia','The North Face',
+  // Shoes / Bags
+  'Manolo Blahnik','Christian Louboutin','Jimmy Choo','Gianvito Rossi','Sam Edelman',
+  'Steve Madden','Coach','Kate Spade','Michael Kors','Tory Burch','Marc Jacobs',
+  'Mansur Gavriel','Polène','Strathberry','DeMellier','Senreve',
+];
+
+function filterBrands(input, type) {
+  const val = input.value.trim().toLowerCase();
+  const ddId = type === 'liked' ? 'likedBrandDD' : 'dislikedBrandDD';
+  const dd = document.getElementById(ddId);
+  if (!val) { dd.classList.remove('open'); return; }
+  const matches = FASHION_BRANDS.filter(b => b.toLowerCase().includes(val)).slice(0, 8);
+  if (!matches.length) { dd.classList.remove('open'); return; }
+  dd.innerHTML = matches.map(b =>
+    `<div class="brand-dd-item" onmousedown="addBrandChip('${b.replace(/'/g,"\\'")}','${type}')">${b}</div>`
+  ).join('');
+  dd.classList.add('open');
+}
+
+function brandKey(e, type) {
+  if (e.key === 'Enter') {
+    const val = e.target.value.trim();
+    if (val) { addBrandChip(val, type); e.target.value = ''; }
+  }
+}
+
+function closeBrandDD(type, delay) {
+  setTimeout(() => {
+    document.getElementById(type === 'liked' ? 'likedBrandDD' : 'dislikedBrandDD').classList.remove('open');
+  }, delay);
+}
+
+function addBrandChip(brand, type) {
+  const containerId = type === 'liked' ? 'likedBrands' : 'dislikedBrands';
+  const inputId = type === 'liked' ? 'likedBrandInput' : 'dislikedBrandInput';
+  const ddId = type === 'liked' ? 'likedBrandDD' : 'dislikedBrandDD';
+  // Prevent duplicates
+  const existing = [...document.querySelectorAll('#' + containerId + ' .brand-chip')].map(c => c.dataset.brand);
+  if (existing.includes(brand)) return;
   const chip = document.createElement('div');
   chip.className = 'brand-chip';
-  chip.innerHTML = val + '<span class="brand-chip-remove" onclick="this.parentElement.remove()">close</span>';
-  container.appendChild(chip);
-  input.value = '';
+  chip.dataset.brand = brand;
+  chip.innerHTML = brand + '<span class="brand-chip-remove" onclick="this.parentElement.remove()">close</span>';
+  document.getElementById(containerId).appendChild(chip);
+  document.getElementById(inputId).value = '';
+  document.getElementById(ddId).classList.remove('open');
 }
+
+// ── Color swatches ─────────────────────────────────────────────────────────
+const ALL_COLORS = [
+  { key:'black',      hex:'#0D0D0D',  border:false },
+  { key:'off-white',  hex:'#F8F5EF',  border:true  },
+  { key:'cream',      hex:'#F0E8D8',  border:false },
+  { key:'sand',       hex:'#D8C9A8',  border:false },
+  { key:'camel',      hex:'#C8A878',  border:false },
+  { key:'brown',      hex:'#6B4226',  border:false },
+  { key:'chocolate',  hex:'#3A1A0A',  border:false },
+  { key:'gray',       hex:'#8A8A8A',  border:false },
+  { key:'silver',     hex:'#C0C0C0',  border:false },
+  { key:'blush',      hex:'#E8B4A8',  border:false },
+  { key:'dusty-rose', hex:'#C89080',  border:false },
+  { key:'coral',      hex:'#E8704A',  border:false },
+  { key:'red',        hex:'#C43030',  border:false },
+  { key:'burgundy',   hex:'#6B1E28',  border:false },
+  { key:'rust',       hex:'#A84830',  border:false },
+  { key:'orange',     hex:'#D4601E',  border:false },
+  { key:'yellow',     hex:'#D4A820',  border:false },
+  { key:'gold',       hex:'#B8901A',  border:false },
+  { key:'sky-blue',   hex:'#78B8D8',  border:false },
+  { key:'cobalt',     hex:'#2448A0',  border:false },
+  { key:'navy',       hex:'#1A2C4A',  border:false },
+  { key:'teal',       hex:'#2A7878',  border:false },
+  { key:'mint',       hex:'#90D0B8',  border:false },
+  { key:'sage',       hex:'#8BA08A',  border:false },
+  { key:'green',      hex:'#2A4A30',  border:false },
+  { key:'olive',      hex:'#6B6830',  border:false },
+  { key:'lavender',   hex:'#B0A0D0',  border:false },
+  { key:'purple',     hex:'#7840A8',  border:false },
+  { key:'hot-pink',   hex:'#E87898',  border:false },
+  { key:'fuchsia',    hex:'#C83088',  border:false },
+  { key:'neon',       hex:'#B0E020',  border:false },
+];
+
+function buildColorSwatches() {
+  ['likedColors','dislikedColors'].forEach(containerId => {
+    const type = containerId === 'likedColors' ? 'liked' : 'disliked';
+    document.getElementById(containerId).innerHTML = ALL_COLORS.map(c =>
+      `<div class="ob-swatch" data-color="${c.key}" title="${c.key.replace(/-/g,' ')}"
+        style="background:${c.hex};${c.border ? 'border:1px solid #ddd;' : ''}"
+        onclick="toggleSwatch(this,'${type}')"></div>`
+    ).join('');
+  });
+}
+buildColorSwatches();
 
 function toggleSwatch(el, type) { el.classList.toggle('selected'); }
 
 async function completeOnboarding() {
-  // Collect all prefs from the form
-  const pinterestUrl = null; // replaced by inspiration photos
   const budget = document.querySelector('.ob-price-tile.selected')?.dataset?.tier || null;
-  const brandsLiked    = [...document.querySelectorAll('#likedBrands .brand-chip')].map(c => c.textContent.replace('close','').trim());
-  const brandsDisliked = [...document.querySelectorAll('#dislikedBrands .brand-chip')].map(c => c.textContent.replace('close','').trim());
+  const brandsLiked    = [...document.querySelectorAll('#likedBrands .brand-chip')].map(c => c.dataset.brand || c.firstChild?.textContent?.trim() || '').filter(Boolean);
+  const brandsDisliked = [...document.querySelectorAll('#dislikedBrands .brand-chip')].map(c => c.dataset.brand || c.firstChild?.textContent?.trim() || '').filter(Boolean);
   const colorsLove  = [...document.querySelectorAll('#likedColors .ob-swatch.selected')].map(s => s.dataset.color);
   const colorsAvoid = [...document.querySelectorAll('#dislikedColors .ob-swatch.selected')].map(s => s.dataset.color);
   const fit = [...document.querySelectorAll('#fitPrefs .pill.active')].map(p => p.textContent.trim());
 
-  // Save to localStorage for fast access
+  // Save ALL prefs to localStorage so outfit-recommendations can use them
   if (budget) localStorage.setItem('etoile_budget', budget);
   localStorage.setItem('etoile_onboarded', 'true');
+  localStorage.setItem('etoile_brandsLiked',    JSON.stringify(brandsLiked));
+  localStorage.setItem('etoile_brandsDisliked',  JSON.stringify(brandsDisliked));
+  localStorage.setItem('etoile_colorsLove',      JSON.stringify(colorsLove));
+  localStorage.setItem('etoile_colorsAvoid',     JSON.stringify(colorsAvoid));
+  localStorage.setItem('etoile_fit',             JSON.stringify(fit));
   const obItems = getObClosetItems().map(item => ({
     ...item, wornOften: !!obWornState[item.name],
   }));
