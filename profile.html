@@ -92,9 +92,9 @@
       <div class="profile-name">Your Style<br>Profile</div>
       <div style="font-size:12px;color:rgba(255,255,255,0.35);font-family:var(--font-sans);margin-top:6px;" id="sidebarSub">Mid budget · Tailored + Relaxed fit</div>
       <div class="profile-stats">
-        <div><div class="stat-num">42</div><div class="stat-label">Closet Items</div></div>
-        <div><div class="stat-num">6</div><div class="stat-label">Saved Looks</div></div>
-        <div><div class="stat-num">12</div><div class="stat-label">Styled Sessions</div></div>
+        <div><div class="stat-num" id="statCloset">0</div><div class="stat-label">Closet Items</div></div>
+        <div><div class="stat-num" id="statLooks">0</div><div class="stat-label">Saved Looks</div></div>
+        <div><div class="stat-num" id="statSessions">0</div><div class="stat-label">Styled Sessions</div></div>
       </div>
       <div class="p-nav-title">Edit Preferences</div>
       <div class="p-nav-link active" onclick="scrollToSection('pinterest',this)"><span class="material-symbols-outlined">photo_library</span>Pinterest</div>
@@ -496,6 +496,23 @@ function selectBudget(el) {
   el.closest('.price-grid-small').querySelectorAll('.price-opt').forEach(o => o.classList.remove('active'));
   el.classList.add('active');
 }
+// ── Sidebar stats ─────────────────────────────────────────────────────────
+(function() {
+  const closet   = JSON.parse(localStorage.getItem('etoile_closetItems') || '[]');
+  const looks    = JSON.parse(localStorage.getItem('etoile_savedLooks')  || '[]');
+  const sessions = parseInt(localStorage.getItem('etoile_styledSessions') || '0', 10);
+  document.getElementById('statCloset').textContent   = closet.length;
+  document.getElementById('statLooks').textContent    = looks.length;
+  document.getElementById('statSessions').textContent = sessions;
+
+  const budget = localStorage.getItem('etoile_budget');
+  const fit    = JSON.parse(localStorage.getItem('etoile_fit') || '[]');
+  const parts  = [];
+  if (budget) parts.push(budget.charAt(0).toUpperCase() + budget.slice(1) + ' budget');
+  if (fit.length) parts.push(fit.slice(0,2).join(' + ') + ' fit');
+  if (parts.length) document.getElementById('sidebarSub').textContent = parts.join(' · ');
+})();
+
 const savedBudget = localStorage.getItem('etoile_budget');
 if (savedBudget) {
   document.querySelectorAll('.price-opt').forEach(o => {

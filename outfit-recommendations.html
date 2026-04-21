@@ -338,6 +338,7 @@ async function generateLooks() {
     if (errMsg) throw new Error(errMsg);
     if (!data.looks?.length) throw new Error('No looks returned. Raw: ' + JSON.stringify(data).slice(0,200));
     generatedLooks = data.looks;
+    localStorage.setItem('etoile_styledSessions', (parseInt(localStorage.getItem('etoile_styledSessions')||'0',10)+1).toString());
     // Attach cropped Pinterest pin images before rendering
     await attachBoardPhotos(data.looks);
     renderLooks(data.looks);
