@@ -119,7 +119,7 @@ Return ONLY valid JSON:
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2048,
+        max_tokens: 4096,
         messages: [{ role: 'user', content: prompt }],
       }),
     })
@@ -129,9 +129,10 @@ Return ONLY valid JSON:
 
     const text = data.content[0].text
     const match = text.match(/\{[\s\S]*\}/)
-    if (!match) throw new Error('No JSON in response.')
-    const parsed = JSON.parse(match[0])
-    if (!parsed.picks?.length) throw new Error('No picks returned.')
+    if (!match) throw new Error('No JSON in Claude response. Raw: ' + text.slice(0, 300))
+    let parsed: any
+    try { parsed = JSON.parse(match[0]) } catch(e) { throw new Error('JSON parse failed. Raw: ' + match[0].slice(0, 300)) }
+    if (!parsed.picks?.length) throw new Error('No picks in response. Keys: ' + Object.keys(parsed).join(', '))
 
     // Fetch a real product image for each pick in parallel
     if (GOOGLE_SEARCH_KEY && GOOGLE_SEARCH_CX) {

@@ -180,9 +180,11 @@ async function generateEdit() {
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
       body: JSON.stringify({ closetItems, preferences: prefs }),
     });
-    const data = await res.json();
+    const rawText = await res.text();
+    let data: any;
+    try { data = JSON.parse(rawText); } catch(e) { throw new Error('Bad response (HTTP ' + res.status + '): ' + rawText.slice(0, 200)); }
     if (data.error) throw new Error(data.error);
-    if (!data.picks?.length) throw new Error('No picks returned.');
+    if (!data.picks?.length) throw new Error('Empty picks. Response keys: ' + Object.keys(data).join(', ') + '. Raw: ' + rawText.slice(0, 300));
     allPicks = data.picks;
 
     if (data.stylistNote) {
