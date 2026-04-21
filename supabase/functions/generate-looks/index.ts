@@ -99,23 +99,20 @@ STRICT RULES — every rule is mandatory:
 
 1. BUDGET IS ABSOLUTE: Every shopping suggestion must come from the allowed retailers above and be priced within ${budgetConfig.priceRange}. If you suggest a piece outside this range, the response fails. Do not suggest luxury brands for a low budget or fast fashion for a high budget.
 
-2. SEARCH URLS must be specific: build the search query from brand + item name so the user lands on exactly what you described. Use these URL formats (replace TERM with URL-encoded brand+item, spaces as +):
+2. SEARCH URLS — use ONLY these verified formats (spaces as +, no other characters needed):
    - Shopbop: https://www.shopbop.com/search/results.jsp?q=TERM
    - Revolve: https://www.revolve.com/search/?q=TERM
    - Nordstrom: https://www.nordstrom.com/sr?keyword=TERM
    - Net-a-Porter: https://www.net-a-porter.com/en-us/shop/search?q=TERM
    - SSENSE: https://www.ssense.com/en-us/women/search?q=TERM
-   - Mytheresa: https://www.mytheresa.com/us/en/women/search?q=TERM
    - Zara: https://www.zara.com/us/en/search?searchTerm=TERM
    - ASOS: https://www.asos.com/search/?q=TERM
-   - Mango: https://shop.mango.com/us/search?q=TERM
-   - & Other Stories: https://www.stories.com/en/search?q=TERM
-   - Sandro: https://us.sandro-paris.com/search?q=TERM
-   - Maje: https://us.maje.com/search?q=TERM
    - Reformation: https://www.thereformation.com/search?q=TERM
-   - Arket: https://www.arket.com/en_usd/search?q=TERM
-   - COS: https://www.cos.com/en_usd/search.html?q=TERM
-   Example: if you suggest "Reformation Lexi midi dress in black", shopUrl = https://www.thereformation.com/search?q=Reformation+Lexi+midi+dress+black
+   - Madewell: https://www.madewell.com/search?Ntt=TERM
+   - Free People: https://www.freepeople.com/search/?q=TERM
+   - Google Shopping (use as default if unsure of retailer URL): https://www.google.com/search?tbm=shop&q=TERM
+   DO NOT use Arket, COS, Mango, Sandro, Maje, Mytheresa, & Other Stories — their URL formats cause 404s.
+   If the budget is high and you'd suggest one of those brands, use Google Shopping with the brand name in the search term instead.
 
 3. COLORS: Use only colors from their "colors they love" list, plus neutrals (black/white/beige/gray/cream) as fillers. NEVER use a color from "colors they avoid" — not even in accessories.
 
