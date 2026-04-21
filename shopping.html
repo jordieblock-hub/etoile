@@ -12,26 +12,41 @@
 .shop-title em { display:block; color:var(--pink); font-style:italic; font-weight:400; font-size:0.65em; }
 .shop-sub { font-size:14px; color:rgba(255,255,255,0.45); font-family:var(--font-sans); max-width:420px; line-height:1.7; }
 .shop-filters { background:var(--white); padding:28px 48px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
-.shop-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding:48px; background:var(--cream); }
-.prod { cursor:pointer; }
-.prod-img { aspect-ratio:3/4; overflow:hidden; position:relative; }
-.prod-img-bg { width:100%; height:100%; object-fit:cover; transition:transform 0.45s; }
-.prod:hover .prod-img-bg { transform:scale(1.05); }
-.prod-overlay { position:absolute; bottom:0; left:0; right:0; padding:16px; background:linear-gradient(to top,rgba(0,0,0,0.55),transparent); opacity:0; transition:opacity 0.25s; display:flex; gap:8px; }
-.prod:hover .prod-overlay { opacity:1; }
+.shop-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding:48px; background:var(--cream); min-height:300px; }
+
+/* Product card */
+.prod { cursor:pointer; background:var(--white); border:1px solid var(--border); transition:box-shadow 0.3s, transform 0.3s; }
+.prod:hover { box-shadow:0 12px 48px rgba(0,0,0,0.1); transform:translateY(-3px); }
+.prod-img { aspect-ratio:3/4; overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; font-family:'Material Symbols Outlined'; font-size:48px; color:rgba(255,255,255,0.5); }
 .prod-badges { position:absolute; top:12px; left:12px; display:flex; flex-direction:column; gap:5px; }
+.prod-overlay { position:absolute; bottom:0; left:0; right:0; padding:16px; background:linear-gradient(to top,rgba(0,0,0,0.65),transparent); opacity:0; transition:opacity 0.25s; display:flex; gap:8px; align-items:flex-end; }
+.prod:hover .prod-overlay { opacity:1; }
 .prod-heart { position:absolute; top:12px; right:12px; width:32px; height:32px; background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; transition:opacity 0.2s; font-family:'Material Symbols Outlined'; font-size:16px; color:var(--charcoal); }
 .prod:hover .prod-heart { opacity:1; }
-.prod-heart.saved { opacity:1; color:var(--pink); background:var(--white); }
-.prod-heart:hover { background:var(--white); color:var(--pink); }
-.prod-info { padding:14px 0 0; }
+.prod-heart.saved { opacity:1; color:var(--pink); }
+.prod-info { padding:16px; border-top:1px solid var(--border); }
 .prod-brand { font-size:9.5px; letter-spacing:0.18em; text-transform:uppercase; font-weight:600; color:var(--mid-gray); font-family:var(--font-sans); }
-.prod-name { font-family:var(--font-serif); font-size:18px; font-weight:400; color:var(--charcoal); margin:5px 0 4px; line-height:1.3; }
-.prod-price { font-size:13px; color:var(--warm-gray); font-family:var(--font-sans); }
+.prod-name { font-family:var(--font-serif); font-size:17px; font-weight:400; color:var(--charcoal); margin:5px 0 4px; line-height:1.3; }
+.prod-price { font-size:13px; font-weight:700; color:var(--charcoal); font-family:var(--font-sans); }
 .prod-note { font-size:11px; color:var(--pink); font-family:var(--font-sans); font-style:italic; margin-top:4px; }
-.stylist-note { background:var(--pink-light); border-left:3px solid var(--pink); padding:20px 24px; margin:0 48px 48px; }
+
+/* Skeleton */
+@keyframes shimmer { 0%{background-position:-800px 0} 100%{background-position:800px 0} }
+.skeleton { background:linear-gradient(90deg,#f0ede8 25%,#e4e0da 50%,#f0ede8 75%); background-size:800px 100%; animation:shimmer 1.6s infinite; }
+.prod-skel { background:var(--white); border:1px solid var(--border); }
+.prod-skel-img { aspect-ratio:3/4; }
+.prod-skel-body { padding:16px; display:flex; flex-direction:column; gap:8px; }
+
+/* Stylist note */
+.stylist-note { background:var(--pink-light); border-left:3px solid var(--pink); padding:20px 24px; margin:40px 48px 0; }
 .stylist-note-label { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; color:var(--pink); font-family:var(--font-sans); margin-bottom:6px; }
 .stylist-note-text { font-family:var(--font-serif); font-size:16px; font-style:italic; color:var(--charcoal); line-height:1.55; }
+
+/* Error / empty state */
+.state-panel { padding:80px 56px; background:var(--cream); text-align:center; }
+.state-panel .material-symbols-outlined { font-size:48px; color:var(--border-dark); display:block; margin-bottom:24px; }
+.state-panel h3 { font-family:var(--font-display); font-size:32px; font-weight:900; margin-bottom:12px; }
+.state-panel p { font-size:13px; color:var(--warm-gray); font-family:var(--font-sans); max-width:480px; margin:0 auto 28px; line-height:1.7; }
 </style>
 </head>
 <body>
@@ -60,195 +75,54 @@
   </section>
 
   <div class="shop-filters">
-    <div class="pills-row">
-      <div class="pill active" onclick="setPill(this)">All Pieces</div>
-      <div class="pill" onclick="setPill(this)">Tops</div>
-      <div class="pill" onclick="setPill(this)">Bottoms</div>
-      <div class="pill" onclick="setPill(this)">Dresses</div>
-      <div class="pill" onclick="setPill(this)">Outerwear</div>
-      <div class="pill" onclick="setPill(this)">Shoes</div>
-      <div class="pill" onclick="setPill(this)">Bags</div>
-      <div class="pill" onclick="setPill(this)">Accessories</div>
+    <div class="pills-row" id="catPills">
+      <div class="pill active" onclick="filterCat(this,'all')">All Pieces</div>
+      <div class="pill" onclick="filterCat(this,'TOP')">Tops</div>
+      <div class="pill" onclick="filterCat(this,'BOTTOM')">Bottoms</div>
+      <div class="pill" onclick="filterCat(this,'DRESS')">Dresses</div>
+      <div class="pill" onclick="filterCat(this,'OUTERWEAR')">Outerwear</div>
+      <div class="pill" onclick="filterCat(this,'SHOES')">Shoes</div>
+      <div class="pill" onclick="filterCat(this,'BAG')">Bags</div>
+      <div class="pill" onclick="filterCat(this,'ACCESSORIES,JEWELRY')">Accessories</div>
     </div>
-    <div style="display:flex;gap:8px;flex-shrink:0;">
-      <div class="pill active" onclick="setPill(this)">Mid Budget</div>
-      <div class="pill" onclick="setPill(this)">Low</div>
-      <div class="pill" onclick="setPill(this)">High</div>
-    </div>
+    <button class="btn btn-outline btn-sm" onclick="generateEdit()" id="refreshBtn">
+      <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;">refresh</span> Refresh Edit
+    </button>
   </div>
 
   <!-- STYLIST NOTE -->
-  <div style="padding:40px 48px 0;">
+  <div id="stylistNoteWrap" style="display:none;">
     <div class="stylist-note">
       <div class="stylist-note-label">Stylist Note</div>
-      <p class="stylist-note-text">"Your Pinterest board skews heavily towards tonal dressing and clean silhouettes — I've prioritised pieces in camel, cream, and black that will layer well with what you already own. The trouser and bag combination below addresses your two biggest wardrobe gaps."</p>
+      <p class="stylist-note-text" id="stylistNoteText"></p>
     </div>
   </div>
 
-  <!-- PINTEREST BOARD LINK SECTION -->
-  <div id="pinterestSection" style="display:none; padding:0 48px 48px;">
-    <div style="background:var(--white);border:1px solid var(--border);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
-      <div style="display:flex;align-items:center;gap:16px;">
-        <span class="material-symbols-outlined" style="font-size:28px;color:var(--pink);">photo_library</span>
-        <div>
-          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;color:var(--pink);font-family:var(--font-sans);margin-bottom:4px;">Your Pinterest Board</div>
-          <div id="boardUrlDisplay" style="font-size:14px;color:var(--charcoal);font-family:var(--font-sans);font-weight:500;"></div>
-          <div style="font-size:11px;color:var(--warm-gray);font-family:var(--font-sans);margin-top:2px;">Recommendations are inspired by pins from this board</div>
+  <!-- LOADING -->
+  <div id="shopLoading" style="display:none;">
+    <div class="shop-grid">
+      ${Array(8).fill(0).map(() => `
+      <div class="prod-skel">
+        <div class="prod-skel-img skeleton"></div>
+        <div class="prod-skel-body">
+          <div class="skeleton" style="height:10px;width:40%;border-radius:2px;"></div>
+          <div class="skeleton" style="height:16px;width:80%;border-radius:2px;"></div>
+          <div class="skeleton" style="height:12px;width:30%;border-radius:2px;"></div>
         </div>
-      </div>
-      <a id="boardLink" href="#" target="_blank" rel="noopener" class="btn btn-outline btn-sm">View Board →</a>
+      </div>`).join('')}
     </div>
   </div>
 
-  <section class="shop-grid">
+  <!-- ERROR -->
+  <div id="shopError" style="display:none;" class="state-panel">
+    <span class="material-symbols-outlined">error_outline</span>
+    <h3>Couldn't load your edit</h3>
+    <p id="shopErrorText">Something went wrong.</p>
+    <button class="btn btn-dark" onclick="generateEdit()">Try Again →</button>
+  </div>
 
-    <!-- Product helper macro: each card has data-shop-url for external retailer -->
-
-    <div class="prod card-lift" data-shop-url="https://www.net-a-porter.com/en-us/shop/search?q=toteme+trench+coat">
-      <div class="prod-img" style="background:linear-gradient(135deg,#D4C8C0,#B8A8A0);">
-        <img class="prod-img-bg" src="photos/8cd742f7fe1c2b9f92c99d57e65fef7e.jpg" alt="" onerror="this.remove()">
-        <div class="prod-badges"><span class="badge badge-dark">Closes Gap</span></div>
-        <div class="prod-overlay">
-          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();wishlist(this)">Save</button>
-          <a href="https://www.net-a-porter.com/en-us/shop/search?q=toteme+trench+coat" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
-        </div>
-        <div class="prod-heart" onclick="event.stopPropagation();this.classList.toggle('saved')">favorite</div>
-      </div>
-      <div class="prod-info">
-        <div class="prod-brand">Totême &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">Net-a-Porter</span></div>
-        <div class="prod-name">Double-Breasted Trench Coat</div>
-        <div class="prod-price">$1,290</div>
-        <div class="prod-note">Matches 4 items in your closet</div>
-      </div>
-    </div>
-
-    <div class="prod card-lift" data-shop-url="https://www.net-a-porter.com/en-us/shop/search?q=the+row+margaux+tote">
-      <div class="prod-img" style="background:linear-gradient(135deg,#C8C0D4,#A8A0B8);">
-        <img class="prod-img-bg" src="photos/5ba50d568468ed29caee3a91cced1128.jpg" alt="" onerror="this.remove()">
-        <div class="prod-badges"><span class="badge badge-pink">Pinterest Match</span></div>
-        <div class="prod-overlay">
-          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();wishlist(this)">Save</button>
-          <a href="https://www.net-a-porter.com/en-us/shop/search?q=the+row+margaux+tote" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
-        </div>
-        <div class="prod-heart" onclick="event.stopPropagation();this.classList.toggle('saved')">favorite</div>
-      </div>
-      <div class="prod-info">
-        <div class="prod-brand">The Row &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">Net-a-Porter</span></div>
-        <div class="prod-name">Margaux Leather Tote</div>
-        <div class="prod-price">$890</div>
-        <div class="prod-note">Your #1 wardrobe gap</div>
-      </div>
-    </div>
-
-    <div class="prod card-lift" data-shop-url="https://www.net-a-porter.com/en-us/shop/search?q=max+mara+blazer">
-      <div class="prod-img" style="background:linear-gradient(135deg,#C8D4C0,#A8B8A0);">
-        <img class="prod-img-bg" src="photos/023a143224d5fd4397a3b454dddae015.jpg" alt="" onerror="this.remove()">
-        <div class="prod-badges"><span class="badge badge-dark">Stylist Pick</span></div>
-        <div class="prod-overlay">
-          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();wishlist(this)">Save</button>
-          <a href="https://www.net-a-porter.com/en-us/shop/search?q=max+mara+blazer" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
-        </div>
-        <div class="prod-heart" onclick="event.stopPropagation();this.classList.toggle('saved')">favorite</div>
-      </div>
-      <div class="prod-info">
-        <div class="prod-brand">Max Mara &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">Net-a-Porter</span></div>
-        <div class="prod-name">Single-Breasted Wool Blazer</div>
-        <div class="prod-price">$650</div>
-        <div class="prod-note">Works with your most-worn jeans</div>
-      </div>
-    </div>
-
-    <div class="prod card-lift" data-shop-url="https://www.ssense.com/en-us/women/search?q=jacquemus+midi+dress">
-      <div class="prod-img" style="background:linear-gradient(135deg,#D4C0C8,#B8A0A8);">
-        <img class="prod-img-bg" src="photos/8a3d7999ffdd579680f32d7530870aa1.jpg" alt="" onerror="this.remove()">
-        <div class="prod-badges"><span class="badge badge-pink">Pinterest Match</span></div>
-        <div class="prod-overlay">
-          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();wishlist(this)">Save</button>
-          <a href="https://www.ssense.com/en-us/women/search?q=jacquemus+midi+dress" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
-        </div>
-        <div class="prod-heart" onclick="event.stopPropagation();this.classList.toggle('saved')">favorite</div>
-      </div>
-      <div class="prod-info">
-        <div class="prod-brand">Jacquemus &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">SSENSE</span></div>
-        <div class="prod-name">La Robe Midi Dress</div>
-        <div class="prod-price">$520</div>
-        <div class="prod-note">Matches your event history</div>
-      </div>
-    </div>
-
-    <div class="prod card-lift" data-shop-url="https://www.arket.com/en_gbp/women/trousers-skirts">
-      <div class="prod-img" style="background:linear-gradient(135deg,#C0C8D4,#A0A8B8);">
-        <img class="prod-img-bg" src="photos/53f4fbd8da5ea134e12fe0a43db1e9bc.jpg" alt="" onerror="this.remove()">
-        <div class="prod-badges"><span class="badge badge-dark">Closes Gap</span></div>
-        <div class="prod-overlay">
-          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();wishlist(this)">Save</button>
-          <a href="https://www.arket.com/en_gbp/women/trousers-skirts" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
-        </div>
-        <div class="prod-heart" onclick="event.stopPropagation();this.classList.toggle('saved')">favorite</div>
-      </div>
-      <div class="prod-info">
-        <div class="prod-brand">Arket &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">Arket.com</span></div>
-        <div class="prod-name">Slim Tailored Trousers</div>
-        <div class="prod-price">$185</div>
-        <div class="prod-note">Budget-friendly gap filler</div>
-      </div>
-    </div>
-
-    <div class="prod card-lift" data-shop-url="https://www.ssense.com/en-us/women/search?q=aesther+ekme+tote">
-      <div class="prod-img" style="background:linear-gradient(135deg,#C8D0B8,#A8B098);">
-        <img class="prod-img-bg" src="photos/1924abb8b7cb217c634c91a20a589cb7.jpg" alt="" onerror="this.remove()">
-        <div class="prod-badges"><span class="badge badge-pink">Pinterest Match</span></div>
-        <div class="prod-overlay">
-          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();wishlist(this)">Save</button>
-          <a href="https://www.ssense.com/en-us/women/search?q=aesther+ekme+tote" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
-        </div>
-        <div class="prod-heart" onclick="event.stopPropagation();this.classList.toggle('saved')">favorite</div>
-      </div>
-      <div class="prod-info">
-        <div class="prod-brand">Aesther Ekme &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">SSENSE</span></div>
-        <div class="prod-name">Soft Crinkle Tote</div>
-        <div class="prod-price">$365</div>
-        <div class="prod-note">Straight from your board vibe</div>
-      </div>
-    </div>
-
-    <div class="prod card-lift" data-shop-url="https://www.net-a-porter.com/en-us/shop/search?q=toteme+knit+skirt">
-      <div class="prod-img" style="background:linear-gradient(135deg,#D8C8C0,#B8A8A0);">
-        <img class="prod-img-bg" src="photos/991a9dfe12a8a18daeec45fb32646bfb.jpg" alt="" onerror="this.remove()">
-        <div class="prod-badges"><span class="badge badge-dark">Stylist Pick</span></div>
-        <div class="prod-overlay">
-          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();wishlist(this)">Save</button>
-          <a href="https://www.net-a-porter.com/en-us/shop/search?q=toteme+knit+skirt" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
-        </div>
-        <div class="prod-heart" onclick="event.stopPropagation();this.classList.toggle('saved')">favorite</div>
-      </div>
-      <div class="prod-info">
-        <div class="prod-brand">Totême &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">Net-a-Porter</span></div>
-        <div class="prod-name">Ribbed Knit Midi Skirt</div>
-        <div class="prod-price">$420</div>
-        <div class="prod-note">Pairs with 3 tops you own</div>
-      </div>
-    </div>
-
-    <div class="prod card-lift" data-shop-url="https://www.cos.com/en_gbp/women/tops-shirts/shirts.html">
-      <div class="prod-img" style="background:linear-gradient(135deg,#C8B8D0,#A898B0);">
-        <img class="prod-img-bg" src="photos/a685e23b02171dce4928bb22615b3361.jpg" alt="" onerror="this.remove()">
-        <div class="prod-badges"><span class="badge badge-pink">Budget Alt</span></div>
-        <div class="prod-overlay">
-          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();wishlist(this)">Save</button>
-          <a href="https://www.cos.com/en_gbp/women/tops-shirts/shirts.html" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
-        </div>
-        <div class="prod-heart" onclick="event.stopPropagation();this.classList.toggle('saved')">favorite</div>
-      </div>
-      <div class="prod-info">
-        <div class="prod-brand">COS &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">COS.com</span></div>
-        <div class="prod-name">Oversized Linen Shirt</div>
-        <div class="prod-price">$89</div>
-        <div class="prod-note">Cheaper alt to your board finds</div>
-      </div>
-    </div>
-
-  </section>
+  <!-- GRID -->
+  <section class="shop-grid" id="shopGrid" style="display:none;"></section>
 
   <footer class="footer">
     <div class="footer-top">
@@ -261,37 +135,131 @@
   </footer>
 </div>
 
+<script src="js/supabase.js"></script>
 <script src="js/app.js"></script>
 <script>
-function setPill(p) { document.querySelectorAll('.pills-row .pill').forEach(x=>x.classList.remove('active')); p.classList.add('active'); }
-function wishlist(btn) {
-  const heart = btn.closest('.prod').querySelector('.prod-heart');
-  if (heart) heart.classList.add('saved');
-  btn.textContent = 'Saved ✓';
-  btn.style.background = 'var(--pink)'; btn.style.color = 'var(--white)';
+const EDGE_FN_URL    = 'https://pqtlqcfqbnoptexjvagh.supabase.co/functions/v1/generate-shopping';
+const SUPABASE_ANON_KEY = 'sb_publishable_iRup46G7cNmey1WdPmqf_g_kIwypDko';
+
+const SLOT_ICONS = {
+  TOP:'checkroom', SHIRT:'checkroom', BLOUSE:'checkroom',
+  BOTTOM:'straighten', PANTS:'straighten', SKIRT:'straighten', JEANS:'straighten',
+  DRESS:'dry_cleaning', JUMPSUIT:'dry_cleaning',
+  OUTERWEAR:'umbrella', JACKET:'umbrella', COAT:'umbrella', BLAZER:'umbrella',
+  SHOES:'footprint', BOOTS:'footprint', HEELS:'footprint', SNEAKERS:'footprint',
+  BAG:'shopping_bag', HANDBAG:'shopping_bag',
+  JEWELRY:'diamond', NECKLACE:'diamond', EARRINGS:'diamond',
+  ACCESSORIES:'watch', BELT:'watch', SCARF:'watch',
+};
+function slotIcon(slot) {
+  return SLOT_ICONS[slot?.toUpperCase().split(' ')[0]] || 'checkroom';
 }
 
-// Show Pinterest board section if URL was saved during onboarding
-const boardUrl = localStorage.getItem('etoile_pinterestUrl');
-if (boardUrl) {
-  const section = document.getElementById('pinterestSection');
-  if (section) {
-    section.style.display = 'block';
-    const display = document.getElementById('boardUrlDisplay');
-    const link = document.getElementById('boardLink');
-    if (display) display.textContent = boardUrl;
-    if (link) link.href = boardUrl;
+let allPicks = [];
+let currentCat = 'all';
+
+const closetItems = JSON.parse(localStorage.getItem('etoile_closetItems') || '[]');
+const prefs = {
+  budget:            localStorage.getItem('etoile_budget') || 'mid',
+  brandsLiked:       JSON.parse(localStorage.getItem('etoile_brandsLiked')    || '[]'),
+  brandsDisliked:    JSON.parse(localStorage.getItem('etoile_brandsDisliked') || '[]'),
+  colorsLove:        JSON.parse(localStorage.getItem('etoile_colorsLove')     || '[]'),
+  colorsAvoid:       JSON.parse(localStorage.getItem('etoile_colorsAvoid')    || '[]'),
+  fit:               JSON.parse(localStorage.getItem('etoile_fit')            || '[]'),
+  aestheticAnalysis: (() => { try { return JSON.parse(localStorage.getItem('etoile_aestheticAnalysis') || 'null'); } catch(e) { return null; } })(),
+};
+
+generateEdit();
+
+async function generateEdit() {
+  showState('loading');
+  document.getElementById('refreshBtn').disabled = true;
+  try {
+    const res = await fetch(EDGE_FN_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+      body: JSON.stringify({ closetItems, preferences: prefs }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    if (!data.picks?.length) throw new Error('No picks returned.');
+    allPicks = data.picks;
+
+    if (data.stylistNote) {
+      document.getElementById('stylistNoteText').textContent = '"' + data.stylistNote + '"';
+      document.getElementById('stylistNoteWrap').style.display = 'block';
+    }
+
+    renderPicks(currentCat);
+  } catch(err) {
+    document.getElementById('shopErrorText').textContent = err.message || 'Unknown error.';
+    showState('error');
+  } finally {
+    document.getElementById('refreshBtn').disabled = false;
   }
 }
 
-// Make entire product card clickable to external retailer
-document.querySelectorAll('.prod[data-shop-url]').forEach(card => {
-  card.addEventListener('click', e => {
-    // Don't double-fire when clicking overlay buttons
-    if (e.target.closest('.prod-overlay') || e.target.closest('.prod-heart')) return;
-    window.open(card.dataset.shopUrl, '_blank', 'noopener');
-  });
-});
+function renderPicks(cat) {
+  currentCat = cat;
+  const grid = document.getElementById('shopGrid');
+  const filtered = cat === 'all'
+    ? allPicks
+    : allPicks.filter(p => cat.split(',').some(c => p.slot?.toUpperCase().startsWith(c)));
+
+  grid.innerHTML = filtered.map(p => {
+    const icon = slotIcon(p.slot);
+    const grad = p.gradient || 'linear-gradient(135deg,#B0A898,#8A8078)';
+    const badgeClass = ['Closes Gap','Wardrobe Essential'].includes(p.badge) ? 'badge-dark' : 'badge-pink';
+    return `<div class="prod" onclick="window.open('${esc(p.shopUrl)}','_blank','noopener')">
+      <div class="prod-img" style="background:${grad};">
+        ${icon}
+        <div class="prod-badges"><span class="badge ${badgeClass}">${esc(p.badge)}</span></div>
+        <div class="prod-overlay">
+          <a href="${esc(p.shopUrl)}" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
+          <button class="btn btn-white btn-sm" onclick="event.stopPropagation();saveToWishlist(this,${JSON.stringify(p).replace(/"/g,'&quot;')})">Save</button>
+        </div>
+        <div class="prod-heart material-symbols-outlined" onclick="event.stopPropagation();this.classList.toggle('saved')">favorite</div>
+      </div>
+      <div class="prod-info">
+        <div class="prod-brand">${esc(p.brand)} &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">${esc(p.retailer)}</span></div>
+        <div class="prod-name">${esc(p.name)}</div>
+        <div class="prod-price">${esc(p.price)}</div>
+        <div class="prod-note">${esc(p.note)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  showState('grid');
+}
+
+function filterCat(pill, cat) {
+  document.querySelectorAll('#catPills .pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  renderPicks(cat);
+}
+
+function showState(state) {
+  document.getElementById('shopLoading').style.display = state === 'loading' ? 'block' : 'none';
+  document.getElementById('shopError').style.display   = state === 'error'   ? 'block' : 'none';
+  document.getElementById('shopGrid').style.display    = state === 'grid'    ? 'grid'  : 'none';
+  if (state !== 'grid') document.getElementById('stylistNoteWrap').style.display = 'none';
+}
+
+function saveToWishlist(btn, pick) {
+  const items = JSON.parse(localStorage.getItem('etoile_wishlist') || '[]');
+  const exists = items.some(i => i.shopUrl === pick.shopUrl);
+  if (!exists) {
+    items.unshift({ ...pick, savedAt: new Date().toLocaleDateString('en-US',{month:'short',year:'numeric'}) });
+    localStorage.setItem('etoile_wishlist', JSON.stringify(items));
+  }
+  btn.textContent = 'Saved ✓';
+  btn.style.background = 'var(--pink)';
+  btn.style.color = 'var(--white)';
+}
+
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 </script>
 </body>
 </html>
