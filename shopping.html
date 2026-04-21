@@ -210,10 +210,13 @@ function renderPicks(cat) {
     const icon = slotIcon(p.slot);
     const grad = p.gradient || 'linear-gradient(135deg,#B0A898,#8A8078)';
     const badgeClass = ['Closes Gap','Wardrobe Essential'].includes(p.badge) ? 'badge-dark' : 'badge-pink';
+    const imgHtml = p.imageUrl
+      ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">`
+      : `<span style="font-family:'Material Symbols Outlined';font-size:48px;color:rgba(255,255,255,0.5);">${icon}</span>`;
     return `<div class="prod" onclick="window.open('${esc(p.shopUrl)}','_blank','noopener')">
-      <div class="prod-img" style="background:${grad};">
-        ${icon}
-        <div class="prod-badges"><span class="badge ${badgeClass}">${esc(p.badge)}</span></div>
+      <div class="prod-img" style="background:${grad};position:relative;">
+        ${imgHtml}
+        <div class="prod-badges" style="position:absolute;top:12px;left:12px;z-index:2;"><span class="badge ${badgeClass}">${esc(p.badge)}</span></div>
         <div class="prod-overlay">
           <a href="${esc(p.shopUrl)}" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop →</a>
           <button class="btn btn-white btn-sm" onclick="event.stopPropagation();saveToWishlist(this,${JSON.stringify(p).replace(/"/g,'&quot;')})">Save</button>
