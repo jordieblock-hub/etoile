@@ -117,6 +117,18 @@ let _sbUser = null;
   renderLooks('all');
 })();
 
+function resolvePhoto(look) {
+  // Prefer stored full-res image on the look itself
+  if (look.image) return look.image;
+  // Fall back: look up from stored inspiration photos by photoIndex
+  const photos = JSON.parse(localStorage.getItem('etoile_inspirationPhotos') || '[]');
+  if (!photos.length) return '';
+  const idx = (typeof look.photoIndex === 'number' && look.photoIndex < photos.length)
+    ? look.photoIndex
+    : 0;
+  return photos[idx] || '';
+}
+
 function renderLooks(filter) {
   currentFilter = filter;
   const grid = document.getElementById('looksGrid');
@@ -146,6 +158,7 @@ function renderLooks(filter) {
     const badgeClass = OCCASION_COLORS[look.occasion] || 'badge-dark';
     const label = look.occasion ? look.occasion.replace(/\b\w/g,c=>c.toUpperCase()) : 'Styled Look';
     const restyleQ = encodeURIComponent(look.query || look.occasion || look.name);
+    const photo = resolvePhoto(look);
     const pieceChips = (look.pieces || []).map(p =>
       `<a class="look-piece-chip" href="${p.shopUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
         <span class="material-symbols-outlined" style="font-size:11px;">shopping_bag</span>${escSL(p.slot || 'Piece')}
@@ -154,7 +167,7 @@ function renderLooks(filter) {
     return `
     <div class="look-card" data-occasion="${look.occasion || ''}">
       <div class="look-img" style="background:${look.gradient || 'linear-gradient(135deg,#C8C0B8,#A89888)'};">
-        <img class="look-img-bg" src="${look.image || ''}" alt="" onerror="this.remove()">
+        ${photo ? `<img class="look-img-bg" src="${photo}" alt="" onerror="this.style.display='none'">` : ''}
         <div class="look-overlay">
           ${pieceChips ? `<div class="look-overlay-btns">${pieceChips}</div>` : ''}
           <div class="look-overlay-btns">

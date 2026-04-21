@@ -529,9 +529,10 @@ async function saveLook(btn, idx) {
     name:     look.name,
     occasion: (look.occasionLabel || q).toLowerCase(),
     caption:  look.caption,
-    gradient: look.gradient,
-    image:    look.imageUrl || '',
-    savedAt:  new Date().toLocaleDateString('en-US', { month:'short', year:'numeric' }),
+    gradient:   look.gradient,
+    image:      look.imageUrl || '',
+    photoIndex: typeof look.photoIndex === 'number' ? look.photoIndex : null,
+    savedAt:    new Date().toLocaleDateString('en-US', { month:'short', year:'numeric' }),
     query:    q,
     pieces:   (look.pieces || []).filter(p => !p.fromCloset && p.shopUrl).slice(0, 4),
   };
