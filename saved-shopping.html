@@ -9,13 +9,13 @@
 <style>
 .wish-header { background:var(--white); padding:72px 48px 48px; border-bottom:1px solid var(--border); }
 .wish-title { font-family:var(--font-display); font-size:clamp(44px,6vw,80px); font-weight:900; line-height:0.9; letter-spacing:-0.02em; color:var(--black); margin-bottom:12px; }
-.wish-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding:48px; background:var(--cream); }
+.wish-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding:48px; background:var(--cream); min-height:200px; }
 .wish-card { background:var(--white); border:1px solid var(--border); overflow:hidden; cursor:pointer; transition:box-shadow 0.35s,transform 0.35s; }
 .wish-card:hover { box-shadow:0 10px 40px rgba(0,0,0,0.09); transform:translateY(-2px); }
-.wish-img { aspect-ratio:3/4; overflow:hidden; position:relative; }
-.wish-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.45s; }
+.wish-img { aspect-ratio:3/4; overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; font-family:'Material Symbols Outlined'; font-size:48px; color:rgba(255,255,255,0.5); }
+.wish-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 0.45s; }
 .wish-card:hover .wish-img img { transform:scale(1.05); }
-.wish-remove { position:absolute; top:10px; right:10px; width:28px; height:28px; background:rgba(255,255,255,0.92); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; transition:opacity 0.2s; font-family:'Material Symbols Outlined'; font-size:14px; color:var(--charcoal); }
+.wish-remove { position:absolute; top:10px; right:10px; width:28px; height:28px; background:rgba(255,255,255,0.92); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; transition:opacity 0.2s; font-family:'Material Symbols Outlined'; font-size:14px; color:var(--charcoal); z-index:2; }
 .wish-card:hover .wish-remove { opacity:1; }
 .wish-remove:hover { color:var(--pink); }
 .wish-body { padding:16px; }
@@ -24,6 +24,12 @@
 .wish-price { font-size:13px; color:var(--warm-gray); font-family:var(--font-sans); }
 .wish-added { font-size:10px; color:var(--mid-gray); letter-spacing:0.1em; text-transform:uppercase; font-family:var(--font-sans); margin-top:4px; }
 .wish-footer-row { display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-top:1px solid var(--border); background:var(--cream); }
+.wish-count { font-size:12px; color:var(--warm-gray); font-family:var(--font-sans); }
+/* empty state */
+.wish-empty { padding:96px 48px; text-align:center; background:var(--cream); }
+.wish-empty .material-symbols-outlined { font-size:48px; color:var(--border-dark); display:block; margin-bottom:24px; }
+.wish-empty h3 { font-family:var(--font-display); font-size:32px; font-weight:900; margin-bottom:12px; }
+.wish-empty p { font-size:13px; color:var(--warm-gray); font-family:var(--font-sans); max-width:400px; margin:0 auto 28px; line-height:1.7; }
 </style>
 </head>
 <body>
@@ -54,121 +60,22 @@
       </div>
       <a href="shopping.html" class="btn btn-dark">Discover More →</a>
     </div>
-    <div class="pills-row mt-32">
-      <div class="pill active" onclick="setPill(this)">All</div>
-      <div class="pill" onclick="setPill(this)">Tops</div>
-      <div class="pill" onclick="setPill(this)">Bags</div>
-      <div class="pill" onclick="setPill(this)">Shoes</div>
-      <div class="pill" onclick="setPill(this)">Outerwear</div>
-      <div class="pill" onclick="setPill(this)">Dresses</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:32px;">
+      <div class="pills-row" id="catPills">
+        <div class="pill active" onclick="filterCat(this,'all')">All</div>
+        <div class="pill" onclick="filterCat(this,'TOP')">Tops</div>
+        <div class="pill" onclick="filterCat(this,'BOTTOM')">Bottoms</div>
+        <div class="pill" onclick="filterCat(this,'BAG')">Bags</div>
+        <div class="pill" onclick="filterCat(this,'SHOES')">Shoes</div>
+        <div class="pill" onclick="filterCat(this,'OUTERWEAR')">Outerwear</div>
+        <div class="pill" onclick="filterCat(this,'DRESS')">Dresses</div>
+        <div class="pill" onclick="filterCat(this,'JEWELRY,ACCESSORIES')">Accessories</div>
+      </div>
+      <span class="wish-count" id="wishCount"></span>
     </div>
   </section>
 
-  <section class="wish-grid">
-
-    <div class="wish-card">
-      <div class="wish-img" style="background:linear-gradient(135deg,#D4C8C0,#B8A8A0);">
-        <img src="photos/8cd742f7fe1c2b9f92c99d57e65fef7e.jpg" alt="" onerror="this.remove()">
-        <div class="wish-remove" onclick="removeWish(this)">close</div>
-      </div>
-      <div class="wish-body">
-        <div class="wish-brand">Totême</div>
-        <div class="wish-name">Double-Breasted Trench</div>
-        <div class="wish-price">$1,290</div>
-        <div class="wish-added">Added Apr 2025</div>
-      </div>
-      <div class="wish-footer-row">
-        <span class="badge badge-dark">Outerwear</span>
-        <button class="btn btn-pink btn-sm">Shop Now</button>
-      </div>
-    </div>
-
-    <div class="wish-card">
-      <div class="wish-img" style="background:linear-gradient(135deg,#C8C0D4,#A8A0B8);">
-        <img src="photos/5ba50d568468ed29caee3a91cced1128.jpg" alt="" onerror="this.remove()">
-        <div class="wish-remove" onclick="removeWish(this)">close</div>
-      </div>
-      <div class="wish-body">
-        <div class="wish-brand">The Row</div>
-        <div class="wish-name">Margaux Leather Tote</div>
-        <div class="wish-price">$890</div>
-        <div class="wish-added">Added Apr 2025</div>
-      </div>
-      <div class="wish-footer-row">
-        <span class="badge badge-dark">Bag</span>
-        <button class="btn btn-pink btn-sm">Shop Now</button>
-      </div>
-    </div>
-
-    <div class="wish-card">
-      <div class="wish-img" style="background:linear-gradient(135deg,#C8D4C0,#A8B8A0);">
-        <img src="photos/023a143224d5fd4397a3b454dddae015.jpg" alt="" onerror="this.remove()">
-        <div class="wish-remove" onclick="removeWish(this)">close</div>
-      </div>
-      <div class="wish-body">
-        <div class="wish-brand">Max Mara</div>
-        <div class="wish-name">Wool-Blend Blazer</div>
-        <div class="wish-price">$650</div>
-        <div class="wish-added">Added Mar 2025</div>
-      </div>
-      <div class="wish-footer-row">
-        <span class="badge badge-dark">Suiting</span>
-        <button class="btn btn-pink btn-sm">Shop Now</button>
-      </div>
-    </div>
-
-    <div class="wish-card">
-      <div class="wish-img" style="background:linear-gradient(135deg,#D4C0C8,#B8A0A8);">
-        <img src="photos/8a3d7999ffdd579680f32d7530870aa1.jpg" alt="" onerror="this.remove()">
-        <div class="wish-remove" onclick="removeWish(this)">close</div>
-      </div>
-      <div class="wish-body">
-        <div class="wish-brand">Jacquemus</div>
-        <div class="wish-name">La Robe Midi Dress</div>
-        <div class="wish-price">$520</div>
-        <div class="wish-added">Added Mar 2025</div>
-      </div>
-      <div class="wish-footer-row">
-        <span class="badge badge-dark">Dress</span>
-        <button class="btn btn-pink btn-sm">Shop Now</button>
-      </div>
-    </div>
-
-    <div class="wish-card">
-      <div class="wish-img" style="background:linear-gradient(135deg,#C0C8D4,#A0A8B8);">
-        <img src="photos/53f4fbd8da5ea134e12fe0a43db1e9bc.jpg" alt="" onerror="this.remove()">
-        <div class="wish-remove" onclick="removeWish(this)">close</div>
-      </div>
-      <div class="wish-body">
-        <div class="wish-brand">Arket</div>
-        <div class="wish-name">Slim Tailored Trousers</div>
-        <div class="wish-price">$185</div>
-        <div class="wish-added">Added Feb 2025</div>
-      </div>
-      <div class="wish-footer-row">
-        <span class="badge badge-dark">Bottoms</span>
-        <button class="btn btn-pink btn-sm">Shop Now</button>
-      </div>
-    </div>
-
-    <div class="wish-card">
-      <div class="wish-img" style="background:linear-gradient(135deg,#C8D0B8,#A8B098);">
-        <img src="photos/1924abb8b7cb217c634c91a20a589cb7.jpg" alt="" onerror="this.remove()">
-        <div class="wish-remove" onclick="removeWish(this)">close</div>
-      </div>
-      <div class="wish-body">
-        <div class="wish-brand">Aesther Ekme</div>
-        <div class="wish-name">Soft Crinkle Tote</div>
-        <div class="wish-price">$365</div>
-        <div class="wish-added">Added Feb 2025</div>
-      </div>
-      <div class="wish-footer-row">
-        <span class="badge badge-dark">Bag</span>
-        <button class="btn btn-pink btn-sm">Shop Now</button>
-      </div>
-    </div>
-
-  </section>
+  <div id="wishContent"></div>
 
   <footer class="footer">
     <div class="footer-top">
@@ -183,12 +90,108 @@
 
 <script src="js/app.js"></script>
 <script>
-function setPill(p) { document.querySelectorAll('.pills-row .pill').forEach(x=>x.classList.remove('active')); p.classList.add('active'); }
-function removeWish(btn) {
-  const card = btn.closest('.wish-card');
-  card.style.transition = 'opacity 0.3s'; card.style.opacity = '0';
-  setTimeout(() => card.remove(), 300);
+const SLOT_ICONS = {
+  TOP:'checkroom', SHIRT:'checkroom', BLOUSE:'checkroom',
+  BOTTOM:'straighten', PANTS:'straighten', SKIRT:'straighten',
+  DRESS:'dry_cleaning', JUMPSUIT:'dry_cleaning',
+  OUTERWEAR:'umbrella', JACKET:'umbrella', COAT:'umbrella', BLAZER:'umbrella',
+  SHOES:'footprint', BOOTS:'footprint', HEELS:'footprint',
+  BAG:'shopping_bag', HANDBAG:'shopping_bag',
+  JEWELRY:'diamond', NECKLACE:'diamond', EARRINGS:'diamond',
+  ACCESSORIES:'watch', BELT:'watch', SCARF:'watch',
+};
+function slotIcon(slot) {
+  return SLOT_ICONS[slot?.toUpperCase().split(' ')[0]] || 'checkroom';
 }
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let allItems = [];
+let currentCat = 'all';
+
+function loadWishlist() {
+  try { allItems = JSON.parse(localStorage.getItem('etoile_wishlist') || '[]'); } catch(e) { allItems = []; }
+}
+
+function renderWishlist(cat) {
+  currentCat = cat;
+  loadWishlist();
+
+  const filtered = cat === 'all'
+    ? allItems
+    : allItems.filter(item => cat.split(',').some(c => item.slot?.toUpperCase().startsWith(c)));
+
+  const count = document.getElementById('wishCount');
+  count.textContent = filtered.length + ' piece' + (filtered.length !== 1 ? 's' : '');
+
+  const content = document.getElementById('wishContent');
+
+  if (allItems.length === 0) {
+    content.innerHTML = `
+      <div class="wish-empty">
+        <span class="material-symbols-outlined">favorite_border</span>
+        <h3>Your wishlist is empty</h3>
+        <p>Save pieces from your Shopping Edit to revisit them whenever you're ready to buy.</p>
+        <a href="shopping.html" class="btn btn-dark">Browse Your Edit →</a>
+      </div>`;
+    return;
+  }
+
+  if (filtered.length === 0) {
+    content.innerHTML = `
+      <div class="wish-empty">
+        <span class="material-symbols-outlined">filter_list</span>
+        <h3>No ${cat.toLowerCase()} saved yet</h3>
+        <p>You haven't saved any pieces in this category. Try a different filter or discover more.</p>
+        <a href="shopping.html" class="btn btn-dark">Discover More →</a>
+      </div>`;
+    return;
+  }
+
+  const cards = filtered.map((item, idx) => {
+    const grad = item.gradient || 'linear-gradient(135deg,#B0A898,#8A8078)';
+    const icon = slotIcon(item.slot);
+    const imgHtml = item.imageUrl
+      ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.name)}" onerror="this.remove()">`
+      : '';
+    const realIdx = allItems.indexOf(item);
+    return `<div class="wish-card" onclick="window.open('${esc(item.shopUrl)}','_blank','noopener')">
+      <div class="wish-img" style="background:${grad};">
+        ${imgHtml}
+        <span style="font-family:'Material Symbols Outlined';font-size:48px;color:rgba(255,255,255,0.45);position:relative;z-index:0;">${icon}</span>
+        <div class="wish-remove" onclick="event.stopPropagation();removeWish(${realIdx})">close</div>
+      </div>
+      <div class="wish-body">
+        <div class="wish-brand">${esc(item.brand)} &nbsp;·&nbsp; <span style="color:var(--pink);font-size:8.5px;">${esc(item.retailer||'')}</span></div>
+        <div class="wish-name">${esc(item.name)}</div>
+        <div class="wish-price">${esc(item.price)}</div>
+        <div class="wish-added">Added ${esc(item.savedAt||'')}</div>
+      </div>
+      <div class="wish-footer-row">
+        <span class="badge badge-dark">${esc(item.slot||item.badge||'')}</span>
+        <a href="${esc(item.shopUrl)}" target="_blank" rel="noopener" class="btn btn-pink btn-sm" onclick="event.stopPropagation()">Shop Now</a>
+      </div>
+    </div>`;
+  }).join('');
+
+  content.innerHTML = `<section class="wish-grid">${cards}</section>`;
+}
+
+function filterCat(pill, cat) {
+  document.querySelectorAll('#catPills .pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  renderWishlist(cat);
+}
+
+function removeWish(idx) {
+  loadWishlist();
+  allItems.splice(idx, 1);
+  localStorage.setItem('etoile_wishlist', JSON.stringify(allItems));
+  renderWishlist(currentCat);
+}
+
+renderWishlist('all');
 </script>
 </body>
 </html>
