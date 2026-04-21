@@ -437,11 +437,19 @@
             <div class="ob-cat-tile" data-cat="tops" onclick="toggleCat(this)"><div class="ob-cat-icon">checkroom</div><div class="ob-cat-name">Tops</div></div>
             <div class="ob-cat-tile" data-cat="bottoms" onclick="toggleCat(this)"><div class="ob-cat-icon">straighten</div><div class="ob-cat-name">Bottoms</div></div>
             <div class="ob-cat-tile" data-cat="dresses" onclick="toggleCat(this)"><div class="ob-cat-icon">dry_cleaning</div><div class="ob-cat-name">Dresses</div></div>
+            <div class="ob-cat-tile" data-cat="outerwear" onclick="toggleCat(this)"><div class="ob-cat-icon">umbrella</div><div class="ob-cat-name">Outerwear</div></div>
             <div class="ob-cat-tile" data-cat="shoes" onclick="toggleCat(this)"><div class="ob-cat-icon">footprint</div><div class="ob-cat-name">Shoes</div></div>
             <div class="ob-cat-tile" data-cat="bags" onclick="toggleCat(this)"><div class="ob-cat-icon">shopping_bag</div><div class="ob-cat-name">Bags</div></div>
-            <div class="ob-cat-tile" data-cat="outerwear" onclick="toggleCat(this)"><div class="ob-cat-icon">umbrella</div><div class="ob-cat-name">Outerwear</div></div>
             <div class="ob-cat-tile" data-cat="jewelry" onclick="toggleCat(this)"><div class="ob-cat-icon">diamond</div><div class="ob-cat-name">Jewelry</div></div>
+            <div class="ob-cat-tile" data-cat="accessories" onclick="toggleCat(this)"><div class="ob-cat-icon">style</div><div class="ob-cat-name">Accessories</div></div>
             <div class="ob-cat-tile" data-cat="suiting" onclick="toggleCat(this)"><div class="ob-cat-icon">business_center</div><div class="ob-cat-name">Suiting</div></div>
+            <div class="ob-cat-tile" data-cat="denim" onclick="toggleCat(this)"><div class="ob-cat-icon">content_cut</div><div class="ob-cat-name">Denim</div></div>
+            <div class="ob-cat-tile" data-cat="activewear" onclick="toggleCat(this)"><div class="ob-cat-icon">fitness_center</div><div class="ob-cat-name">Activewear</div></div>
+            <div class="ob-cat-tile" data-cat="occasionwear" onclick="toggleCat(this)"><div class="ob-cat-icon">celebration</div><div class="ob-cat-name">Occasionwear</div></div>
+            <div class="ob-cat-tile" data-cat="knitwear" onclick="toggleCat(this)"><div class="ob-cat-icon">texture</div><div class="ob-cat-name">Knitwear</div></div>
+            <div class="ob-cat-tile" data-cat="loungewear" onclick="toggleCat(this)"><div class="ob-cat-icon">bedtime</div><div class="ob-cat-name">Loungewear</div></div>
+            <div class="ob-cat-tile" data-cat="swimwear" onclick="toggleCat(this)"><div class="ob-cat-icon">pool</div><div class="ob-cat-name">Swimwear</div></div>
+            <div class="ob-cat-tile" data-cat="seasonal" onclick="toggleCat(this)"><div class="ob-cat-icon">ac_unit</div><div class="ob-cat-name">Seasonal</div></div>
           </div>
         </div>
 
@@ -450,18 +458,18 @@
           <div class="ob-price-grid">
             <div class="ob-price-tile" data-tier="low" onclick="selectTier(this)">
               <div class="ob-price-name">Low</div>
-              <div class="ob-price-range">Under $200 / item</div>
-              <div class="ob-price-desc">High-street, vintage, resale — great style at real prices</div>
+              <div class="ob-price-range">$0 – $50 / item</div>
+              <div class="ob-price-desc">High-street, vintage, resale — Zara, ASOS, H&M</div>
             </div>
-            <div class="ob-price-tile selected" data-tier="medium" onclick="selectTier(this)">
+            <div class="ob-price-tile selected" data-tier="mid" onclick="selectTier(this)">
               <div class="ob-price-name">Mid</div>
-              <div class="ob-price-range">$200 – $800 / item</div>
-              <div class="ob-price-desc">Contemporary brands, quality investment pieces</div>
+              <div class="ob-price-range">$50 – $150 / item</div>
+              <div class="ob-price-desc">Contemporary brands — Shopbop, Revolve, Nordstrom</div>
             </div>
             <div class="ob-price-tile" data-tier="high" onclick="selectTier(this)">
               <div class="ob-price-name">High</div>
-              <div class="ob-price-range">$800+ / item</div>
-              <div class="ob-price-desc">Luxury, designer, heritage — the real thing</div>
+              <div class="ob-price-range">$150+ / item</div>
+              <div class="ob-price-desc">Luxury & designer — Net-a-Porter, SSENSE, Mytheresa</div>
             </div>
           </div>
         </div>
@@ -749,7 +757,7 @@ async function completeOnboarding() {
   const fit = [...document.querySelectorAll('#fitPrefs .pill.active')].map(p => p.textContent.trim());
 
   // Save to localStorage for fast access
-  if (pinterestUrl) localStorage.setItem('etoile_pinterestUrl', pinterestUrl);
+  if (budget) localStorage.setItem('etoile_budget', budget);
   localStorage.setItem('etoile_onboarded', 'true');
 
   // Save to Supabase

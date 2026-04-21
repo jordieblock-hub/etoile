@@ -21,6 +21,7 @@ serve(async (req) => {
 
     const BUDGET_LABEL: Record<string, string> = {
       low:    'under $50 per piece — suggest Zara, ASOS, H&M, Mango',
+      mid:    '$50–150 per piece — Shopbop, Revolve, Nordstrom, & Other Stories',
       medium: '$50–150 per piece — Shopbop, Revolve, Nordstrom, & Other Stories',
       high:   '$150+ per piece — Net-a-Porter, SSENSE, Mytheresa, The Row',
     }
