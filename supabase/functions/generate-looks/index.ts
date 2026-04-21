@@ -19,63 +19,124 @@ serve(async (req) => {
       ? closetItems.map((i: any) => `- ${i.name} (${i.category})${i.brand ? ' by ' + i.brand : ''}`).join('\n')
       : '(no items added yet)'
 
-    const BUDGET_LABEL: Record<string, string> = {
-      low:    'under $50 per piece — suggest Zara, ASOS, H&M, Mango',
-      mid:    '$50–150 per piece — Shopbop, Revolve, Nordstrom, & Other Stories',
-      medium: '$50–150 per piece — Shopbop, Revolve, Nordstrom, & Other Stories',
-      high:   '$150+ per piece — Net-a-Porter, SSENSE, Mytheresa, The Row',
+    const budget = preferences?.budget || 'mid'
+
+    // Budget-to-retailer mapping — enforced as a hard rule
+    const BUDGET_CONFIG: Record<string, { label: string; retailers: string; priceRange: string }> = {
+      low: {
+        label: 'under $50 per piece',
+        retailers: 'Zara, ASOS, H&M, Mango, Urban Outfitters, Topshop',
+        priceRange: '$15–$50',
+      },
+      mid: {
+        label: '$50–$150 per piece',
+        retailers: 'Shopbop, Revolve, Nordstrom, & Other Stories, Sandro, Maje, Reformation, Madewell, Banana Republic, Arket, COS',
+        priceRange: '$50–$150',
+      },
+      medium: {
+        label: '$50–$150 per piece',
+        retailers: 'Shopbop, Revolve, Nordstrom, & Other Stories, Sandro, Maje, Reformation, Madewell, Banana Republic, Arket, COS',
+        priceRange: '$50–$150',
+      },
+      high: {
+        label: '$150+ per piece',
+        retailers: 'Net-a-Porter, SSENSE, Mytheresa, The Row, Totême, Jacquemus, Isabel Marant, Acne Studios, Sandro (high end)',
+        priceRange: '$150–$800',
+      },
     }
+
+    const budgetConfig = BUDGET_CONFIG[budget] || BUDGET_CONFIG['mid']
+
+    const brandsLoved = preferences?.brandsLiked?.length
+      ? `Prioritize these brands: ${preferences.brandsLiked.join(', ')}`
+      : 'No brand preference specified'
+
+    const brandsAvoided = preferences?.brandsDisliked?.length
+      ? `NEVER suggest these brands: ${preferences.brandsDisliked.join(', ')}`
+      : ''
+
+    const colorsIn = preferences?.colorsLove?.length
+      ? preferences.colorsLove.join(', ')
+      : 'any'
+
+    const colorsOut = preferences?.colorsAvoid?.length
+      ? preferences.colorsAvoid.join(', ')
+      : 'none'
+
+    const fitPref = preferences?.fit?.length
+      ? preferences.fit.join(', ')
+      : 'any'
 
     const photoNote = inspoPhotoCount > 0
       ? `The user has ${inspoPhotoCount} inspiration photos (indexed 0–${inspoPhotoCount - 1}). For each look, return a "photoIndex" (integer) picking which photo best matches that look's mood.`
       : ''
-
-    const stylingRequest = isClosetPiece
-      ? `Build 3 complete outfits around the user's specific closet piece: "${pieceName}". Each look should show a different way to style this piece.`
-      : `Style the user for: "${occasion}". This specific occasion is THE primary creative brief — every choice (silhouette, color, formality, vibe) must serve this occasion. Do NOT generate generic "everyday" looks.`
 
     // Random seed to prevent repeated identical responses
     const seed = Math.random().toString(36).slice(2, 8)
 
     const prompt = `You are ÉTOILE, a luxury fashion AI stylist. Seed: ${seed}. Generate exactly 3 distinct outfit looks.
 
-OCCASION (primary brief): ${isClosetPiece ? `Style the piece "${pieceName}"` : `"${occasion}"`}
-This is not a suggestion — the occasion defines EVERYTHING. A "beach day" look and a "job interview" look should share zero pieces.
+OCCASION: ${isClosetPiece ? `Style the closet piece "${pieceName}" 3 different ways` : `"${occasion}"`}
+Every styling decision — silhouette, formality, color, fabric — must serve this occasion. A beach look and office look share zero pieces.
 
-USER AESTHETIC:
-- Style: ${aesthetic ? `"${aesthetic.aestheticTitle}" — ${aesthetic.description}` : 'not provided'}
+USER PROFILE:
+- Aesthetic: ${aesthetic ? `"${aesthetic.aestheticTitle}" — ${aesthetic.description}` : 'not specified'}
 - Keywords: ${aesthetic?.keywords?.join(', ') || 'none'}
-- Palette: ${aesthetic?.colorPalette?.join(', ') || 'none'}
-- Budget: ${BUDGET_LABEL[preferences?.budget] || 'flexible'}
-- Loves: ${preferences?.brandsLiked?.join(', ') || 'no preference'}
-- Avoids: ${preferences?.brandsDisliked?.join(', ') || 'none'}
-- Colors in: ${preferences?.colorsLove?.join(', ') || 'any'}
-- Colors out: ${preferences?.colorsAvoid?.join(', ') || 'none'}
-- Fit: ${preferences?.fit?.join(', ') || 'any'}
+- Colors they love: ${colorsIn}
+- Colors they avoid (NEVER USE): ${colorsOut}
+- Fit preference: ${fitPref}
+- ${brandsLoved}
+- ${brandsAvoided}
+
+BUDGET: ${budgetConfig.label}
+Allowed retailers: ${budgetConfig.retailers}
+Every non-closet piece must be priced ${budgetConfig.priceRange}. No exceptions.
 
 THEIR CLOSET:
 ${closetList}
 
-STRICT RULES — violating any of these is a failure:
-1. The 3 looks must be genuinely distinct — different silhouettes, different energy, not just color swaps.
-2. Occasion-appropriateness is absolute. A beach look and a job interview look share zero pieces.
-3. COLORS: Every piece must be in a color the user loves, OR a neutral (black/white/beige/gray/cream). NEVER use colors they avoid — not even accessories.
-4. BRANDS: Shopping suggestions MUST prioritize brands they love. NEVER suggest brands they avoid under any circumstances.
-5. FIT: Every silhouette must match their fit preferences. If they want Oversized → loose, relaxed cuts. Tailored → structured, fitted. Flowy → draped, loose. Apply this to every single piece.
-6. For non-closet pieces: suggest real specific items (e.g. "Totême ribbed tank" not just "white tank"), with retailer search URLs.
-7. Retailer URL formats (replace TERM with + for spaces): Net-a-Porter: https://www.net-a-porter.com/en-us/shop/search?q=TERM | SSENSE: https://www.ssense.com/en-us/women/search?q=TERM | Shopbop: https://www.shopbop.com/search/results.jsp?q=TERM | Mytheresa: https://www.mytheresa.com/us/en/women/search?q=TERM | Revolve: https://www.revolve.com/search/?q=TERM | Nordstrom: https://www.nordstrom.com/sr?keyword=TERM | Zara: https://www.zara.com/us/en/search?searchTerm=TERM | ASOS: https://www.asos.com/search/?q=TERM | Mango: https://shop.mango.com/us/search?q=TERM
-8. gradient: 2 muted hex colors from the look's actual color palette (must reflect the color choices above).
-9. caption: editorial, max 18 words, sounds like Vogue, in quotes.
-10. Look names: evocative & occasion-specific (e.g. "The After-Hours Escape", "The Rooftop Arrival").
+STRICT RULES — every rule is mandatory:
+
+1. BUDGET IS ABSOLUTE: Every shopping suggestion must come from the allowed retailers above and be priced within ${budgetConfig.priceRange}. If you suggest a piece outside this range, the response fails. Do not suggest luxury brands for a low budget or fast fashion for a high budget.
+
+2. SEARCH URLS must be specific: build the search query from brand + item name so the user lands on exactly what you described. Use these URL formats (replace TERM with URL-encoded brand+item, spaces as +):
+   - Shopbop: https://www.shopbop.com/search/results.jsp?q=TERM
+   - Revolve: https://www.revolve.com/search/?q=TERM
+   - Nordstrom: https://www.nordstrom.com/sr?keyword=TERM
+   - Net-a-Porter: https://www.net-a-porter.com/en-us/shop/search?q=TERM
+   - SSENSE: https://www.ssense.com/en-us/women/search?q=TERM
+   - Mytheresa: https://www.mytheresa.com/us/en/women/search?q=TERM
+   - Zara: https://www.zara.com/us/en/search?searchTerm=TERM
+   - ASOS: https://www.asos.com/search/?q=TERM
+   - Mango: https://shop.mango.com/us/search?q=TERM
+   - & Other Stories: https://www.stories.com/en/search?q=TERM
+   - Sandro: https://us.sandro-paris.com/search?q=TERM
+   - Maje: https://us.maje.com/search?q=TERM
+   - Reformation: https://www.thereformation.com/search?q=TERM
+   - Arket: https://www.arket.com/en_usd/search?q=TERM
+   - COS: https://www.cos.com/en_usd/search.html?q=TERM
+   Example: if you suggest "Reformation Lexi midi dress in black", shopUrl = https://www.thereformation.com/search?q=Reformation+Lexi+midi+dress+black
+
+3. COLORS: Use only colors from their "colors they love" list, plus neutrals (black/white/beige/gray/cream) as fillers. NEVER use a color from "colors they avoid" — not even in accessories.
+
+4. FIT: Every piece must match the user's fit preference. Oversized → relaxed/boxy. Tailored → structured/fitted. Flowy → draped/loose. Apply to every single piece.
+
+5. BRANDS: Always suggest brands the user loves when possible. The suggested retailer must carry the suggested brand.
+
+6. SPECIFICITY: Name the exact item — brand + style + color (e.g. "Sandro pleated midi skirt in ecru" not "white skirt"). This is what makes the search URL work.
+
+7. 3 looks must be genuinely different — different silhouettes, color stories, energy. Not just color swaps.
+
+8. Include a realistic price estimate matching the budget range.
 ${photoNote}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON — no markdown, no explanation:
 {
   "looks": [
     {
       "name": "Look name",
-      "caption": "Editorial caption",
-      "occasionLabel": "brief label",
+      "caption": "Editorial caption in quotes, max 18 words, Vogue-style",
+      "occasionLabel": "brief occasion label",
       "gradient": "linear-gradient(135deg, #hex1, #hex2)",
       "photoIndex": 0,
       "pieces": [
@@ -87,11 +148,11 @@ Return ONLY valid JSON:
         },
         {
           "slot": "SHOES",
-          "name": "Specific brand + item",
+          "name": "Brand + specific item name + color",
           "fromCloset": false,
-          "shopUrl": "https://...",
+          "shopUrl": "https://exact-search-url-for-this-item",
           "retailer": "Retailer Name",
-          "price": "$180"
+          "price": "$85"
         }
       ]
     }
@@ -107,7 +168,7 @@ Return ONLY valid JSON:
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 4000,
+        max_tokens: 4096,
         messages: [{ role: 'user', content: prompt }],
       }),
     })
